@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-const RegistName = ({navigation}) => {
+const RegistInstitutionBK = ({navigation}) => {
   return (
     <ScrollView>
       <TouchableOpacity
@@ -26,17 +26,17 @@ const RegistName = ({navigation}) => {
       <View style={{marginTop: 50, marginBottom: 30, alignItems: 'center'}}>
         <Image
           style={Styles.imageCenter}
-          source={require('../assets/icons/teacher.png')}
+          source={require('../assets/icons/school.png')}
         />
-        <Text style={Styles.head1}>Halo!</Text>
-        <Text style={Styles.head2}>Masukkan nama lengkap</Text>
+        <Text style={Styles.head1}>Institusi</Text>
+        <Text style={Styles.head2}>Masukkan nama sekolah</Text>
       </View>
       <View style={{margin: 20}}>
-        <TextInput style={Styles.input} placeholder="Nama Lengkap" />
+        <TextInput style={Styles.input} placeholder="Nama sekolah" />
         <TouchableOpacity
           style={Styles.button}
           onPress={() => {
-            navigation.navigate('RegistRole');
+            navigation.navigate('RegistAccount');
           }}>
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
@@ -90,4 +90,4 @@ const Styles = StyleSheet.create({
   },
 });
 
-export default RegistName;
+export default RegistInstitutionBK;
