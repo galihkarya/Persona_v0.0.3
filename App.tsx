@@ -1,16 +1,16 @@
 import React from 'react';
 import {
-  Text,
-  View,
+  StatusBar, 
 } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import Router from './src/router'
 
 const App = ( ) => {
   return (
-    <View>
-      <Text>
-        App
-      </Text>
-    </View>
+    <NavigationContainer>
+      <StatusBar  barStyle={'dark-content'} backgroundColor={'#f2f2f2'}/>
+      <Router/>
+    </NavigationContainer>
   )
 }
 
