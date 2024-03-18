@@ -26,7 +26,7 @@ const GroupListPage = ({navigation}) => {
           }}>
           <Image
             style={Styles.backIcon}
-            source={require('../../assets/icons/icon_arrowLeft.png')}
+            source={require('../../../assets/icons/icon_arrowLeft.png')}
           />
         </TouchableOpacity>
         <Text style={Styles.headerText}>Daftar Grup</Text>
@@ -36,7 +36,7 @@ const GroupListPage = ({navigation}) => {
         <Text style={Styles.schoolCode}>Kode instansi: {institutioncode}</Text>
         <View style={Styles.searchBox}>
           <Image
-            source={require('../../assets/icons/icon_search_black.png')}
+            source={require('../../../assets/icons/icon_search_black.png')}
             style={Styles.searchIcon}
           />
           <TextInput placeholder="Cari" inputMode="search" />
