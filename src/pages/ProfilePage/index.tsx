@@ -5,7 +5,7 @@ const ProfilePage = ({navigation}) => {
   return (
     <View style={{margin: 20}}>
       <Image
-        source={require('../../assets/icons/pp.png')}
+        source={require('../../../assets/images/pp.png')}
         style={Styles.profilePicture}
       />
       <View style={{margin: 20, alignItems: 'center'}}>
