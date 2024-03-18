@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,14 @@ import {
 } from 'react-native';
 
 const LoginPage = ({navigation}) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [passwordVisible, setPasswordVisible] = useState(true);
+
+  let visibleicon = require('../../../assets/icons/visibleicon.png');
+  let invisibleicon = require('../../../assets/icons/invisibleicon.png');
+
   return (
     <ScrollView>
       <View>
@@ -21,7 +29,7 @@ const LoginPage = ({navigation}) => {
           }}>
           <Image
             style={Styles.backIcon}
-            source={require('../assets/icons/icon_arrowLeft.png')}
+            source={require('../../../assets/icons/icon_arrowLeft.png')}
           />
         </TouchableOpacity>
       </View>
@@ -35,18 +43,53 @@ const LoginPage = ({navigation}) => {
           </Text>
         </View>
 
-        <TextInput style={Styles.input} placeholder="username" />
         <TextInput
           style={Styles.input}
-          secureTextEntry
-          placeholder="password"
+          placeholder="username"
+          value={username}
+          onChange={item => {
+            setUsername(item.value);
+          }}
         />
-        <TouchableOpacity style={Styles.button}>
-          <Text style={Styles.textButton} onPress={() => {navigation.navigate('BottomNav')}}>Masuk</Text>
+        <View style={Styles.input}>
+          <TextInput
+            secureTextEntry={passwordVisible}
+            placeholder="password"
+            style={{flex: 1}}
+            value={password}
+            onChange={item => {
+              setPassword(item.value);
+            }}
+          />
+          <TouchableOpacity
+            onPress={() => setPasswordVisible(!passwordVisible)}>
+            <Image
+              style={Styles.visibleIcon}
+              source={passwordVisible ? invisibleicon : visibleicon}
+            />
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          style={[
+            Styles.button,
+            {opacity: username === '' || password === '' ? 0.5 : 1},
+          ]}
+          disabled={username === '' || password === ''}
+          onPress={() => {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'Tabs'}],
+            });
+          }}>
+          <Text style={Styles.textButton}>Masuk</Text>
         </TouchableOpacity>
         <View style={{flexDirection: 'row', alignSelf: 'center'}}>
           <Text>Belum punya akun? </Text>
-          <TouchableOpacity hitSlop={{top: 5, bottom: 5, right: 5, left: 5}} onPress={() => {navigation.navigate('RegistName')}}>
+          <TouchableOpacity
+            hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
+            onPress={() => {
+              navigation.navigate('RegistName');
+            }}>
             <Text style={{color: '#CC3663'}}>Daftar</Text>
           </TouchableOpacity>
         </View>
@@ -61,6 +104,8 @@ const Styles = StyleSheet.create({
     height: 20,
   },
   input: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#fefefe',
     borderRadius: 10,
     elevation: 8,
@@ -84,6 +129,10 @@ const Styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginHorizontal: 20,
     marginVertical: 30,
+  },
+  visibleIcon: {
+    width: 22,
+    height: 22,
   },
 });
 
