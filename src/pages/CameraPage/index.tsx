@@ -50,9 +50,13 @@ const CameraPage = ({navigation}) => {
         enableShutterSound: false,
       });
       console.log(photo)
+
       const takenPhoto = await CameraRoll.saveAsset(`file://${photo.path}`, {type: 'photo'});
+
       console.log(takenPhoto)
-      setPhotoURI(takenPhoto.node.image.uri); // Update state with path
+
+      setPhotoURI(takenPhoto.node.image.uri); 
+      
     } catch (error) {
       console.error('Error taking photo:', error);
     } finally {
