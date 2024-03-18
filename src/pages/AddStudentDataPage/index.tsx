@@ -10,13 +10,15 @@ import {
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 
 const AddStudentDataPage = ({navigation}) => {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [gender, setGender] = useState<string | null>(null);
 
-  const handleRadioButtonPress = (option: string) => {
-    setSelectedOption(option === selectedOption ? null : option);
+  const [studentName, setStudentName] = useState('');
+
+  const handleRadioGender = (option: string) => {
+    setGender(option === gender ? null : option);
   };
 
-  const [value, setValue] = useState<string>();
+  const [value, setValue] = useState<string>('');
   const ref = useRef<IDropdownRef>(null);
   const data = [
     {label: '1A', value: '1a'},
@@ -49,7 +51,7 @@ const AddStudentDataPage = ({navigation}) => {
         }}>
         <Image
           style={Styles.backIcon}
-          source={require('../../assets/icons/icon_arrowLeft.png')}
+          source={require('../../../assets/icons/icon_arrowLeft.png')}
         />
       </TouchableOpacity>
       <Text style={Styles.instructionText}>Masukkan data diri</Text>
@@ -57,26 +59,28 @@ const AddStudentDataPage = ({navigation}) => {
         <TouchableOpacity
           style={[
             Styles.radioButtons,
-            {opacity: selectedOption === 'Laki-laki' ? 1 : 0.3},
+            {opacity: gender === 'Laki-laki' ? 1 : 0.3},
           ]}
-          onPress={() => handleRadioButtonPress('Laki-laki')}
+          onPress={() => handleRadioGender('Laki-laki')}
           activeOpacity={1}>
           <Text style={Styles.genderText}>Laki-laki</Text>
-          <Image style={Styles.genderImage} source={require('../../assets/icons/boy.png')} />
+          <Image style={Styles.genderImage} source={require('../../../assets/images/boy.png')} />
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             Styles.radioButtons,
-            {opacity: selectedOption === 'Perempuan' ? 1 : 0.3},
+            {opacity: gender === 'Perempuan' ? 1 : 0.3},
           ]}
-          onPress={() => handleRadioButtonPress('Perempuan')}
+          onPress={() => handleRadioGender('Perempuan')}
           activeOpacity={1}>
           <Text style={Styles.genderText}>Perempuan</Text>
-          <Image style={Styles.genderImage} source={require('../../assets/icons/girl.png')} />
+          <Image style={Styles.genderImage} source={require('../../../assets/images/girl.png')} />
         </TouchableOpacity>
       </View>
       <View style={{margin: 20, rowGap: 20}}>
-        <TextInput style={Styles.input} placeholder="Nama Lengkap" />
+
+        <TextInput style={Styles.input} placeholder="Nama Lengkap" value={studentName} onChange={item => {setStudentName(item.value)}} />
+
         <Dropdown
           ref={ref}
           style={Styles.dropdown}
@@ -93,10 +97,12 @@ const AddStudentDataPage = ({navigation}) => {
           }}
         />
         <TouchableOpacity
-          style={Styles.button}
+          style={[Styles.button, {opacity: gender === null || value === '' || studentName === '' ? 0.3 : 1}]}
           onPress={() => {
             navigation.navigate('ReminderPage');
-          }}>
+          }}
+          disabled={gender === null || value === '' || studentName === ''}>
+          
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
       </View>
