@@ -6,7 +6,11 @@ import {
   Image,
   StyleSheet,
   ScrollView,
+  Platform,
+  PermissionsAndroid,
+  ToastAndroid,
 } from 'react-native';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 const ResultPage = ({navigation}) => {
   let studentName: string;
@@ -24,6 +28,61 @@ const ResultPage = ({navigation}) => {
   heartLine =
     'Anda memiliki perasaan yang hangat, penyayang, dan ramah. Suatu hari nanti, anda akan menjadi orang yang romatis, hangat, aktif, dan bahkan rela berkorban. ';
 
+  const exportToPDF = async () => {
+    try {
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Izin Menulis ke Penyimpanan',
+            message:
+              'Aplikasi ini membutuhkan izin untuk menulis ke penyimpanan.',
+            buttonPositive: 'Oke',
+            buttonNegative: 'Batal',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          generatePDF();
+        } else {
+          ToastAndroid.show(
+            'Izin ditolak, tidak dapat menyimpan PDF.',
+            ToastAndroid.SHORT,
+          );
+        }
+      } else {
+        generatePDF();
+      }
+    } catch (error) {
+      console.error('Error exporting to PDF:', error);
+    }
+  };
+
+  const generatePDF = async () => {
+    try {
+      const htmlContent = `
+          <h1>${studentName}</h1>
+          <p>Kelas ${classGroup}</p>
+          <h2>Garis Kepala</h2>
+          <p>${headLine}</p>
+          <h2>Garis Kehidupan</h2>
+          <p>${lifeLine}</p>
+          <h2>Garis Hati</h2>
+          <p>${heartLine}</p>
+        `;
+
+      const options = {
+        html: htmlContent,
+        fileName: 'hasil.pdf',
+        directory: 'Documents',
+      };
+
+      const file = await RNHTMLtoPDF.convert(options);
+      console.log('PDF generated:', file.filePath);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  };
+
   return (
     <View>
       <View style={{borderBottomWidth: 0.5, borderColor: '#00000050'}}>
@@ -31,15 +90,16 @@ const ResultPage = ({navigation}) => {
           style={Styles.backButton}
           hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
           onPress={() => {
-            navigation.goBack();
+            navigation.goBack('AddStudentDataPage');
           }}>
           <Image
             style={Styles.backIcon}
-            source={require('../assets/icons/icon_arrowLeft.png')}
+            source={require('../../../assets/icons/icon_arrowLeft.png')}
           />
         </TouchableOpacity>
         <Text style={Styles.headerText}>Hasil</Text>
       </View>
+
       <ScrollView>
         <Text style={Styles.studentNameText}>{studentName}</Text>
         <Text style={Styles.classGroupText}>Kelas {classGroup}</Text>
@@ -54,7 +114,7 @@ const ResultPage = ({navigation}) => {
           <View style={Styles.card}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
-                source={require('../assets/icons/headline.png')}
+                source={require('../../../assets/images/headline.png')}
                 style={Styles.images}
               />
               <Text style={Styles.lineTitle}>Garis Kepala</Text>
@@ -65,7 +125,7 @@ const ResultPage = ({navigation}) => {
           <View style={Styles.card}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
-                source={require('../assets/icons/lifeline.png')}
+                source={require('../../../assets/images/lifeline.png')}
                 style={Styles.images}
               />
               <Text style={Styles.lineTitle}>Garis Kehidupan</Text>
@@ -76,7 +136,7 @@ const ResultPage = ({navigation}) => {
           <View style={Styles.card}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
-                source={require('../assets/icons/heartline.png')}
+                source={require('../../../assets/images/heartline.png')}
                 style={Styles.images}
               />
               <Text style={Styles.lineTitle}>Garis Hati</Text>
@@ -98,7 +158,8 @@ const ResultPage = ({navigation}) => {
             backgroundColor: '#CC3663',
             marginHorizontal: 20,
             borderRadius: 15,
-          }}>
+          }}
+          onPress={exportToPDF}>
           <Text
             style={{
               textAlign: 'center',
@@ -118,7 +179,10 @@ const ResultPage = ({navigation}) => {
             borderWidth: 3,
           }}
           onPress={() => {
-            navigation.replace('HomePage');
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'Tabs'}],
+            });
           }}>
           <Text
             style={{
