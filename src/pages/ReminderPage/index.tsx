@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 
 const ReminderPage = ({navigation}) => {
   return (
@@ -12,44 +19,46 @@ const ReminderPage = ({navigation}) => {
         }}>
         <Image
           style={Styles.backIcon}
-          source={require('../assets/icons/icon_arrowLeft.png')}
+          source={require('../../../assets/icons/icon_arrowLeft.png')}
         />
       </TouchableOpacity>
-      <View style={{marginHorizontal: 20, alignItems: 'center'}}>
-        <Text style={Styles.header}>Perhatian</Text>
+      <ScrollView>
+        <View style={{marginHorizontal: 20, alignItems: 'center'}}>
+          <Text style={Styles.header}>Perhatian</Text>
 
-        <Image
-          source={require('../assets/icons/palm_in_square.png')}
-          style={Styles.images}
-        />
-        <Text style={Styles.description}>
-          Pastikan telapak tangan masuk semua ke dalam area kotak yang sudah
-          ditentukan.
-        </Text>
-        <Image
-          source={require('../assets/icons/leftpalm_selected.png')}
-          style={Styles.images}
-        />
-        <Text style={Styles.description}>
-          Telapak tangan yang digunakan untuk identifikasi kepribadian adalah
-          tangan kiri
-        </Text>
-        <Image
-          source={require('../assets/icons/focusing_on_palm.png')}
-          style={Styles.images}
-        />
-        <Text style={Styles.description}>
-          Pastikan gambar yang diambil sudah fokus sehingga garis telapak tangan
-          terlihat sangat jelas
-        </Text>
-      </View>
-      <TouchableOpacity
-        style={Styles.button}
-        onPress={() => {
-          navigation.navigate('CameraPage');
-        }}>
-        <Text style={Styles.textButton}>lanjut ...</Text>
-      </TouchableOpacity>
+          <Image
+            source={require('../../../assets/images/palm_in_square.png')}
+            style={Styles.images}
+          />
+          <Text style={Styles.description}>
+            Pastikan telapak tangan masuk semua ke dalam area kotak yang sudah
+            ditentukan.
+          </Text>
+          <Image
+            source={require('../../../assets/images/leftpalm_selected.png')}
+            style={Styles.images}
+          />
+          <Text style={Styles.description}>
+            Telapak tangan yang digunakan untuk identifikasi kepribadian adalah
+            tangan kiri
+          </Text>
+          <Image
+            source={require('../../../assets/images/focusing_on_palm.png')}
+            style={Styles.images}
+          />
+          <Text style={Styles.description}>
+            Pastikan gambar yang diambil sudah fokus sehingga garis telapak
+            tangan terlihat sangat jelas
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={Styles.button}
+          onPress={() => {
+            navigation.navigate('CameraPage');
+          }}>
+          <Text style={Styles.textButton}>lanjut ...</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };
@@ -87,7 +96,7 @@ const Styles = StyleSheet.create({
   button: {
     backgroundColor: '#CC3663',
     marginVertical: 25,
-    marginHorizontal: 20, 
+    marginHorizontal: 20,
     verticalAlign: 'bottom',
     borderRadius: 15,
   },
