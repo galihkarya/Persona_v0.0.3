@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, use} from 'react';
 import {
   View,
   Text,
@@ -51,7 +51,7 @@ const ResultListPage = ({navigation}) => {
         <Text style={Styles.schoolCode}>Kode instansi: {institutioncode}</Text>
         <View style={Styles.searchBox}>
           <Image
-            source={require('../../assets/icons/icon_search_black.png')}
+            source={require('../../../assets/icons/icon_search_black.png')}
             style={Styles.searchIcon}
           />
           <TextInput placeholder="Cari" inputMode="search" />
@@ -82,7 +82,7 @@ const ResultListPage = ({navigation}) => {
               navigation.navigate('GroupListPage');
             }}>
             <Image
-              source={require('../../assets/icons/icon_edit.png')}
+              source={require('../../../assets/icons/icon_edit.png')}
               style={{width: 25, height: 25}}
             />
           </TouchableOpacity>
