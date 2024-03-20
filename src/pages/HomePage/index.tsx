@@ -221,7 +221,7 @@ const Styles = StyleSheet.create({
     fontWeight: '900',
     color: '#000000',
     alignSelf: 'center',
-    maxWidth: 200, 
+    maxWidth: 150, 
   },
   button: {
     backgroundColor: '#CC3663',

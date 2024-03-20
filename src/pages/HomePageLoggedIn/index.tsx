@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   Modal,
+  ScrollView,
 } from 'react-native';
 
 const HomePageLogedIn = ({navigation}) => {
@@ -78,7 +79,7 @@ const HomePageLogedIn = ({navigation}) => {
   };
 
   return (
-      <View>
+      <ScrollView>
         <View
           style={{
             marginRight: 20,
@@ -157,7 +158,7 @@ const HomePageLogedIn = ({navigation}) => {
           }}>
           <Text style={Styles.textButton}>Mulai Prediksi</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
   );
 };
 
@@ -225,7 +226,7 @@ const Styles = StyleSheet.create({
     fontWeight: '900',
     color: '#000000',
     alignSelf: 'center',
-    marginRight: 200,
+    maxWidth: 150, 
   },
   button: {
     backgroundColor: '#CC3663',
