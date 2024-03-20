@@ -14,13 +14,19 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 const ResultPage = ({navigation}) => {
   let studentName: string;
+  let gender: string;
   let classGroup: string;
+  let accountName: string;
+  let timestampClock: string;
+  let timestampDate: string;
   let headLine: string;
   let lifeLine: string;
   let heartLine: string;
 
-  studentName = 'Upin';
-  classGroup = '1A';
+  studentName = 'Pia';
+  gender = 'Perempuan';
+  classGroup = '6B';
+  accountName = 'Ica Siti';
   headLine =
     'Berdasarkan perhitungan, anda memiliki pola pikir yang panjang dan berwawasan luas. Anda juga termasuk orang yang kreatif. Anda multi talenta, memiliki mimpi besar dan daya imajinasi yang bagus. ';
   lifeLine =
@@ -29,6 +35,10 @@ const ResultPage = ({navigation}) => {
     'Anda memiliki perasaan yang hangat, penyayang, dan ramah. Suatu hari nanti, anda akan menjadi orang yang romatis, hangat, aktif, dan bahkan rela berkorban. ';
 
   const exportToPDF = async () => {
+    var moment = require('moment');
+    timestampClock = moment().format('LT');
+    timestampDate = moment().format('L');
+
     try {
       if (Platform.OS === 'android') {
         const granted = await PermissionsAndroid.request(
@@ -60,24 +70,32 @@ const ResultPage = ({navigation}) => {
   const generatePDF = async () => {
     try {
       const htmlContent = `
-          <h1>${studentName}</h1>
-          <p>Kelas ${classGroup}</p>
+      <div style="background-image: url('../../../assets/images/handpalm.png'); background-repeat: no-repeat; margin: 50">
+          <h1>Hasil Pembacaan Garis Tangan</h1>
+          <p>Nama siswa: ${studentName}</p>
+          <p>Jenis kelamin: ${gender}</p>
+          <p>Kelas: ${classGroup}</p>
+          <p>Dicetak oleh: ${accountName}</p>
+          <p>Waktu cetak: ${timestampDate} ${timestampClock}</p>
           <h2>Garis Kepala</h2>
           <p>${headLine}</p>
           <h2>Garis Kehidupan</h2>
           <p>${lifeLine}</p>
           <h2>Garis Hati</h2>
           <p>${heartLine}</p>
+      </div>
         `;
 
       const options = {
         html: htmlContent,
-        fileName: 'hasil.pdf',
-        directory: 'Documents',
+        fileName: `${studentName}${classGroup}`,
+        directory: `Documents`,
+
       };
 
       const file = await RNHTMLtoPDF.convert(options);
       console.log('PDF generated:', file.filePath);
+      
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
