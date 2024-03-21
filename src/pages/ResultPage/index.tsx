@@ -9,10 +9,12 @@ import {
   Platform,
   PermissionsAndroid,
   ToastAndroid,
+
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
-const ResultPage = ({navigation}) => {
+
+const ResultPage = ({navigation}:any) => {
   let studentName: string;
   let gender: string;
   let classGroup: string;
@@ -38,6 +40,8 @@ const ResultPage = ({navigation}) => {
     var moment = require('moment');
     timestampClock = moment().format('LT');
     timestampDate = moment().format('L');
+    let timestampClock_str = timestampClock.toString();
+
 
     try {
       if (Platform.OS === 'android') {
@@ -89,17 +93,20 @@ const ResultPage = ({navigation}) => {
       const options = {
         html: htmlContent,
         fileName: `${studentName}${classGroup}`,
-        directory: `Documents`,
+        directory: `Persona/Results`,
 
       };
 
       const file = await RNHTMLtoPDF.convert(options);
       console.log('PDF generated:', file.filePath);
+      ToastAndroid.show(`PDF berhasil di export di ${file.filePath}`, ToastAndroid.LONG)
       
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
   };
+
+  
 
   return (
     <View>

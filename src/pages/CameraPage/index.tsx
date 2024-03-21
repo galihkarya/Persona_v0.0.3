@@ -16,7 +16,7 @@ import {
 } from 'react-native-vision-camera';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 
-const CameraPage = ({navigation}) => {
+const CameraPage = ({navigation}:any) => {
   const flashOnIcon = require('../../../assets/icons/icon_flash_on.png');
   const flashOffIcon = require('../../../assets/icons/icon_flash_off.png');
 
@@ -44,7 +44,7 @@ const CameraPage = ({navigation}) => {
   const onTakePicturePressed = async () => {
     setIsTakingPhoto(true);
     try {
-      const photo = await camera.current.takePhoto({
+      const photo = await camera.current?.takePhoto({
         qualityPrioritization: 'quality',
         flash,
         enableShutterSound: false,
@@ -147,6 +147,7 @@ const CameraPage = ({navigation}) => {
             ref={camera}
             style={Styles.viewFinder}
             device={device}
+
             isActive={true}
             format={format}
             photo={true}

@@ -8,7 +8,7 @@ import {
   Modal,
 } from 'react-native';
 
-const HomePage = ({navigation}) => {
+const HomePage = ({navigation}:any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentModal, setCurrentModal] = useState(2);
 
@@ -221,7 +221,7 @@ const Styles = StyleSheet.create({
     fontWeight: '900',
     color: '#000000',
     alignSelf: 'center',
-    maxWidth: 150, 
+    maxWidth: 175
   },
   button: {
     backgroundColor: '#CC3663',

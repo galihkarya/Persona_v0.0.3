@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 
-const AddStudentDataPage = ({navigation}) => {
+const AddStudentDataPage = ({navigation}:any) => {
   const [gender, setGender] = useState<string | null>(null);
 
   const [studentName, setStudentName] = useState('');

@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-const HomePageLogedIn = ({navigation}) => {
+const HomePageLogedIn = ({navigation}:any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentModal, setCurrentModal] = useState(2);
 
