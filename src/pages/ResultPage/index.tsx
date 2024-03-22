@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {
   View,
   Text,
@@ -9,21 +9,27 @@ import {
   Platform,
   PermissionsAndroid,
   ToastAndroid,
-
+  Linking,
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import FileViewer from "react-native-file-viewer";
+// import Share from 'react-native-share';
 
-
-const ResultPage = ({navigation}:any) => {
+const ResultPage = ({navigation}: any) => {
   let studentName: string;
   let gender: string;
   let classGroup: string;
   let accountName: string;
-  let timestampClock: string;
-  let timestampDate: string;
   let headLine: string;
   let lifeLine: string;
   let heartLine: string;
+
+  let timestampClock: string;
+  let timestampDate: string;
+  let year: string;
+  let month: string;
+  let day: string;
+  let timestampClock_str: string;
 
   studentName = 'Pia';
   gender = 'Perempuan';
@@ -38,10 +44,14 @@ const ResultPage = ({navigation}:any) => {
 
   const exportToPDF = async () => {
     var moment = require('moment');
-    timestampClock = moment().format('LT');
+    moment.locale('en');
+    timestampClock = moment().format('LTS');
     timestampDate = moment().format('L');
-    let timestampClock_str = timestampClock.toString();
 
+    year = timestampDate.slice(6, 10).toString();
+    month = timestampDate.slice(0, 2).toString();
+    day = timestampDate.slice(3, 5).toString();
+    timestampClock_str = timestampClock.replaceAll(':', '').slice(0, -3);
 
     try {
       if (Platform.OS === 'android') {
@@ -92,21 +102,24 @@ const ResultPage = ({navigation}:any) => {
 
       const options = {
         html: htmlContent,
-        fileName: `${studentName}${classGroup}`,
+        fileName: `${studentName}${classGroup}_${year}${month}${day}${timestampClock_str}`,
         directory: `Persona/Results`,
-
       };
 
       const file = await RNHTMLtoPDF.convert(options);
       console.log('PDF generated:', file.filePath);
-      ToastAndroid.show(`PDF berhasil di export di ${file.filePath}`, ToastAndroid.LONG)
+      ToastAndroid.show(
+        `PDF berhasil di export di ${file.filePath}`,
+        ToastAndroid.LONG,
+      );
+      FileViewer.open(`file://${file.filePath}`);
+      // await Linking.openURL(`file://${file.filePath}`);
+      // Share.open({url: `file://${file.filePath}`});
       
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
   };
-
-  
 
   return (
     <View>
@@ -192,7 +205,7 @@ const ResultPage = ({navigation}:any) => {
               paddingVertical: 15,
               fontSize: 14,
             }}>
-            Simpan sebagai .pdf
+            Buka sebagai .pdf
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
