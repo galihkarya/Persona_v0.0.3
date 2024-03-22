@@ -14,7 +14,6 @@ import {
   RegistInstitutionWK,
   RegistAccount,
   ResultPage,
-  CheckPhotoPage, 
   Tabs
 } from '../pages';
 
@@ -86,11 +85,6 @@ const Router = () => {
       <Stack.Screen
         name="ResultPage"
         component={ResultPage}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="CheckPhotoPage"
-        component={CheckPhotoPage}
         options={{headerShown: false}}
       />
       <Stack.Screen

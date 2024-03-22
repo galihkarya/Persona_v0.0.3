@@ -1,6 +1,5 @@
 import AddStudentDataPage from './AddStudentDataPage';
 import CameraPage from './CameraPage';
-import CheckPhotoPage from './CheckPhotoPage';
 import GroupListPage from './GroupListPage';
 import HomePage from './HomePage/';
 import HomePageLogedIn from './HomePageLoggedIn';
@@ -34,6 +33,5 @@ export {
   ResultListPage,
   ResultPage,
   Splash, 
-  CheckPhotoPage, 
   Tabs
 };
