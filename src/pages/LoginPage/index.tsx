@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-const LoginPage = ({navigation}) => {
+const LoginPage = ({navigation}:any) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -47,9 +47,7 @@ const LoginPage = ({navigation}) => {
           style={Styles.input}
           placeholder="username"
           value={username}
-          onChange={item => {
-            setUsername(item.value);
-          }}
+          onChangeText={setUsername}
         />
         <View style={Styles.input}>
           <TextInput
@@ -57,9 +55,7 @@ const LoginPage = ({navigation}) => {
             placeholder="password"
             style={{flex: 1}}
             value={password}
-            onChange={item => {
-              setPassword(item.value);
-            }}
+            onChangeText={setPassword}
           />
           <TouchableOpacity
             onPress={() => setPasswordVisible(!passwordVisible)}>

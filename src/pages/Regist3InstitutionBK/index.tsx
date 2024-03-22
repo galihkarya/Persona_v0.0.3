@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-const RegistInstitutionBK = ({navigation}) => {
+const RegistInstitutionBK = ({navigation}:any) => {
   const [institution, setInstitution] = useState('');
 
   return (
@@ -34,7 +34,7 @@ const RegistInstitutionBK = ({navigation}) => {
         <Text style={Styles.head2}>Masukkan nama sekolah</Text>
       </View>
       <View style={{margin: 20}}>
-        <TextInput style={Styles.input} placeholder="Nama sekolah" value={institution} onChange={ item => {setInstitution(item.value) }}/>
+        <TextInput style={Styles.input} placeholder="Nama sekolah" value={institution} onChangeText={setInstitution}/>
         <TouchableOpacity
           style={[Styles.button, {opacity: institution === '' ? 0.5 : 1}]}
           onPress={() => {

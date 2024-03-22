@@ -7,9 +7,10 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  ToastAndroid, 
 } from 'react-native';
 
-const RegistAccount = ({navigation}) => {
+const RegistAccount = ({navigation}:any) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
@@ -19,6 +20,12 @@ const RegistAccount = ({navigation}) => {
 
   let visibleicon = require('../../../assets/icons/visibleicon.png');
   let invisibleicon = require('../../../assets/icons/invisibleicon.png');
+
+  const handleRegistration = () => {
+    if (password.length < 8) ToastAndroid.show('Password minimal 8 karakter', 2000);
+    else if (password !== rePassword) ToastAndroid.show('Password belum sama', 2000);
+    else navigation.reset({index: 0, routes: [{name: 'Tabs'}]})
+  }
 
   return (
     <ScrollView>
@@ -49,9 +56,7 @@ const RegistAccount = ({navigation}) => {
           <TextInput
             placeholder="username"
             value={username}
-            onChange={item => {
-              setUsername(item.value);
-            }}
+            onChangeText={setUsername}
           />
         </View>
 
@@ -61,9 +66,7 @@ const RegistAccount = ({navigation}) => {
             placeholder="password"
             style={{flex: 1}}
             value={password}
-            onChange={item => {
-              setPassword(item.value);
-            }}
+            onChangeText={setPassword}
           />
           <TouchableOpacity
             onPress={() => setPasswordVisible1(!passwordVisible1)}>
@@ -80,9 +83,7 @@ const RegistAccount = ({navigation}) => {
             placeholder="ketik ulang password"
             style={{flex: 1}}
             value={rePassword}
-            onChange={item => {
-              setRePassword(item.value);
-            }}
+            onChangeText={setRePassword}
           />
           <TouchableOpacity
             onPress={() => setPasswordVisible2(!passwordVisible2)}>
@@ -95,13 +96,8 @@ const RegistAccount = ({navigation}) => {
 
         <TouchableOpacity
           style={[Styles.button, {opacity: username === '' || password === '' || rePassword === '' ? 0.5 : 1} ]}
-          onPress={() => {
-            navigation.reset({
-              index: 0, 
-              routes: [{name: 'Tabs'}]
-            })
-          }}
-          disabled={username === '' || password === '' || rePassword === ''}>
+          onPress={handleRegistration}
+          disabled={username === '' || password === '' || rePassword === '' }>
           <Text style={Styles.textButton}>Daftar</Text>
         </TouchableOpacity>
       </View>

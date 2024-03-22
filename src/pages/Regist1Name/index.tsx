@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 
-const RegistName = ({navigation}) => {
+const RegistName = ({navigation}:any) => {
   const [name, setName] = useState('');
 
   return (
@@ -35,7 +35,7 @@ const RegistName = ({navigation}) => {
         <Text style={Styles.head2}>Masukkan nama lengkap</Text>
       </View>
       <View style={{margin: 20}}>
-        <TextInput style={Styles.input} placeholder="Nama Lengkap" value={name} onChange={ item => {setName(item.value) }}/>
+        <TextInput style={Styles.input} placeholder="Nama Lengkap" value={name} onChangeText={setName}/>
         <TouchableOpacity
           style={[Styles.button, {opacity: name === '' ? 0.5 : 1}]}
           onPress={() => {

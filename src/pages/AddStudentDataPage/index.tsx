@@ -79,7 +79,7 @@ const AddStudentDataPage = ({navigation}:any) => {
       </View>
       <View style={{margin: 20, rowGap: 20}}>
 
-        <TextInput style={Styles.input} placeholder="Nama Lengkap" value={studentName} onChange={item => {setStudentName(item.value)}} />
+        <TextInput style={Styles.input} placeholder="Nama Lengkap" value={studentName} onChangeText={setStudentName} />
 
         <Dropdown
           ref={ref}

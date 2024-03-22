@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
-const ProfilePage = ({navigation}) => {
+const ProfilePage = ({navigation}:any) => {
   return (
     <View style={{margin: 20}}>
       <Image

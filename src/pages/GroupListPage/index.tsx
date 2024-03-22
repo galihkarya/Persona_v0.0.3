@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-const GroupListPage = ({navigation}) => {
+const GroupListPage = ({navigation}:any) => {
   let institutionname: string;
   let institutioncode: string;
 

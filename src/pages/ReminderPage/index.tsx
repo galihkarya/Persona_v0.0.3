@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-const ReminderPage = ({navigation}) => {
+const ReminderPage = ({navigation}:any) => {
   return (
     <View>
       <TouchableOpacity

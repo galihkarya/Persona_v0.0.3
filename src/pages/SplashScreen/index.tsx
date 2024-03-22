@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Image, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function Splash({ navigation }) {
+function Splash({ navigation }:any) {
   useEffect(() => {
     const checkToken = async () => {
       try {

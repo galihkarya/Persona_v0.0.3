@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 
-const RegistRole = ({navigation}) => {
+const RegistRole = ({navigation}:any) => {
   const [value, setValue] = useState<string>('');
   const ref = useRef<IDropdownRef>(null);
   const data = [

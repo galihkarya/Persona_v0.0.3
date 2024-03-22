@@ -1,4 +1,4 @@
-import React, {useRef, useState, use} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import {
 
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 
-const ResultListPage = ({navigation}) => {
+const ResultListPage = ({navigation}:any) => {
   let institutionname: string;
   let institutioncode: string;
 
