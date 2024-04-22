@@ -11,8 +11,12 @@ import {
 
 
 const RegistName = ({navigation}:any) => {
-  const [name, setName] = useState('');
+  const [fullName, setFullName] = useState('');
 
+  const onPressHandler = () => {
+    navigation.navigate('RegistRole', {fullName});
+  }
+  
   return (
     <ScrollView>
       <TouchableOpacity
@@ -35,14 +39,12 @@ const RegistName = ({navigation}:any) => {
         <Text style={Styles.head2}>Masukkan nama lengkap</Text>
       </View>
       <View style={{margin: 20}}>
-        <TextInput style={Styles.input} placeholder="Nama Lengkap" value={name} onChangeText={setName}/>
+        <TextInput style={Styles.input} placeholder="Nama Lengkap" onChangeText={(val_name) => setFullName(val_name)} value={fullName}/>
         <TouchableOpacity
-          style={[Styles.button, {opacity: name === '' ? 0.5 : 1}]}
-          onPress={() => {
-            navigation.navigate('RegistRole');
-          }}
+          style={[Styles.button, {opacity: fullName === '' ? 0.5 : 1}]}
+          onPress={onPressHandler}
           
-          disabled={ name === '' }>
+          disabled={ fullName === '' }>
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
       </View>
