@@ -9,8 +9,13 @@ import {
   ScrollView,
 } from 'react-native';
 
-const RegistInstitutionBK = ({navigation}:any) => {
-  const [codeInstitution, setCodeInstitution] = useState('');
+const RegistInstitutionBK = ({navigation, route}:any) => {
+  const {fullName, roleID} = route.params;
+  const [InstituteID, setInstituteID] = useState('');
+
+  const onPressHandler = () => {
+    navigation.navigate('RegistAccount', {fullName, roleID, InstituteID});
+  }
 
   return (
     <ScrollView>
@@ -34,13 +39,11 @@ const RegistInstitutionBK = ({navigation}:any) => {
         <Text style={Styles.head2}>Masukkan kode sekolah</Text>
       </View>
       <View style={{margin: 20}}>
-        <TextInput style={Styles.input} placeholder="Kode sekolah"  value={codeInstitution} onChangeText={setCodeInstitution}/>
+        <TextInput style={Styles.input} placeholder="Kode sekolah"  value={InstituteID} onChangeText={(val) => setInstituteID(val)}/>
         <TouchableOpacity
-          style={[Styles.button, {opacity: codeInstitution === '' ? 0.5 : 1}]}
-          onPress={() => {
-            navigation.navigate('RegistAccount');
-          }}
-          disabled={ codeInstitution === '' }>
+          style={[Styles.button, {opacity: InstituteID === '' ? 0.5 : 1}]}
+          onPress={onPressHandler}
+          disabled={ InstituteID === '' }>
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
       </View>
