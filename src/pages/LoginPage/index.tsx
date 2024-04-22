@@ -1,5 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useState} from 'react';
 import {
+  Alert,
   View,
   Text,
   TouchableOpacity,
@@ -8,15 +10,33 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
+import api from '../../API/UserApi';
 
-const LoginPage = ({navigation}:any) => {
-  const [username, setUsername] = useState('');
+const LoginPage = ({navigation}: any) => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [passwordVisible, setPasswordVisible] = useState(true);
 
   let visibleicon = require('../../../assets/icons/visibleicon.png');
   let invisibleicon = require('../../../assets/icons/invisibleicon.png');
+
+  const handleLogin = async () => {
+    setIsLoading(true);
+    await api
+      .post('/auth/token', { email, password })
+      .then(async ({ data }) => {
+        // await AsyncStorage.setItem('user', JSON.stringify(data));
+        await AsyncStorage.setItem('token', data.access_token);
+        navigation.replace('HomePageLoggedIn');
+      })
+      .catch(({ response }) => {
+        console.log(response);
+        Alert.alert('Error', response.data);
+      });
+    setIsLoading(false);
+  };
 
   return (
     <ScrollView>
@@ -38,16 +58,14 @@ const LoginPage = ({navigation}:any) => {
           <Text style={{fontWeight: '900', fontSize: 42, color: '#cc3663'}}>
             Selamat datang kembali,
           </Text>
-          <Text style={{marginVertical: 30}}>
-            Masukkan username dan password
-          </Text>
+          <Text style={{marginVertical: 30}}>Masukkan email dan password</Text>
         </View>
 
         <TextInput
           style={Styles.input}
-          placeholder="username"
-          value={username}
-          onChangeText={setUsername}
+          placeholder="email"
+          value={email}
+          onChangeText={setEmail}
         />
         <View style={Styles.input}>
           <TextInput
@@ -68,15 +86,10 @@ const LoginPage = ({navigation}:any) => {
         <TouchableOpacity
           style={[
             Styles.button,
-            {opacity: username === '' || password === '' ? 0.5 : 1},
+            {opacity: email === '' || password === '' || isLoading == true ? 0.5 : 1},
           ]}
-          disabled={username === '' || password === ''}
-          onPress={() => {
-            navigation.reset({
-              index: 0,
-              routes: [{name: 'Tabs'}],
-            });
-          }}>
+          disabled={email === '' || password === '' || isLoading == true}
+          onPress={async () => {await handleLogin()}}>
           <Text style={Styles.textButton}>Masuk</Text>
         </TouchableOpacity>
         <View style={{flexDirection: 'row', alignSelf: 'center'}}>
