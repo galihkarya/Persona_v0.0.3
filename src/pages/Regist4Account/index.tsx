@@ -7,25 +7,48 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
-  ToastAndroid, 
+  ToastAndroid,
+  Alert,
 } from 'react-native';
+import api from '../../API/UserApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const RegistAccount = ({navigation}:any) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [rePassword, setRePassword] = useState('');
+const RegistAccount = ({navigation, route}: any) => {
+  const {fullName, roleID, instituteID} = route.params;
+  const [email, setemail] = useState('papipu@pikun.com');
+  const [password, setPassword] = useState('papipupepon');
+  const [rePassword, setRePassword] = useState('papipupepon');
 
   const [passwordVisible1, setPasswordVisible1] = useState(true);
   const [passwordVisible2, setPasswordVisible2] = useState(true);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   let visibleicon = require('../../../assets/icons/visibleicon.png');
   let invisibleicon = require('../../../assets/icons/invisibleicon.png');
 
-  const handleRegistration = () => {
-    if (password.length < 8) ToastAndroid.show('Password minimal 8 karakter', 2000);
-    else if (password !== rePassword) ToastAndroid.show('Password belum sama', 2000);
-    else navigation.reset({index: 0, routes: [{name: 'Tabs'}]})
-  }
+  const handleRegistration = async () => {
+    if (password.length < 8)
+      ToastAndroid.show('Password minimal 8 karakter', 2000);
+    else if (password !== rePassword)
+      ToastAndroid.show('Password belum sama', 2000);
+    else {
+      setIsLoading(true);
+      const data = {email, fullName, roleID, password, instituteID}
+      console.log(data)
+      const tes = await api
+        .post('/register', data)
+        .then(async () => {
+          navigation.replace('HomePageLoggedIn');
+        })
+        .catch(response => {
+          console.log(response);
+          Alert.alert('Error', response.data.message);
+        });
+      console.log(tes);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <ScrollView>
@@ -46,17 +69,15 @@ const RegistAccount = ({navigation}:any) => {
           source={require('../../../assets/images/account.png')}
         />
         <Text style={Styles.head1}>Akun</Text>
-        <Text style={Styles.head2}>
-          Masukkan username dan password yang bagus
-        </Text>
+        <Text style={Styles.head2}>Masukkan email dan password yang bagus</Text>
       </View>
 
       <View style={{margin: 20}}>
         <View style={Styles.input}>
           <TextInput
-            placeholder="username"
-            value={username}
-            onChangeText={setUsername}
+            placeholder="email"
+            value={email}
+            onChangeText={setemail}
           />
         </View>
 
@@ -95,9 +116,25 @@ const RegistAccount = ({navigation}:any) => {
         </View>
 
         <TouchableOpacity
-          style={[Styles.button, {opacity: username === '' || password === '' || rePassword === '' ? 0.5 : 1} ]}
+          style={[
+            Styles.button,
+            {
+              opacity:
+                email === '' ||
+                password === '' ||
+                rePassword === '' ||
+                isLoading == true
+                  ? 0.5
+                  : 1,
+            },
+          ]}
           onPress={handleRegistration}
-          disabled={username === '' || password === '' || rePassword === '' }>
+          disabled={
+            email === '' ||
+            password === '' ||
+            rePassword === '' ||
+            isLoading == true
+          }>
           <Text style={Styles.textButton}>Daftar</Text>
         </TouchableOpacity>
       </View>
