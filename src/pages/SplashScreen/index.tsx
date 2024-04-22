@@ -7,7 +7,7 @@ function Splash({ navigation }:any) {
     const checkToken = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        if (token === 'boleh masuk') {
+        if (token === 'LoggedIn') {
           navigation.replace('HomePageLoggedIn');
         } else {
           navigation.replace('HomePage');
