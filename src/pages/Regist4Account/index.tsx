@@ -15,9 +15,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegistAccount = ({navigation, route}: any) => {
   const {fullName, roleID, instituteID} = route.params;
-  const [email, setemail] = useState('papipu@pikun.com');
-  const [password, setPassword] = useState('papipupepon');
-  const [rePassword, setRePassword] = useState('papipupepon');
+  const [email, setemail] = useState('lalala@lll.com');
+  const [password, setPassword] = useState('lalilulelo');
+  const [rePassword, setRePassword] = useState('lalilulelo');
+
+  console.log(Number(roleID));
 
   const [passwordVisible1, setPasswordVisible1] = useState(true);
   const [passwordVisible2, setPasswordVisible2] = useState(true);
