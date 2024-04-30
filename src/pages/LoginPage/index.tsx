@@ -9,11 +9,12 @@ import {
   Image,
   TextInput,
   ScrollView,
+  ToastAndroid
 } from 'react-native';
 import api from '../../API/UserApi';
 
 const LoginPage = ({navigation}: any) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,17 +25,26 @@ const LoginPage = ({navigation}: any) => {
 
   const handleLogin = async () => {
     setIsLoading(true);
+
+    const formData = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
     await api
-      .post('/auth/token', { email, password })
-      .then(async ({ data }) => {
-        // await AsyncStorage.setItem('user', JSON.stringify(data));
-        await AsyncStorage.setItem('token', data.access_token);
-        navigation.replace('HomePageLoggedIn');
-      })
-      .catch(({ response }) => {
-        console.log(response);
-        Alert.alert('Error', response.data);
-      });
+    .post('/auth/token', formData, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+    .then(async ({ data }) => {
+
+      await AsyncStorage.setItem('userData', JSON.stringify(data))
+      
+      console.log(data)
+      navigation.replace('Tabs');
+    })
+    .catch(({ response }) => {
+      console.log(response.data);
+      // ToastAndroid.show(response.data, ToastAndroid.LONG);
+    });
+
     setIsLoading(false);
   };
 
@@ -58,14 +68,14 @@ const LoginPage = ({navigation}: any) => {
           <Text style={{fontWeight: '900', fontSize: 42, color: '#cc3663'}}>
             Selamat datang kembali,
           </Text>
-          <Text style={{marginVertical: 30}}>Masukkan email dan password</Text>
+          <Text style={{marginVertical: 30}}>Masukkan username dan password</Text>
         </View>
 
         <TextInput
           style={Styles.input}
-          placeholder="email"
-          value={email}
-          onChangeText={setEmail}
+          placeholder="username"
+          value={username}
+          onChangeText={setUsername}
         />
         <View style={Styles.input}>
           <TextInput
@@ -86,9 +96,9 @@ const LoginPage = ({navigation}: any) => {
         <TouchableOpacity
           style={[
             Styles.button,
-            {opacity: email === '' || password === '' || isLoading == true ? 0.5 : 1},
+            {opacity: username === '' || password === '' || isLoading == true ? 0.5 : 1},
           ]}
-          disabled={email === '' || password === '' || isLoading == true}
+          disabled={username === '' || password === '' || isLoading == true}
           onPress={async () => {await handleLogin()}}>
           <Text style={Styles.textButton}>Masuk</Text>
         </TouchableOpacity>
