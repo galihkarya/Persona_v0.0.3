@@ -1,4 +1,4 @@
-import React from 'react';
+import {useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,11 @@ import {
   ScrollView,
 } from 'react-native';
 
-const ReminderPage = ({navigation}:any) => {
+const ReminderPage = ({navigation}: any) => {
+  const handleButton = () => {
+    navigation.navigate('CameraPage');
+  };
+
   return (
     <View>
       <TouchableOpacity
@@ -51,11 +55,7 @@ const ReminderPage = ({navigation}:any) => {
             tangan terlihat sangat jelas
           </Text>
         </View>
-        <TouchableOpacity
-          style={Styles.button}
-          onPress={() => {
-            navigation.navigate('CameraPage');
-          }}>
+        <TouchableOpacity style={Styles.button} onPress={handleButton}>
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
       </ScrollView>
