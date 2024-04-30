@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const ProfilePage = ({navigation}:any) => {
+  const [userData, setUserData] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = JSON.parse(await AsyncStorage.getItem('userData'));
+      console.log(await AsyncStorage.getItem('userData'));
+      setUserData(data);
+    };
+    getData();
+  }, []);
+
+  
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.clear();
+      navigation.replace('HomePage');
+    } catch (error) {
+      console.log('Error clearing AsyncStorage:', error);
+    }
+  };
+
   return (
     <View style={{margin: 20}}>
       <Image
@@ -9,16 +33,14 @@ const ProfilePage = ({navigation}:any) => {
         style={Styles.profilePicture}
       />
       <View style={{margin: 20, alignItems: 'center'}}>
-        <Text style={Styles.nameText}>Alifia Rahmadhani G. </Text>
-        <Text style={Styles.roleText}>Guru BK</Text>
+        <Text style={Styles.nameText}>{userData?.fullName}</Text>
+        <Text style={Styles.roleText}>{userData?.roleID ? 'Wali kelas/Guru lainnya' : 'Guru BK'}</Text>
         <Text style={Styles.institutionText}>SDN Hoka Bento</Text>
         <Text style={Styles.codeText}>Kode instansi: 45IKB6T</Text>
       </View>
       <TouchableOpacity
         style={Styles.button}
-        onPress={() => {
-          navigation.replace('HomePage');
-        }}>
+        onPress={handleLogout}>
         <Text style={Styles.textButton}>Keluar</Text>
       </TouchableOpacity>
     </View>
