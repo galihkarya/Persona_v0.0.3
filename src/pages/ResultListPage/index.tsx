@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,16 +8,45 @@ import {
   TouchableOpacity,
   ScrollView,
   StatusBar,
+  FlatList,
 } from 'react-native';
+import api from '../../API/UserApi';
 
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 
-const ResultListPage = ({navigation}:any) => {
+const ResultListPage = ({navigation}: any) => {
   let institutionname: string;
   let institutioncode: string;
 
+  const [listData, setListData] = useState(null);
+
   institutionname = 'SDN Hoka Bento';
   institutioncode = '45IKB6T';
+
+  useEffect(() => {
+    const getResultList = async () => {
+      await api.get('/result').then(({data}) => {
+        console.log(data);
+        setListData(data);
+      });
+      // console.log(ResultList.data);
+    };
+    getResultList();
+  }, []);
+
+  const PropList = ({fullName, groupID}: any) => (
+    <View style={Styles.listView}>
+      <View>
+        <Text style={Styles.resultName}>{fullName}</Text>
+        <Text style={Styles.classGroup}>Kelas {groupID}</Text>
+      </View>
+      <View>
+        <TouchableOpacity style={Styles.lihatButton}>
+          <Text style={Styles.lihatTextButton}>Lihat</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   const [value, setValue] = useState<string>();
   const ref = useRef<IDropdownRef>(null);
@@ -43,7 +72,7 @@ const ResultListPage = ({navigation}:any) => {
   ];
 
   return (
-    <View>
+    <View style={{flex:1, maxHeight: '35%'}}>
       <StatusBar backgroundColor="#f2f2f2" barStyle="dark-content" />
       <Text style={Styles.headerText}>Daftar Hasil</Text>
       <View style={{margin: 20}}>
@@ -87,7 +116,26 @@ const ResultListPage = ({navigation}:any) => {
             />
           </TouchableOpacity>
         </View>
-        <ScrollView></ScrollView>
+        <View>
+          {/* <PropList fullName='galih' groupID={0}/> */}
+          {/* {listData.map((item, index) => {
+            {console.log(item.fullName)}
+            return <PropList
+              key={index}
+              fullName={item.fullName}
+              groupID={item.groupID}
+            />
+            })} */}
+
+          <FlatList
+            data={listData}
+            renderItem={({item}) => (
+              <PropList fullName={item.fullName} groupID={item.groupID} />
+            )}
+            keyExtractor={item => item.id}
+            style={{marginTop: 20}}
+          />
+        </View>
       </View>
     </View>
   );
@@ -137,6 +185,36 @@ const Styles = StyleSheet.create({
   },
   selectedTextStyle: {
     fontSize: 15,
+  },
+  lihatButton: {
+    alignContent: 'center',
+    backgroundColor: '#e0e0e0',
+    borderRadius: 10,
+  },
+  lihatTextButton: {
+    marginVertical: 5,
+    marginHorizontal: 10,
+    color: 'black',
+  },
+  listView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // flex: 1,
+    alignItems: 'center',
+    marginTop: 15,
+    paddingBottom: 5,
+    borderBottomWidth: 0.5,
+    borderColor: '#00000070'
+  },
+  resultName: {
+    color: 'black',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  classGroup: {
+    color: '#00000088',
+    fontWeight: '400',
+    fontSize: 14,
   },
 });
 
