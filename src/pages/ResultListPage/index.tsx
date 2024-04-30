@@ -6,7 +6,6 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  ScrollView,
   StatusBar,
   FlatList,
 } from 'react-native';
@@ -26,7 +25,7 @@ const ResultListPage = ({navigation}: any) => {
   useEffect(() => {
     const getResultList = async () => {
       await api.get('/result').then(({data}) => {
-        console.log(data);
+        // console.log(data);
         setListData(data);
       });
       // console.log(ResultList.data);
@@ -34,19 +33,40 @@ const ResultListPage = ({navigation}: any) => {
     getResultList();
   }, []);
 
-  const PropList = ({fullName, groupID}: any) => (
-    <View style={Styles.listView}>
-      <View>
-        <Text style={Styles.resultName}>{fullName}</Text>
-        <Text style={Styles.classGroup}>Kelas {groupID}</Text>
+  const PropList = ({
+    fullName,
+    groupID,
+    headLine,
+    lifeLine,
+    heartLine,
+    sex,
+  }: any) => {
+    // console.log(fullName, groupID, headLine, lifeLine, heartLine, sex);
+    return (
+      <View style={Styles.listView}>
+        <View>
+          <Text style={Styles.resultName}>{fullName}</Text>
+          <Text style={Styles.classGroup}>Kelas {groupID}</Text>
+        </View>
+        <View>
+          <TouchableOpacity
+            style={Styles.lihatButton}
+            onPress={() =>
+              navigation.navigate('ResultPage', {
+                fullName,
+                groupID,
+                headLine,
+                lifeLine,
+                heartLine,
+                sex,
+              })
+            }>
+            <Text style={Styles.lihatTextButton}>Lihat</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View>
-        <TouchableOpacity style={Styles.lihatButton}>
-          <Text style={Styles.lihatTextButton}>Lihat</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+    );
+  };
 
   const [value, setValue] = useState<string>();
   const ref = useRef<IDropdownRef>(null);
@@ -72,8 +92,9 @@ const ResultListPage = ({navigation}: any) => {
   ];
 
   return (
-    <View style={{flex:1, maxHeight: '35%'}}>
+    <View style={{flex: 1, maxHeight: '35%'}}>
       <StatusBar backgroundColor="#f2f2f2" barStyle="dark-content" />
+
       <Text style={Styles.headerText}>Daftar Hasil</Text>
       <View style={{margin: 20}}>
         <Text style={Styles.schoolName}>{institutionname}</Text>
@@ -130,7 +151,14 @@ const ResultListPage = ({navigation}: any) => {
           <FlatList
             data={listData}
             renderItem={({item}) => (
-              <PropList fullName={item.fullName} groupID={item.groupID} />
+              <PropList
+                fullName={item.fullName}
+                groupID={item.groupID}
+                headLine={item.headLine}
+                lifeLine={item.lifeLine}
+                heartLine={item.heartLine}
+                sex={item.sex}
+              />
             )}
             keyExtractor={item => item.id}
             style={{marginTop: 20}}
@@ -204,7 +232,7 @@ const Styles = StyleSheet.create({
     marginTop: 15,
     paddingBottom: 5,
     borderBottomWidth: 0.5,
-    borderColor: '#00000070'
+    borderColor: '#00000070',
   },
   resultName: {
     color: 'black',
