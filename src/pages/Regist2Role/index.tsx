@@ -5,7 +5,7 @@ import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 
 const RegistRole = ({navigation, route}:any) => {
   const {fullName} = route.params;
-  const [roleID, setRoleID] = useState<string>('');
+  const [roleID, setRoleID] = useState<String>('');
   const ref = useRef<IDropdownRef>(null);
   const data = [
     {label: 'Guru BK', value: '0'},
