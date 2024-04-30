@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,14 +10,24 @@ import {
   ScrollView,
 } from 'react-native';
 
-const HomePageLogedIn = ({navigation}:any) => {
+const HomePageLogedIn = ({navigation}: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentModal, setCurrentModal] = useState(2);
+  const [userData, setUserData] = useState<any>(null);
 
   const setModalContent = (modalHome: number) => {
     setModalVisible(true);
     setCurrentModal(modalHome);
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = JSON.parse(await AsyncStorage.getItem('userData'));
+      setUserData(data);
+    };
+    getData();
+  }, []);
+    // console.log(userData);
 
   const Card1 = () => {
     return (
@@ -79,86 +90,86 @@ const HomePageLogedIn = ({navigation}:any) => {
   };
 
   return (
-      <ScrollView>
-        <View
-          style={{
-            marginRight: 20,
-            marginTop: 30,
-            flexDirection: 'row',
-            marginLeft: 20,
-          }}>
-          <View style={{flex: 1}}>
-            <Text style={{color: 'black', fontSize: 14, fontWeight: '300'}}>
-              Welcome Back,{' '}
-            </Text>
-            <Text style={{color: 'black', fontSize: 24, fontWeight: '700'}}>
-              Alifia Ramadhani G.{' '}
-            </Text>
-            <Text style={{color: 'black', fontSize: 16, fontWeight: '300'}}>
-              SDN Hoka Bento{' '}
-            </Text>
-          </View>
-          <Image
-            style={Styles.avatar}
-            source={require('../../../assets/icons/Avatar.png')}
-          />
+    <ScrollView>
+      <View
+        style={{
+          marginRight: 20,
+          marginTop: 30,
+          flexDirection: 'row',
+          marginLeft: 20,
+        }}>
+        <View style={{flex: 1}}>
+          <Text style={{color: 'black', fontSize: 14, fontWeight: '300'}}>
+            Welcome Back,{' '}
+          </Text>
+          <Text style={{color: 'black', fontSize: 24, fontWeight: '700'}}>
+            {userData?.fullName}
+          </Text>
+          <Text style={{color: 'black', fontSize: 16, fontWeight: '300'}}>
+            SDN Hoka Bento{' '}
+          </Text>
         </View>
+        <Image
+          style={Styles.avatar}
+          source={require('../../../assets/icons/Avatar.png')}
+        />
+      </View>
 
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
-          {currentModal == 1 ? (
-            <Card1 />
-          ) : currentModal == 2 ? (
-            <Card2 />
-          ) : (
-            <Card3 />
-          )}
-        </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        {currentModal == 1 ? (
+          <Card1 />
+        ) : currentModal == 2 ? (
+          <Card2 />
+        ) : (
+          <Card3 />
+        )}
+      </Modal>
 
-        <View style={{marginTop: 20}}>
-          <TouchableOpacity
-            style={Styles.card}
-            onPress={() => setModalContent(1)}>
-            <Image
-              style={Styles.imageObjects}
-              source={require('../../../assets/images/palm_fluent.png')}
-            />
-            <Text style={Styles.textCard}>Apa itu Palmistry?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={Styles.card}
-            onPress={() => setModalContent(2)}>
-            <Image
-              style={Styles.imageObjects}
-              source={require('../../../assets/images/palmline.png')}
-            />
-            <Text style={Styles.textCard}>Macam-macam Garis Tangan</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={Styles.card}
-            onPress={() => setModalContent(3)}>
-            <Image
-              style={Styles.imageObjects}
-              source={require('../../../assets/images/indexfinger_fluent.png')}
-            />
-            <Text style={Styles.textCard}>
-              Gaya belajar yang cocok sesuai kepribadian anak!
-            </Text>
-          </TouchableOpacity>
-        </View>
+      <View style={{marginTop: 20}}>
         <TouchableOpacity
-          style={Styles.button}
-          onPress={() => {
-            navigation.navigate('AddStudentDataPage');
-          }}>
-          <Text style={Styles.textButton}>Mulai Prediksi</Text>
+          style={Styles.card}
+          onPress={() => setModalContent(1)}>
+          <Image
+            style={Styles.imageObjects}
+            source={require('../../../assets/images/palm_fluent.png')}
+          />
+          <Text style={Styles.textCard}>Apa itu Palmistry?</Text>
         </TouchableOpacity>
-      </ScrollView>
+        <TouchableOpacity
+          style={Styles.card}
+          onPress={() => setModalContent(2)}>
+          <Image
+            style={Styles.imageObjects}
+            source={require('../../../assets/images/palmline.png')}
+          />
+          <Text style={Styles.textCard}>Macam-macam Garis Tangan</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={Styles.card}
+          onPress={() => setModalContent(3)}>
+          <Image
+            style={Styles.imageObjects}
+            source={require('../../../assets/images/indexfinger_fluent.png')}
+          />
+          <Text style={Styles.textCard}>
+            Gaya belajar yang cocok sesuai kepribadian anak!
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity
+        style={Styles.button}
+        onPress={() => {
+          navigation.navigate('AddStudentDataPage');
+        }}>
+        <Text style={Styles.textButton}>Mulai Prediksi</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
@@ -226,7 +237,7 @@ const Styles = StyleSheet.create({
     fontWeight: '900',
     color: '#000000',
     alignSelf: 'center',
-    maxWidth: 150, 
+    maxWidth: 150,
   },
   button: {
     backgroundColor: '#CC3663',
