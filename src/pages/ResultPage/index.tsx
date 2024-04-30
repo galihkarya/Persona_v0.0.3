@@ -15,14 +15,10 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import FileViewer from "react-native-file-viewer";
 // import Share from 'react-native-share';
 
-const ResultPage = ({navigation}: any) => {
-  let studentName: string;
-  let gender: string;
-  let classGroup: string;
+const ResultPage = ({navigation, route}: any) => {
+  const {fullName, groupID, headLine, lifeLine, heartLine, sex} = route.params;
+  console.log(fullName, groupID, headLine, lifeLine, heartLine, sex);
   let accountName: string;
-  let headLine: string;
-  let lifeLine: string;
-  let heartLine: string;
 
   let timestampClock: string;
   let timestampDate: string;
@@ -31,16 +27,7 @@ const ResultPage = ({navigation}: any) => {
   let day: string;
   let timestampClock_str: string;
 
-  studentName = 'Pia';
-  gender = 'Perempuan';
-  classGroup = '6B';
   accountName = 'Ica Siti';
-  headLine =
-    'Berdasarkan perhitungan, anda memiliki pola pikir yang panjang dan berwawasan luas. Anda juga termasuk orang yang kreatif. Anda multi talenta, memiliki mimpi besar dan daya imajinasi yang bagus. ';
-  lifeLine =
-    'Anda adalah orang yang terbuka dan mudah bergaul. Memiliki vitalitas dan semangat hidup yang bagus. Anda cenderung memiliki ambisi, tetapi juga memiliki ego yang tinggi';
-  heartLine =
-    'Anda memiliki perasaan yang hangat, penyayang, dan ramah. Suatu hari nanti, anda akan menjadi orang yang romatis, hangat, aktif, dan bahkan rela berkorban. ';
 
   const exportToPDF = async () => {
     var moment = require('moment');
@@ -86,9 +73,9 @@ const ResultPage = ({navigation}: any) => {
       const htmlContent = `
       <div style="background-image: url('../../../assets/images/handpalm.png'); background-repeat: no-repeat; margin: 50">
           <h1>Hasil Pembacaan Garis Tangan</h1>
-          <p>Nama siswa: ${studentName}</p>
-          <p>Jenis kelamin: ${gender}</p>
-          <p>Kelas: ${classGroup}</p>
+          <p>Nama siswa: ${fullName}</p>
+          <p>Jenis kelamin: ${sex}</p>
+          <p>Kelas: ${groupID}</p>
           <p>Dicetak oleh: ${accountName}</p>
           <p>Waktu cetak: ${timestampDate} ${timestampClock}</p>
           <h2>Garis Kepala</h2>
@@ -102,7 +89,7 @@ const ResultPage = ({navigation}: any) => {
 
       const options = {
         html: htmlContent,
-        fileName: `${studentName}${classGroup}_${year}${month}${day}${timestampClock_str}`,
+        fileName: `${fullName}${groupID}_${year}${month}${day}${timestampClock_str}`,
         directory: `Persona/Results`,
       };
 
@@ -139,8 +126,8 @@ const ResultPage = ({navigation}: any) => {
       </View>
 
       <ScrollView>
-        <Text style={Styles.studentNameText}>{studentName}</Text>
-        <Text style={Styles.classGroupText}>Kelas {classGroup}</Text>
+        <Text style={Styles.studentNameText}>{fullName}</Text>
+        <Text style={Styles.classGroupText}>Kelas {groupID}</Text>
 
         <View
           style={{
