@@ -16,8 +16,8 @@ import FileViewer from "react-native-file-viewer";
 // import Share from 'react-native-share';
 
 const ResultPage = ({navigation, route}: any) => {
-  const {fullName, groupID, headLine, lifeLine, heartLine, sex} = route.params;
-  console.log(fullName, groupID, headLine, lifeLine, heartLine, sex);
+  const {studentName, groupID, headLine, lifeLine, heartLine, sex} = route.params;
+  console.log(studentName, groupID, headLine, lifeLine, heartLine, sex);
   let accountName: string;
 
   let timestampClock: string;
@@ -73,7 +73,7 @@ const ResultPage = ({navigation, route}: any) => {
       const htmlContent = `
       <div style="background-image: url('../../../assets/images/handpalm.png'); background-repeat: no-repeat; margin: 50">
           <h1>Hasil Pembacaan Garis Tangan</h1>
-          <p>Nama siswa: ${fullName}</p>
+          <p>Nama siswa: ${studentName}</p>
           <p>Jenis kelamin: ${sex}</p>
           <p>Kelas: ${groupID}</p>
           <p>Dicetak oleh: ${accountName}</p>
@@ -89,7 +89,7 @@ const ResultPage = ({navigation, route}: any) => {
 
       const options = {
         html: htmlContent,
-        fileName: `${fullName}${groupID}_${year}${month}${day}${timestampClock_str}`,
+        fileName: `${studentName}${groupID}_${year}${month}${day}${timestampClock_str}`,
         directory: `Persona/Results`,
       };
 
@@ -126,7 +126,7 @@ const ResultPage = ({navigation, route}: any) => {
       </View>
 
       <ScrollView>
-        <Text style={Styles.studentNameText}>{fullName}</Text>
+        <Text style={Styles.studentNameText}>{studentName}</Text>
         <Text style={Styles.classGroupText}>Kelas {groupID}</Text>
 
         <View
