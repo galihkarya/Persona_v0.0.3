@@ -34,18 +34,18 @@ const ResultListPage = ({navigation}: any) => {
   }, []);
 
   const PropList = ({
-    fullName,
+    studentName,
     groupID,
     headLine,
     lifeLine,
     heartLine,
     sex,
   }: any) => {
-    // console.log(fullName, groupID, headLine, lifeLine, heartLine, sex);
+    // console.log(studentName, groupID, headLine, lifeLine, heartLine, sex);
     return (
       <View style={Styles.listView}>
         <View>
-          <Text style={Styles.resultName}>{fullName}</Text>
+          <Text style={Styles.resultName}>{studentName}</Text>
           <Text style={Styles.classGroup}>Kelas {groupID}</Text>
         </View>
         <View>
@@ -53,7 +53,7 @@ const ResultListPage = ({navigation}: any) => {
             style={Styles.lihatButton}
             onPress={() =>
               navigation.navigate('ResultPage', {
-                fullName,
+                studentName,
                 groupID,
                 headLine,
                 lifeLine,
@@ -138,12 +138,12 @@ const ResultListPage = ({navigation}: any) => {
           </TouchableOpacity>
         </View>
         <View>
-          {/* <PropList fullName='galih' groupID={0}/> */}
+          {/* <PropList studentName='galih' groupID={0}/> */}
           {/* {listData.map((item, index) => {
-            {console.log(item.fullName)}
+            {console.log(item.studentName)}
             return <PropList
               key={index}
-              fullName={item.fullName}
+              studentName={item.studentName}
               groupID={item.groupID}
             />
             })} */}
@@ -152,7 +152,7 @@ const ResultListPage = ({navigation}: any) => {
             data={listData}
             renderItem={({item}) => (
               <PropList
-                fullName={item.fullName}
+                studentName={item.studentName}
                 groupID={item.groupID}
                 headLine={item.headLine}
                 lifeLine={item.lifeLine}
