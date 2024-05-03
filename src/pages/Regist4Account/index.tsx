@@ -19,7 +19,7 @@ const RegistAccount = ({navigation, route}: any) => {
   const [password, setPassword] = useState('lalilulelo');
   const [rePassword, setRePassword] = useState('lalilulelo');
 
-  console.log(Number(roleID));
+  console.log(fullName, Number(roleID), instituteID, email, password);
 
   const [passwordVisible1, setPasswordVisible1] = useState(true);
   const [passwordVisible2, setPasswordVisible2] = useState(true);
@@ -36,7 +36,7 @@ const RegistAccount = ({navigation, route}: any) => {
       ToastAndroid.show('Password belum sama', 2000);
     else {
       setIsLoading(true);
-      const data = {email, fullName, roleID, password, instituteID}
+      const data = {email, fullName, roleID: Number(roleID), password, instituteID: Number(instituteID)}
       console.log(data)
       const tes = await api
         .post('/register', data)
