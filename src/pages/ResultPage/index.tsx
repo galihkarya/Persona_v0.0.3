@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,16 +9,16 @@ import {
   Platform,
   PermissionsAndroid,
   ToastAndroid,
-  Linking,
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import FileViewer from "react-native-file-viewer";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import Share from 'react-native-share';
 
 const ResultPage = ({navigation, route}: any) => {
   const {studentName, groupID, headLine, lifeLine, heartLine, sex} = route.params;
-  console.log(studentName, groupID, headLine, lifeLine, heartLine, sex);
-  let accountName: string;
+  // console.log(studentName, groupID, headLine, lifeLine, heartLine, sex); 
+  const [userData, setUserData] = useState<any>(null);
 
   let timestampClock: string;
   let timestampDate: string;
@@ -27,7 +27,13 @@ const ResultPage = ({navigation, route}: any) => {
   let day: string;
   let timestampClock_str: string;
 
-  accountName = 'Ica Siti';
+  useEffect(() => {
+    const getData = async () => {
+      const data = JSON.parse(await AsyncStorage.getItem('userData'));
+      setUserData(data);
+    };
+    getData();
+  }, []);
 
   const exportToPDF = async () => {
     var moment = require('moment');
@@ -74,9 +80,9 @@ const ResultPage = ({navigation, route}: any) => {
       <div style="background-image: url('../../../assets/images/handpalm.png'); background-repeat: no-repeat; margin: 50">
           <h1>Hasil Pembacaan Garis Tangan</h1>
           <p>Nama siswa: ${studentName}</p>
-          <p>Jenis kelamin: ${sex}</p>
+          <p>Jenis kelamin: ${sex ? 'laki-laki' : 'perempuan'}</p>
           <p>Kelas: ${groupID}</p>
-          <p>Dicetak oleh: ${accountName}</p>
+          <p>Dicetak oleh: ${userData?.fullName}</p>
           <p>Waktu cetak: ${timestampDate} ${timestampClock}</p>
           <h2>Garis Kepala</h2>
           <p>${headLine}</p>
@@ -99,7 +105,7 @@ const ResultPage = ({navigation, route}: any) => {
         `PDF berhasil di export di ${file.filePath}`,
         ToastAndroid.LONG,
       );
-      FileViewer.open(`file://${file.filePath}`);
+      FileViewer.open(`file://${file.filePath}`).then(() => console.log('opened')).catch((error) => console.log(error));
       // await Linking.openURL(`file://${file.filePath}`);
       // Share.open({url: `file://${file.filePath}`});
       
