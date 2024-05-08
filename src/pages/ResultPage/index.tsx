@@ -90,6 +90,7 @@ const ResultPage = ({navigation, route}: any) => {
           <p>${lifeLine}</p>
           <h2>Garis Hati</h2>
           <p>${heartLine}</p>
+          <p>Persona 2024</p>
       </div>
         `;
 
