@@ -18,7 +18,7 @@ function Splash({navigation}: any) {
         navigation.replace('HomePage');
       }
     };
-    setTimeout(checkToken, 3000);
+    setTimeout(checkToken, 1500);
   }, [navigation]);
 
   return (
