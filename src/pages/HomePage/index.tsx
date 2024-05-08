@@ -143,7 +143,7 @@ const HomePage = ({navigation}:any) => {
       <TouchableOpacity
         style={Styles.button}
         onPress={() => {
-          navigation.navigate('ReminderPage');
+          navigation.navigate('AddNamePage');
         }}>
         <Text style={Styles.textButton}>Mulai Prediksi</Text>
       </TouchableOpacity>
