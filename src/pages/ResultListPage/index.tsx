@@ -138,16 +138,6 @@ const ResultListPage = ({navigation}: any) => {
           </TouchableOpacity>
         </View>
         <View>
-          {/* <PropList studentName='galih' groupID={0}/> */}
-          {/* {listData.map((item, index) => {
-            {console.log(item.studentName)}
-            return <PropList
-              key={index}
-              studentName={item.studentName}
-              groupID={item.groupID}
-            />
-            })} */}
-
           <FlatList
             data={listData}
             renderItem={({item}) => (
