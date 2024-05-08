@@ -18,7 +18,7 @@ const AddStudentDataPage = ({navigation}:any) => {
     setSex(option === sex ? null : option);
   };
 
-  const [value, setValue] = useState<string>('');
+  const [groupID, setGroupID] = useState<string>('');
   const ref = useRef<IDropdownRef>(null);
   const data = [
     {label: '1A', value: '1a'},
@@ -91,17 +91,17 @@ const AddStudentDataPage = ({navigation}:any) => {
           labelField="label"
           valueField="value"
           placeholder="Pilih grup kelas"
-          value={value}
+          value={groupID}
           onChange={item => {
-            setValue(item.value);
+            setGroupID(item.value);
           }}
         />
         <TouchableOpacity
-          style={[Styles.button, {opacity: sex === null || value === '' || studentName === '' ? 0.3 : 1}]}
+          style={[Styles.button, {opacity: sex === null || groupID === '' || studentName === '' ? 0.3 : 1}]}
           onPress={() => {
-            navigation.navigate('ReminderPage');
+            navigation.navigate('ReminderPage', {studentName, sex, groupID});
           }}
-          disabled={sex === null || value === '' || studentName === ''}>
+          disabled={sex === null || groupID === '' || studentName === ''}>
           
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
