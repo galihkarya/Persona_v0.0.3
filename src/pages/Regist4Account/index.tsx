@@ -15,11 +15,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegistAccount = ({navigation, route}: any) => {
   const {fullName, roleID, instituteID} = route.params;
-  const [email, setemail] = useState('lalala@lll.com');
-  const [password, setPassword] = useState('lalilulelo');
-  const [rePassword, setRePassword] = useState('lalilulelo');
+  const [email, setemail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
 
-  console.log(fullName, Number(roleID), instituteID, email, password);
+  // console.log(fullName, Number(roleID), instituteID, email, password);
 
   const [passwordVisible1, setPasswordVisible1] = useState(true);
   const [passwordVisible2, setPasswordVisible2] = useState(true);
@@ -36,12 +36,14 @@ const RegistAccount = ({navigation, route}: any) => {
       ToastAndroid.show('Password belum sama', 2000);
     else {
       setIsLoading(true);
-      const data = {email, fullName, roleID: Number(roleID), password, instituteID: Number(instituteID)}
+      const data = {email, fullName, roleID: Number(roleID), instituteID: Number(instituteID), password}
       console.log(data)
       const tes = await api
-        .post('/register', data)
+        .post('/register/', data)
         .then(async () => {
-          navigation.replace('HomePageLoggedIn');
+          ToastAndroid.show('Registrasi berhasil', ToastAndroid.SHORT)
+          navigation.replace('Tabs');
+
         })
         .catch(response => {
           console.log(response);
@@ -80,6 +82,7 @@ const RegistAccount = ({navigation, route}: any) => {
             placeholder="email"
             value={email}
             onChangeText={setemail}
+            style={{flex:1}}
           />
         </View>
 
