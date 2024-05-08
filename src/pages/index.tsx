@@ -14,6 +14,8 @@ import ReminderPage from './ReminderPage';
 import ResultListPage from './ResultListPage';
 import ResultPage from './ResultPage';
 import Splash from './SplashScreen';
+import AddNamePage from './AddNamePage';
+import ResultGeneralPage from './ResultGeneralPage';
 import Tabs from '../components/BottomNavigation';
 
 export {
@@ -32,6 +34,8 @@ export {
   ReminderPage,
   ResultListPage,
   ResultPage,
-  Splash, 
+  Splash,
+  AddNamePage,  
+  ResultGeneralPage, 
   Tabs
 };
