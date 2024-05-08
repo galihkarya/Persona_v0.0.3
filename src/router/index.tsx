@@ -14,6 +14,8 @@ import {
   RegistInstitutionWK,
   RegistAccount,
   ResultPage,
+  AddNamePage, 
+  ResultGeneralPage, 
   Tabs
 } from '../pages';
 
@@ -85,6 +87,16 @@ const Router = () => {
       <Stack.Screen
         name="ResultPage"
         component={ResultPage}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AddNamePage"
+        component={AddNamePage}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ResultGeneralPage"
+        component={ResultGeneralPage}
         options={{headerShown: false}}
       />
       <Stack.Screen
