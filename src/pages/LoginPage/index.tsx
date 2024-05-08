@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useState} from 'react';
 import {
-  Alert,
   View,
   Text,
   TouchableOpacity,
@@ -9,7 +8,7 @@ import {
   Image,
   TextInput,
   ScrollView,
-  ToastAndroid
+  ToastAndroid,
 } from 'react-native';
 import api from '../../API/UserApi';
 
@@ -28,7 +27,7 @@ const LoginPage = ({navigation}: any) => {
 
     const formData = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
     await api
-    .post('/auth/token', formData, {
+    .post('/auth/login', formData, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
@@ -42,7 +41,7 @@ const LoginPage = ({navigation}: any) => {
     })
     .catch(({ response }) => {
       console.log(response.data);
-      // ToastAndroid.show(response.data, ToastAndroid.LONG);
+      ToastAndroid.show('email atau password salah', (ToastAndroid.LONG));
     });
 
     setIsLoading(false);
