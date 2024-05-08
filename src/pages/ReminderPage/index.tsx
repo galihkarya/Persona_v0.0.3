@@ -1,4 +1,5 @@
-import {useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,9 +9,21 @@ import {
   ScrollView,
 } from 'react-native';
 
-const ReminderPage = ({navigation}: any) => {
+const ReminderPage = ({navigation, route}: any) => {
+  const {name, sex, fullName, groupID} = route.params;
+  const [userData, setUserData] = useState<any>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = JSON.parse(await AsyncStorage.getItem('userData'));
+      setUserData(data);
+    };
+    getData();
+  }, []);
+
   const handleButton = () => {
-    navigation.navigate('CameraPage');
+    if (userData == null) navigation.navigate('CameraPage', {name, sex});
+    else navigation.navigate('CameraPage', {fullName, sex, groupID});
   };
 
   return (
