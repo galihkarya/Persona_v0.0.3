@@ -16,7 +16,13 @@ import {
 } from 'react-native-vision-camera';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 
-const CameraPage = ({navigation}:any) => {
+const CameraPage = ({navigation, route}: any) => {
+  const {name, sex, fullName, groupID} = route.params;
+
+  const heartLine = 'heartline';
+  const lifeLine = 'lifeLine';
+  const headLine = 'headLine';
+
   const flashOnIcon = require('../../../assets/icons/icon_flash_on.png');
   const flashOffIcon = require('../../../assets/icons/icon_flash_off.png');
 
@@ -49,19 +55,25 @@ const CameraPage = ({navigation}:any) => {
         flash,
         enableShutterSound: false,
       });
-      console.log(photo)
+      console.log(photo);
 
-      const takenPhoto = await CameraRoll.saveAsset(`file://${photo.path}`, {type: 'photo'});
+      const takenPhoto = await CameraRoll.saveAsset(`file://${photo.path}`, {
+        type: 'photo',
+      });
 
-      console.log(takenPhoto)
+      console.log(takenPhoto);
 
-      setPhotoURI(takenPhoto.node.image.uri); 
-      
+      setPhotoURI(takenPhoto.node.image.uri);
     } catch (error) {
       console.error('Error taking photo:', error);
     } finally {
       setIsTakingPhoto(false);
     }
+  };
+
+  const buttonHandler = () => {
+    if (fullName == null) navigation.navigate('ResultGeneralPage', {name, sex, heartLine, lifeLine, headLine});
+    else navigation.navigate('ResultPage', {fullName, sex, groupID,  heartLine, lifeLine, headLine});
   };
 
   return (
@@ -87,9 +99,7 @@ const CameraPage = ({navigation}:any) => {
                   marginHorizontal: 20,
                   borderRadius: 15,
                 }}
-                onPress={() => {
-                  navigation.replace('ResultPage');
-                }}>
+                onPress={buttonHandler}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -147,11 +157,9 @@ const CameraPage = ({navigation}:any) => {
             ref={camera}
             style={Styles.viewFinder}
             device={device}
-
             isActive={true}
             format={format}
             photo={true}
-
           />
           <TouchableOpacity
             style={Styles.shutterButton}
