@@ -14,7 +14,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const instance = axios.create({
-  baseURL: 'https://personaapp-2nryopyb2q-et.a.run.app', // Ganti dengan URL base API Anda
+  baseURL: 'https://persona-api-2nryopyb2q-et.a.run.app/', // Ganti dengan URL base API Anda
 });
 
 // Interceptor request
