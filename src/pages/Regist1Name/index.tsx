@@ -11,10 +11,10 @@ import {
 
 
 const RegistName = ({navigation}:any) => {
-  const [fullName, setFullName] = useState('');
+  const [full_name, set_full_name] = useState('');
 
   const onPressHandler = () => {
-    navigation.navigate('RegistRole', {fullName});
+    navigation.navigate('RegistRole', {full_name});
   }
   
   return (
@@ -39,12 +39,12 @@ const RegistName = ({navigation}:any) => {
         <Text style={Styles.head2}>Masukkan nama lengkap</Text>
       </View>
       <View style={{margin: 20}}>
-        <TextInput style={Styles.input} placeholder="Nama Lengkap" onChangeText={(val_name) => setFullName(val_name)} value={fullName}/>
+        <TextInput style={Styles.input} placeholder="Nama Lengkap" onChangeText={(val_name) => set_full_name(val_name)} value={full_name}/>
         <TouchableOpacity
-          style={[Styles.button, {opacity: fullName === '' ? 0.5 : 1}]}
+          style={[Styles.button, {opacity: full_name === '' ? 0.5 : 1}]}
           onPress={onPressHandler}
           
-          disabled={ fullName === '' }>
+          disabled={ full_name === '' }>
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
       </View>
