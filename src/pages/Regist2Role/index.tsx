@@ -4,20 +4,20 @@ import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 
 const RegistRole = ({navigation, route}:any) => {
-  const {fullName} = route.params;
-  const [roleID, setRoleID] = useState<String>('');
+  const {full_name} = route.params;
+  const [role, set_role] = useState<String>('');
   const ref = useRef<IDropdownRef>(null);
   const data = [
-    {label: 'Guru BK', value: '0'},
-    {label: 'Wali Kelas/lainnya', value: '1'},
+    {label: 'Guru BK', value: 'bk'},
+    {label: 'Wali Kelas/lainnya', value: 'wali'},
   ];
 
   const onPressHandler = () => {
-    if (roleID === '0'){
-      navigation.navigate('RegistInstitutionBK', {fullName, roleID})
+    if (role === 'bk'){
+      navigation.navigate('RegistInstitutionBK', {full_name, role})
     }
-    else if (roleID === '1'){
-      navigation.navigate('RegistInstitutionWK', {fullName, roleID})
+    else if (role === 'wali'){
+      navigation.navigate('RegistInstitutionWK', {full_name, role})
     }
   }
 
@@ -53,15 +53,15 @@ const RegistRole = ({navigation, route}:any) => {
           labelField="label"
           valueField="value"
           placeholder="Pilih role"
-          value={roleID}
+          value={role}
           onChange={item => {
-            setRoleID(item.value);
+            set_role(item.value);
           }}
         />
         <TouchableOpacity
-          style={[Styles.button, {opacity: roleID === '' ? 0.5 : 1}]}
+          style={[Styles.button, {opacity: role === '' ? 0.5 : 1}]}
           onPress={onPressHandler}
-          disabled={ roleID === '' }>
+          disabled={ role === '' }>
 
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
