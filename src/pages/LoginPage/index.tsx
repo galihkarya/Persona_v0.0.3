@@ -13,7 +13,7 @@ import {
 import api from '../../API/UserApi';
 
 const LoginPage = ({navigation}: any) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,13 +25,8 @@ const LoginPage = ({navigation}: any) => {
   const handleLogin = async () => {
     setIsLoading(true);
 
-    const formData = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
     await api
-    .post('/auth/login', formData, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
+    .post('/api/v1/user/login', {email, password})
     .then(async ({ data }) => {
 
       await AsyncStorage.setItem('userData', JSON.stringify(data))
@@ -67,14 +62,14 @@ const LoginPage = ({navigation}: any) => {
           <Text style={{fontWeight: '900', fontSize: 42, color: '#cc3663'}}>
             Selamat datang kembali,
           </Text>
-          <Text style={{marginVertical: 30}}>Masukkan username dan password</Text>
+          <Text style={{marginVertical: 30}}>Masukkan email dan password</Text>
         </View>
 
         <TextInput
           style={Styles.input}
-          placeholder="username"
-          value={username}
-          onChangeText={setUsername}
+          placeholder="email"
+          value={email}
+          onChangeText={setEmail}
         />
         <View style={Styles.input}>
           <TextInput
@@ -95,9 +90,9 @@ const LoginPage = ({navigation}: any) => {
         <TouchableOpacity
           style={[
             Styles.button,
-            {opacity: username === '' || password === '' || isLoading == true ? 0.5 : 1},
+            {opacity: email === '' || password === '' || isLoading == true ? 0.5 : 1},
           ]}
-          disabled={username === '' || password === '' || isLoading == true}
+          disabled={email === '' || password === '' || isLoading == true}
           onPress={async () => {await handleLogin()}}>
           <Text style={Styles.textButton}>Masuk</Text>
         </TouchableOpacity>
