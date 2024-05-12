@@ -14,12 +14,13 @@ import api from '../../API/UserApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegistAccount = ({navigation, route}: any) => {
-  const {fullName, roleID, instituteID} = route.params;
+  const {full_name, role, institute} = route.params;
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
+  const name = institute;
 
-  // console.log(fullName, Number(roleID), instituteID, email, password);
+  // console.log(full_name, Number(role), institute, email, password);
 
   const [passwordVisible1, setPasswordVisible1] = useState(true);
   const [passwordVisible2, setPasswordVisible2] = useState(true);
@@ -36,20 +37,27 @@ const RegistAccount = ({navigation, route}: any) => {
       ToastAndroid.show('Password belum sama', 2000);
     else {
       setIsLoading(true);
-      const data = {email, fullName, roleID: Number(roleID), instituteID: Number(instituteID), password}
+      const data = {email, full_name, role, password}
       console.log(data)
-      const tes = await api
-        .post('/register/', data)
+
+      const createInstitute = await api
+        .post('/api/v1/institute/', name)
+        .then(async () => ToastAndroid.show('Registrasi berhasil', ToastAndroid.SHORT))
+
+      const registAPI = await api
+        .post('/api/v1/user/', data)
         .then(async () => {
           ToastAndroid.show('Registrasi berhasil', ToastAndroid.SHORT)
+          await AsyncStorage.setItem('userData', JSON.stringify(data))
           navigation.replace('Tabs');
 
         })
         .catch(response => {
           console.log(response);
-          Alert.alert('Error', response.data.message);
+          Alert.alert('Error', response);
         });
-      console.log(tes);
+      console.log(createInstitute);
+      console.log(registAPI);
       setIsLoading(false);
     }
   };
