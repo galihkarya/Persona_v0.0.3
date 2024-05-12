@@ -9,14 +9,14 @@ const RegistRole = ({navigation, route}:any) => {
   const ref = useRef<IDropdownRef>(null);
   const data = [
     {label: 'Guru BK', value: 'bk'},
-    {label: 'Wali Kelas/lainnya', value: 'wali'},
+    {label: 'Wali Kelas/lainnya', value: 'wk'},
   ];
 
   const onPressHandler = () => {
     if (role === 'bk'){
       navigation.navigate('RegistInstitutionBK', {full_name, role})
     }
-    else if (role === 'wali'){
+    else if (role === 'wk'){
       navigation.navigate('RegistInstitutionWK', {full_name, role})
     }
   }
