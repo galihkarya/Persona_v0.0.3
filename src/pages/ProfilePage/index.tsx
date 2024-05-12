@@ -33,9 +33,9 @@ const ProfilePage = ({navigation}:any) => {
         style={Styles.profilePicture}
       />
       <View style={{margin: 20, alignItems: 'center'}}>
-        <Text style={Styles.nameText}>{userData?.fullName}</Text>
-        <Text style={Styles.roleText}>{userData?.roleID ? 'Wali kelas/Guru lainnya' : 'Guru BK'}</Text>
-        <Text style={Styles.institutionText}>SDN Hoka Bento</Text>
+        <Text style={Styles.nameText}>{userData?.full_name}</Text>
+        <Text style={Styles.roleText}>{userData?.role == 'wk' ? 'Wali kelas/Guru lainnya' : 'Guru BK'}</Text>
+        <Text style={Styles.institutionText}>{userData?.institute_name}</Text>
         <Text style={Styles.codeText}>Kode instansi: 45IKB6T</Text>
       </View>
       <TouchableOpacity
