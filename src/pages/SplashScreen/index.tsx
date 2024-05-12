@@ -6,8 +6,7 @@ function Splash({navigation}: any) {
   useEffect(() => {
     const checkToken = async () => {
       try {
-        const token = JSON.parse(await AsyncStorage.getItem('userData')).access_token;
-        // console.log('ini', token);
+        const token = JSON.parse(await AsyncStorage.getItem('userData')).app_token;
         if (token == null) {
           navigation.replace('HomePage');
         } else {
