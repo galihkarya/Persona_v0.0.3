@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 
 const RegistInstitutionBK = ({navigation, route}:any) => {
-  const {fullName, roleID} = route.params;
-  const [instituteID, setInstituteID] = useState('');
+  const {full_name, role} = route.params;
+  const [institute, setInstitute] = useState('');
 
   const onPressHandler = () => {
-    navigation.navigate('RegistAccount', {fullName, roleID, instituteID});
+    navigation.navigate('RegistAccount', {full_name, role, institute});
   }
 
   return (
@@ -39,11 +39,11 @@ const RegistInstitutionBK = ({navigation, route}:any) => {
         <Text style={Styles.head2}>Masukkan kode sekolah</Text>
       </View>
       <View style={{margin: 20}}>
-        <TextInput style={Styles.input} placeholder="Kode sekolah"  value={instituteID} onChangeText={(val_instituteID) => setInstituteID(val_instituteID)}/>
+        <TextInput style={Styles.input} placeholder="Kode sekolah"  value={institute} onChangeText={(val_institute) => setInstitute(val_institute)}/>
         <TouchableOpacity
-          style={[Styles.button, {opacity: instituteID === '' ? 0.5 : 1}]}
+          style={[Styles.button, {opacity: institute === '' ? 0.5 : 1}]}
           onPress={onPressHandler}
-          disabled={ instituteID === '' }>
+          disabled={ institute === '' }>
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
       </View>
