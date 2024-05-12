@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
   ToastAndroid,
+  SafeAreaView,
 } from 'react-native';
 import api from '../../API/UserApi';
 
@@ -26,86 +27,97 @@ const LoginPage = ({navigation}: any) => {
     setIsLoading(true);
 
     await api
-    .post('/api/v1/user/login', {email, password})
-    .then(async ({ data }) => {
-      console.log(data)
-      await AsyncStorage.setItem('userData', JSON.stringify(data))
-      navigation.replace('Tabs');
-    })
-    .catch(({ response }) => {
-      console.log(response.data);
-      ToastAndroid.show('email atau password salah', (ToastAndroid.LONG));
-    });
+      .post('/api/v1/user/login', {email, password})
+      .then(async ({data}) => {
+        console.log(data);
+        await AsyncStorage.setItem('userData', JSON.stringify(data));
+        navigation.replace('Tabs');
+      })
+      .catch(({response}) => {
+        console.log(response.data);
+        ToastAndroid.show('email atau password salah', ToastAndroid.LONG);
+      });
 
     setIsLoading(false);
   };
 
   return (
-    <ScrollView>
-      <View>
-        <TouchableOpacity
-          style={Styles.backButton}
-          hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <Image
-            style={Styles.backIcon}
-            source={require('../../../assets/icons/icon_arrowLeft.png')}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={{margin: 20}}>
-        <View style={{alignItems: 'center', marginTop: 50, marginBottom: 50}}>
-          <Text style={{fontWeight: '900', fontSize: 42, color: '#cc3663'}}>
-            Selamat datang kembali,
-          </Text>
-          <Text style={{marginVertical: 30}}>Masukkan email dan password</Text>
-        </View>
-
-        <TextInput
-          style={Styles.input}
-          placeholder="email"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <View style={Styles.input}>
-          <TextInput
-            secureTextEntry={passwordVisible}
-            placeholder="password"
-            style={{flex: 1}}
-            value={password}
-            onChangeText={setPassword}
-          />
+    <SafeAreaView>
+      <ScrollView>
+        <View>
           <TouchableOpacity
-            onPress={() => setPasswordVisible(!passwordVisible)}>
+            style={Styles.backButton}
+            hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
+            onPress={() => {
+              navigation.goBack();
+            }}>
             <Image
-              style={Styles.visibleIcon}
-              source={passwordVisible ? invisibleicon : visibleicon}
+              style={Styles.backIcon}
+              source={require('../../../assets/icons/icon_arrowLeft.png')}
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={[
-            Styles.button,
-            {opacity: email === '' || password === '' || isLoading == true ? 0.5 : 1},
-          ]}
-          disabled={email === '' || password === '' || isLoading == true}
-          onPress={async () => {await handleLogin()}}>
-          <Text style={Styles.textButton}>Masuk</Text>
-        </TouchableOpacity>
-        <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-          <Text>Belum punya akun? </Text>
+        <View style={{margin: 20}}>
+          <View style={{alignItems: 'center', marginTop: 50, marginBottom: 50}}>
+            <Text style={{fontWeight: '900', fontSize: 42, color: '#cc3663'}}>
+              Selamat datang kembali,
+            </Text>
+            <Text style={{marginVertical: 30}}>
+              Masukkan email dan password
+            </Text>
+          </View>
+
+          <TextInput
+            style={Styles.input}
+            placeholder="email"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <View style={Styles.input}>
+            <TextInput
+              secureTextEntry={passwordVisible}
+              placeholder="password"
+              style={{flex: 1}}
+              value={password}
+              onChangeText={setPassword}
+            />
+            <TouchableOpacity
+              onPress={() => setPasswordVisible(!passwordVisible)}>
+              <Image
+                style={Styles.visibleIcon}
+                source={passwordVisible ? invisibleicon : visibleicon}
+              />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
-            hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
-            onPress={() => {
-              navigation.navigate('RegistName');
+            style={[
+              Styles.button,
+              {
+                opacity:
+                  email === '' || password === '' || isLoading == true
+                    ? 0.5
+                    : 1,
+              },
+            ]}
+            disabled={email === '' || password === '' || isLoading == true}
+            onPress={async () => {
+              await handleLogin();
             }}>
-            <Text style={{color: '#CC3663'}}>Daftar</Text>
+            <Text style={Styles.textButton}>Masuk</Text>
           </TouchableOpacity>
+          <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+            <Text>Belum punya akun? </Text>
+            <TouchableOpacity
+              hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
+              onPress={() => {
+                navigation.navigate('RegistName');
+              }}>
+              <Text style={{color: '#CC3663'}}>Daftar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
