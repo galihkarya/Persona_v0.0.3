@@ -28,10 +28,8 @@ const LoginPage = ({navigation}: any) => {
     await api
     .post('/api/v1/user/login', {email, password})
     .then(async ({ data }) => {
-
-      await AsyncStorage.setItem('userData', JSON.stringify(data))
-      
       console.log(data)
+      await AsyncStorage.setItem('userData', JSON.stringify(data))
       navigation.replace('Tabs');
     })
     .catch(({ response }) => {
