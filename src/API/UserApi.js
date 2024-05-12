@@ -21,7 +21,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async config => {
     // Mengambil token dari AsyncStorage (jika menggunakan token)
-    const token = await AsyncStorage.getItem('appToken');
+    const token = await AsyncStorage.getItem('app_token');
     if (token) {
       // Menambahkan token ke header Authorization
       config.headers.Authorization = `Bearer ${token}`;
