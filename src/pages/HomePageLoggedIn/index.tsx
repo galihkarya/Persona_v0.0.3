@@ -103,7 +103,7 @@ const HomePageLogedIn = ({navigation}: any) => {
             Welcome Back,{' '}
           </Text>
           <Text style={{color: 'black', fontSize: 24, fontWeight: '700'}}>
-            {userData?.fullName}
+            {userData?.full_name}
           </Text>
           <Text style={{color: 'black', fontSize: 16, fontWeight: '300'}}>
             SDN Hoka Bento{' '}
