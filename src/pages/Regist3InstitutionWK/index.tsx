@@ -11,10 +11,10 @@ import {
 
 const RegistInstitutionBK = ({navigation, route}:any) => {
   const {full_name, role} = route.params;
-  const [institute, setInstitute] = useState('');
+  const [institute_code, setInstitute_code] = useState('');
 
   const onPressHandler = () => {
-    navigation.navigate('RegistAccount', {full_name, role, institute});
+    navigation.navigate('RegistAccount', {full_name, role, institute_code});
   }
 
   return (
@@ -39,11 +39,11 @@ const RegistInstitutionBK = ({navigation, route}:any) => {
         <Text style={Styles.head2}>Masukkan kode sekolah</Text>
       </View>
       <View style={{margin: 20}}>
-        <TextInput style={Styles.input} placeholder="Kode sekolah"  value={institute} onChangeText={(val_institute) => setInstitute(val_institute)}/>
+        <TextInput style={Styles.input} placeholder="Kode sekolah"  value={institute_code} onChangeText={(val_institute_code) => setInstitute_code(val_institute_code)}/>
         <TouchableOpacity
-          style={[Styles.button, {opacity: institute === '' ? 0.5 : 1}]}
+          style={[Styles.button, {opacity: institute_code === '' ? 0.5 : 1}]}
           onPress={onPressHandler}
-          disabled={ institute === '' }>
+          disabled={ institute_code === '' }>
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
       </View>
