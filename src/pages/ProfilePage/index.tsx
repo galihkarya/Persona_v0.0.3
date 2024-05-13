@@ -8,14 +8,14 @@ const ProfilePage = ({navigation}:any) => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = JSON.parse(await AsyncStorage.getItem('userData'));
+      const userData = await AsyncStorage.getItem('userData');
+      const data = userData ? JSON.parse(userData) : ' ';
+
       console.log(await AsyncStorage.getItem('userData'));
       setUserData(data);
     };
     getData();
   }, []);
-
-  
 
   const handleLogout = async () => {
     try {
@@ -34,9 +34,9 @@ const ProfilePage = ({navigation}:any) => {
       />
       <View style={{margin: 20, alignItems: 'center'}}>
         <Text style={Styles.nameText}>{userData?.full_name}</Text>
-        <Text style={Styles.roleText}>{userData?.role == 'wk' ? 'Wali kelas/Guru lainnya' : 'Guru BK'}</Text>
+        <Text style={Styles.roleText}>{userData?.group_name == 'BK' ? 'Guru BK' : 'Wali kelas/Guru lainnya'}</Text>
         <Text style={Styles.institutionText}>{userData?.institute_name}</Text>
-        <Text style={Styles.codeText}>Kode instansi: 45IKB6T</Text>
+        <Text style={Styles.codeText}>Kode instansi: {userData?.institute_code}</Text>
       </View>
       <TouchableOpacity
         style={Styles.button}
