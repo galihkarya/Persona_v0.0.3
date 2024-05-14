@@ -1,4 +1,5 @@
-import React, {useRef, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Text,
   View,
@@ -8,8 +9,12 @@ import {
   TextInput,
 } from 'react-native';
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
+import api from '../../API/UserApi';
 
-const AddStudentDataPage = ({navigation}:any) => {
+const AddStudentDataPage = ({navigation}: any) => {
+  const [userData, setUserData] = useState<any>();
+  const [classList, setClassList] = useState<any>([]);
+
   const [sex, setSex] = useState<string | null>(null);
 
   const [studentName, setStudentName] = useState('');
@@ -18,28 +23,27 @@ const AddStudentDataPage = ({navigation}:any) => {
     setSex(option === sex ? null : option);
   };
 
-  const [groupID, setGroupID] = useState<string>('');
+  useEffect(() => {
+    const getData = async () => {
+      const userData = await AsyncStorage.getItem('userData');
+      const data = userData ? JSON.parse(userData) : ' ';
+      setUserData(data);
+      console.log(data)
+
+      await api
+        .get(`/api/v1/institute/id/${data.institute_id}`)
+        .then(async ({data}) => {
+          // console.log(data.groups)
+          const group = data.groups.map(({id: value, name: label}: any) => ({value,label}));
+          setClassList(group);
+          // console.log(classList);
+        });
+    };
+    getData();
+  }, []);
+
+  const [group_id, setGroup_id] = useState<any>('');
   const ref = useRef<IDropdownRef>(null);
-  const data = [
-    {label: '1A', value: '1a'},
-    {label: '1B', value: '1b'},
-    {label: '1C', value: '1c'},
-    {label: '2A', value: '2a'},
-    {label: '2B', value: '2b'},
-    {label: '2C', value: '2c'},
-    {label: '3A', value: '3a'},
-    {label: '3B', value: '3b'},
-    {label: '3C', value: '3c'},
-    {label: '4A', value: '4a'},
-    {label: '4B', value: '4b'},
-    {label: '4C', value: '4c'},
-    {label: '5A', value: '5a'},
-    {label: '5B', value: '5b'},
-    {label: '5C', value: '5c'},
-    {label: '6A', value: '6a'},
-    {label: '6B', value: '6b'},
-    {label: '6C', value: '6c'},
-  ];
 
   return (
     <View>
@@ -64,7 +68,10 @@ const AddStudentDataPage = ({navigation}:any) => {
           onPress={() => handleRadiosex('Laki-laki')}
           activeOpacity={1}>
           <Text style={Styles.sexText}>Laki-laki</Text>
-          <Image style={Styles.sexImage} source={require('../../../assets/images/boy.png')} />
+          <Image
+            style={Styles.sexImage}
+            source={require('../../../assets/images/boy.png')}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           style={[
@@ -74,35 +81,47 @@ const AddStudentDataPage = ({navigation}:any) => {
           onPress={() => handleRadiosex('Perempuan')}
           activeOpacity={1}>
           <Text style={Styles.sexText}>Perempuan</Text>
-          <Image style={Styles.sexImage} source={require('../../../assets/images/girl.png')} />
+          <Image
+            style={Styles.sexImage}
+            source={require('../../../assets/images/girl.png')}
+          />
         </TouchableOpacity>
       </View>
       <View style={{margin: 20, rowGap: 20}}>
-
-        <TextInput style={Styles.input} placeholder="Nama Lengkap" value={studentName} onChangeText={setStudentName} />
+        <TextInput
+          style={Styles.input}
+          placeholder="Nama Lengkap"
+          value={studentName}
+          onChangeText={setStudentName}
+        />
 
         <Dropdown
           ref={ref}
           style={Styles.dropdown}
           placeholderStyle={Styles.placeholderStyle}
           selectedTextStyle={Styles.selectedTextStyle}
-          data={data}
+          data={classList}
           maxHeight={200}
           labelField="label"
           valueField="value"
           placeholder="Pilih grup kelas"
-          value={groupID}
+          value={group_id}
           onChange={item => {
-            setGroupID(item.value);
+            setGroup_id(item.value);
           }}
         />
         <TouchableOpacity
-          style={[Styles.button, {opacity: sex === null || groupID === '' || studentName === '' ? 0.3 : 1}]}
+          style={[
+            Styles.button,
+            {
+              opacity:
+                sex === null || group_id === '' || studentName === '' ? 0.3 : 1,
+            },
+          ]}
           onPress={() => {
-            navigation.navigate('ReminderPage', {studentName, sex, groupID});
+            navigation.navigate('ReminderPage', {studentName, sex, group_id});
           }}
-          disabled={sex === null || groupID === '' || studentName === ''}>
-          
+          disabled={sex === null || group_id === '' || studentName === ''}>
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
       </View>
