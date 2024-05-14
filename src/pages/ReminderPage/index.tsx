@@ -10,12 +10,13 @@ import {
 } from 'react-native';
 
 const ReminderPage = ({navigation, route}: any) => {
-  const {name, sex, fullName, groupID} = route.params;
+  const {name, sex, full_name, group_id} = route.params;
   const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
     const getData = async () => {
-      const data = JSON.parse(await AsyncStorage.getItem('userData'));
+      const userData = await AsyncStorage.getItem('userData');
+      const data = userData ? JSON.parse(userData) : ' ';
       setUserData(data);
     };
     getData();
@@ -23,7 +24,7 @@ const ReminderPage = ({navigation, route}: any) => {
 
   const handleButton = () => {
     if (userData == null) navigation.navigate('CameraPage', {name, sex});
-    else navigation.navigate('CameraPage', {fullName, sex, groupID});
+    else navigation.navigate('CameraPage', {full_name, sex, group_id});
   };
 
   return (
