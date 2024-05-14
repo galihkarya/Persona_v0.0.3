@@ -22,7 +22,8 @@ const HomePageLogedIn = ({navigation}: any) => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = JSON.parse(await AsyncStorage.getItem('userData'));
+      const userData = await AsyncStorage.getItem('userData');
+      const data = userData ? JSON.parse(userData) : ' ';
       setUserData(data);
     };
     getData();
@@ -106,7 +107,7 @@ const HomePageLogedIn = ({navigation}: any) => {
             {userData?.full_name}
           </Text>
           <Text style={{color: 'black', fontSize: 16, fontWeight: '300'}}>
-            SDN Hoka Bento{' '}
+            {userData?.institute_name}
           </Text>
         </View>
         <Image
