@@ -12,25 +12,38 @@ import {
 import api from '../../API/UserApi';
 
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ResultListPage = ({navigation}: any) => {
-  let institutionname: string;
-  let institutioncode: string;
-
+  const [userData, setUserData] = useState<any>();
+  const [classList, setClassList] = useState<any>([]);
   const [listData, setListData] = useState(null);
 
-  institutionname = 'SDN Hoka Bento';
-  institutioncode = '45IKB6T';
-
   useEffect(() => {
-    const getResultList = async () => {
-      await api.get('/result').then(({data}) => {
-        // console.log(data);
-        setListData(data);
-      });
-      // console.log(ResultList.data);
+    const getData = async () => {
+      const userData = await AsyncStorage.getItem('userData');
+      const data = userData ? JSON.parse(userData) : ' ';
+      setUserData(data);
+
+      await api
+        .get(`/api/v1/institute/id/${data.institute_id}`)
+        .then(async ({data}) => {
+          // console.log(data.groups)
+          const group = data.groups.map(({id: value, name: label}: any) => ({value, label,}));
+          setClassList(group);
+          // console.log(classList);
+        });
     };
-    getResultList();
+    getData();
+
+    // const getResultList = async () => {
+    //   await api.get('/result').then(({data}) => {
+    //     // console.log(data);
+    //     setListData(data);
+    //   });
+    //   // console.log(ResultList.data);
+    // };
+    // getResultList();
   }, []);
 
   const PropList = ({
@@ -68,28 +81,8 @@ const ResultListPage = ({navigation}: any) => {
     );
   };
 
-  const [value, setValue] = useState<string>();
+  const [classSelected, setClassSelected] = useState<any>();
   const ref = useRef<IDropdownRef>(null);
-  const data = [
-    {label: '1A', value: '1a'},
-    {label: '1B', value: '1b'},
-    {label: '1C', value: '1c'},
-    {label: '2A', value: '2a'},
-    {label: '2B', value: '2b'},
-    {label: '2C', value: '2c'},
-    {label: '3A', value: '3a'},
-    {label: '3B', value: '3b'},
-    {label: '3C', value: '3c'},
-    {label: '4A', value: '4a'},
-    {label: '4B', value: '4b'},
-    {label: '4C', value: '4c'},
-    {label: '5A', value: '5a'},
-    {label: '5B', value: '5b'},
-    {label: '5C', value: '5c'},
-    {label: '6A', value: '6a'},
-    {label: '6B', value: '6b'},
-    {label: '6C', value: '6c'},
-  ];
 
   return (
     <View style={{flex: 1, maxHeight: '35%'}}>
@@ -97,8 +90,10 @@ const ResultListPage = ({navigation}: any) => {
 
       <Text style={Styles.headerText}>Daftar Hasil</Text>
       <View style={{margin: 20}}>
-        <Text style={Styles.schoolName}>{institutionname}</Text>
-        <Text style={Styles.schoolCode}>Kode instansi: {institutioncode}</Text>
+        <Text style={Styles.schoolName}>{userData?.institute_name}</Text>
+        <Text style={Styles.schoolCode}>
+          Kode instansi: {userData?.institute_code}
+        </Text>
         <View style={Styles.searchBox}>
           <Image
             source={require('../../../assets/icons/icon_search_black.png')}
@@ -107,19 +102,19 @@ const ResultListPage = ({navigation}: any) => {
           <TextInput placeholder="Cari" inputMode="search" />
         </View>
         <View style={{flexDirection: 'row', gap: 10, alignItems: 'center'}}>
-          <Dropdown
+        <Dropdown
             ref={ref}
             style={Styles.dropdown}
             placeholderStyle={Styles.placeholderStyle}
             selectedTextStyle={Styles.selectedTextStyle}
-            data={data}
+            data={classList}
             maxHeight={200}
             labelField="label"
             valueField="value"
             placeholder="Pilih grup kelas"
-            value={value}
+            value={classSelected}
             onChange={item => {
-              setValue(item.value);
+              setClassSelected(item.value);
             }}
           />
           <TouchableOpacity
