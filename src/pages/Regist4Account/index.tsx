@@ -14,11 +14,10 @@ import api from '../../API/UserApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegistAccount = ({navigation, route}: any) => {
-  const {full_name, role, institute} = route.params;
+  const {full_name, role, institute_name, institute_code, groupIdSelected, institute_id, group_name} = route.params;
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
-  const name = institute;
 
   // console.log(full_name, Number(role), institute, email, password);
 
@@ -37,27 +36,33 @@ const RegistAccount = ({navigation, route}: any) => {
       ToastAndroid.show('Password belum sama', 2000);
     else {
       setIsLoading(true);
-      const data = {email, full_name, role, password}
-      console.log(data)
 
-      const createInstitute = await api
-        .post('/api/v1/institute/', name)
-        .then(async () => ToastAndroid.show('Registrasi berhasil', ToastAndroid.SHORT))
-
-      const registAPI = await api
-        .post('/api/v1/user/', data)
+      if (role === 'bk'){
+        const registAPI = await api
+        .post('/api/v1/user/bk', {full_name, email, password, institute_name})
         .then(async () => {
-          ToastAndroid.show('Registrasi berhasil', ToastAndroid.SHORT)
-          await AsyncStorage.setItem('userData', JSON.stringify(data))
-          navigation.replace('Tabs');
+          ToastAndroid.show('Registrasi berhasil, silahkan login', ToastAndroid.SHORT)
+          navigation.replace('LoginPage');
 
         })
         .catch(response => {
           console.log(response);
           Alert.alert('Error', response);
         });
-      console.log(createInstitute);
-      console.log(registAPI);
+      }
+      else if (role === 'wk'){
+        const registAPI = await api
+        .post('/api/v1/user/', {full_name, email, role, password, institute_code, group_id: groupIdSelected, institute_id, institute_name, group_name})
+        .then(async () => {
+          ToastAndroid.show('Registrasi berhasil, silahkan login', ToastAndroid.SHORT)
+          navigation.replace('LoginPage');
+
+        })
+        .catch(response => {
+          console.log(response);
+          Alert.alert('Error', response);
+        });
+      }
       setIsLoading(false);
     }
   };
