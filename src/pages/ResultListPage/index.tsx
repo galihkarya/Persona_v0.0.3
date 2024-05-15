@@ -29,49 +29,52 @@ const ResultListPage = ({navigation}: any) => {
         .get(`/api/v1/institute/id/${data.institute_id}`)
         .then(async ({data}) => {
           // console.log(data.groups)
-          const group = data.groups.map(({id: value, name: label}: any) => ({value, label,}));
+          const group = data.groups.map(({id: value, name: label}: any) => ({value, label}));
           setClassList(group);
           // console.log(classList);
         });
+      
+      if (data.role == 'bk'){
+        await api
+        .get(`/api/v1/result/institute/${data.institute_id}`)
+        .then(({data}) => {console.log('bk', data); setListData(data)})
+      }
+      else if (data.role == 'wk'){
+        await api
+        .get(`/api/v1/result/group/20`)
+        .then(({data}) => {console.log('wk', data); setListData(data)})
+      }
+      
     };
     getData();
-
-    // const getResultList = async () => {
-    //   await api.get('/result').then(({data}) => {
-    //     // console.log(data);
-    //     setListData(data);
-    //   });
-    //   // console.log(ResultList.data);
-    // };
-    // getResultList();
   }, []);
 
   const PropList = ({
-    studentName,
-    groupID,
-    headLine,
-    lifeLine,
-    heartLine,
-    sex,
+    student_name,
+    group_name,
+    head_line,
+    life_line,
+    heart_line,
+    gender,
   }: any) => {
-    // console.log(studentName, groupID, headLine, lifeLine, heartLine, sex);
+    // console.log(student_name, group_name, head_line, life_line, heart_line, gender);
     return (
       <View style={Styles.listView}>
         <View>
-          <Text style={Styles.resultName}>{studentName}</Text>
-          <Text style={Styles.classGroup}>Kelas {groupID}</Text>
+          <Text style={Styles.resultName}>{student_name}</Text>
+          <Text style={Styles.classGroup}>Kelas {group_name}</Text>
         </View>
         <View>
           <TouchableOpacity
             style={Styles.lihatButton}
             onPress={() =>
               navigation.navigate('ResultPage', {
-                studentName,
-                groupID,
-                headLine,
-                lifeLine,
-                heartLine,
-                sex,
+                student_name,
+                group_name,
+                head_line,
+                life_line,
+                heart_line,
+                gender,
               })
             }>
             <Text style={Styles.lihatTextButton}>Lihat</Text>
@@ -137,12 +140,12 @@ const ResultListPage = ({navigation}: any) => {
             data={listData}
             renderItem={({item}) => (
               <PropList
-                studentName={item.studentName}
-                groupID={item.groupID}
-                headLine={item.headLine}
-                lifeLine={item.lifeLine}
-                heartLine={item.heartLine}
-                sex={item.sex}
+                student_name={item.student_name}
+                group_name={item.group.name}
+                head_line={item.head_line}
+                life_line={item.life_line}
+                heart_line={item.heart_line}
+                gender={item.gender}
               />
             )}
             keyExtractor={item => item.id}
