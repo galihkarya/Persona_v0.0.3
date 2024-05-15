@@ -9,12 +9,11 @@ import {
 } from 'react-native';
 
 const AddNamePage = ({navigation}:any) => {
-  const [sex, setSex] = useState<string | null>(null);
-
+  const [gender, setgender] = useState<string | null>(null);
   const [name, setName] = useState('');
 
-  const handleRadiosex = (option: string) => {
-    setSex(option === sex ? null : option);
+  const handleRadiogender = (option: string) => {
+    setgender(option === gender ? null : option);
   };
 
   return (
@@ -35,22 +34,22 @@ const AddNamePage = ({navigation}:any) => {
         <TouchableOpacity
           style={[
             Styles.radioButtons,
-            {opacity: sex === 'Laki-laki' ? 1 : 0.3},
+            {opacity: gender === 'Laki-laki' ? 1 : 0.3},
           ]}
-          onPress={() => handleRadiosex('Laki-laki')}
+          onPress={() => handleRadiogender('Laki-laki')}
           activeOpacity={1}>
-          <Text style={Styles.sexText}>Laki-laki</Text>
-          <Image style={Styles.sexImage} source={require('../../../assets/images/boy.png')} />
+          <Text style={Styles.genderText}>Laki-laki</Text>
+          <Image style={Styles.genderImage} source={require('../../../assets/images/boy.png')} />
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             Styles.radioButtons,
-            {opacity: sex === 'Perempuan' ? 1 : 0.3},
+            {opacity: gender === 'Perempuan' ? 1 : 0.3},
           ]}
-          onPress={() => handleRadiosex('Perempuan')}
+          onPress={() => handleRadiogender('Perempuan')}
           activeOpacity={1}>
-          <Text style={Styles.sexText}>Perempuan</Text>
-          <Image style={Styles.sexImage} source={require('../../../assets/images/girl.png')} />
+          <Text style={Styles.genderText}>Perempuan</Text>
+          <Image style={Styles.genderImage} source={require('../../../assets/images/girl.png')} />
         </TouchableOpacity>
       </View>
       <View style={{margin: 20, rowGap: 20}}>
@@ -58,11 +57,11 @@ const AddNamePage = ({navigation}:any) => {
         <TextInput style={Styles.input} placeholder="Nama Lengkap" value={name} onChangeText={setName} />
 
         <TouchableOpacity
-          style={[Styles.button, {opacity: sex === null || name === '' ? 0.3 : 1}]}
+          style={[Styles.button, {opacity: gender === null || name === '' ? 0.3 : 1}]}
           onPress={() => {
-            navigation.navigate('ReminderPage', {name, sex});
+            navigation.navigate('ReminderPage', {name, gender});
           }}
-          disabled={sex === null || name === ''}>
+          disabled={gender === null || name === ''}>
           
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
@@ -89,7 +88,7 @@ const Styles = StyleSheet.create({
     marginBottom: '20%',
     fontSize: 16,
   },
-  sexImage: {
+  genderImage: {
     width: 115,
     height: 115,
   },
@@ -104,7 +103,7 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
     columnGap: 20,
   },
-  sexText: {
+  genderText: {
     fontSize: 16,
     fontWeight: '800',
     color: 'black',
