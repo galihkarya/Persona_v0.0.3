@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 
 const ReminderPage = ({navigation, route}: any) => {
-  const {name, sex, full_name, group_id} = route.params;
+  const {name, gender, student_name, group_id} = route.params;
+  // console.log(name, gender, student_name, group_id);
   const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
@@ -23,8 +24,8 @@ const ReminderPage = ({navigation, route}: any) => {
   }, []);
 
   const handleButton = () => {
-    if (userData == null) navigation.navigate('CameraPage', {name, sex});
-    else navigation.navigate('CameraPage', {full_name, sex, group_id});
+    if (userData == null) navigation.navigate('CameraPage', {name, gender});
+    else navigation.navigate('CameraPage', {student_name, gender, group_id});
   };
 
   return (
