@@ -14,13 +14,12 @@ import api from '../../API/UserApi';
 const AddStudentDataPage = ({navigation}: any) => {
   const [userData, setUserData] = useState<any>();
   const [classList, setClassList] = useState<any>([]);
+  const [gender, setGender] = useState<string | null>(null);
+  const [student_name, setStudent_name] = useState('');
+  const [group_id, setGroup_id] = useState<any>('');
 
-  const [sex, setSex] = useState<string | null>(null);
-
-  const [studentName, setStudentName] = useState('');
-
-  const handleRadiosex = (option: string) => {
-    setSex(option === sex ? null : option);
+  const handleRadiogender = (option: string) => {
+    setGender(option === gender ? null : option);
   };
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const AddStudentDataPage = ({navigation}: any) => {
     getData();
   }, []);
 
-  const [group_id, setGroup_id] = useState<any>('');
+  
   const ref = useRef<IDropdownRef>(null);
 
   return (
@@ -63,26 +62,26 @@ const AddStudentDataPage = ({navigation}: any) => {
         <TouchableOpacity
           style={[
             Styles.radioButtons,
-            {opacity: sex === 'Laki-laki' ? 1 : 0.3},
+            {opacity: gender === 'Laki-laki' ? 1 : 0.3},
           ]}
-          onPress={() => handleRadiosex('Laki-laki')}
+          onPress={() => handleRadiogender('Laki-laki')}
           activeOpacity={1}>
-          <Text style={Styles.sexText}>Laki-laki</Text>
+          <Text style={Styles.genderText}>Laki-laki</Text>
           <Image
-            style={Styles.sexImage}
+            style={Styles.genderImage}
             source={require('../../../assets/images/boy.png')}
           />
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             Styles.radioButtons,
-            {opacity: sex === 'Perempuan' ? 1 : 0.3},
+            {opacity: gender === 'Perempuan' ? 1 : 0.3},
           ]}
-          onPress={() => handleRadiosex('Perempuan')}
+          onPress={() => handleRadiogender('Perempuan')}
           activeOpacity={1}>
-          <Text style={Styles.sexText}>Perempuan</Text>
+          <Text style={Styles.genderText}>Perempuan</Text>
           <Image
-            style={Styles.sexImage}
+            style={Styles.genderImage}
             source={require('../../../assets/images/girl.png')}
           />
         </TouchableOpacity>
@@ -91,8 +90,8 @@ const AddStudentDataPage = ({navigation}: any) => {
         <TextInput
           style={Styles.input}
           placeholder="Nama Lengkap"
-          value={studentName}
-          onChangeText={setStudentName}
+          value={student_name}
+          onChangeText={setStudent_name}
         />
 
         <Dropdown
@@ -115,13 +114,13 @@ const AddStudentDataPage = ({navigation}: any) => {
             Styles.button,
             {
               opacity:
-                sex === null || group_id === '' || studentName === '' ? 0.3 : 1,
+                gender === null || group_id === '' || student_name === '' ? 0.3 : 1,
             },
           ]}
           onPress={() => {
-            navigation.navigate('ReminderPage', {studentName, sex, group_id});
+            navigation.navigate('ReminderPage', {student_name, gender, group_id});
           }}
-          disabled={sex === null || group_id === '' || studentName === ''}>
+          disabled={gender === null || group_id === '' || student_name === ''}>
           <Text style={Styles.textButton}>lanjut ...</Text>
         </TouchableOpacity>
       </View>
@@ -147,7 +146,7 @@ const Styles = StyleSheet.create({
     marginBottom: '20%',
     fontSize: 16,
   },
-  sexImage: {
+  genderImage: {
     width: 115,
     height: 115,
   },
@@ -162,7 +161,7 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
     columnGap: 20,
   },
-  sexText: {
+  genderText: {
     fontSize: 16,
     fontWeight: '800',
     color: 'black',
