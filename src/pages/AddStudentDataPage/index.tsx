@@ -12,7 +12,6 @@ import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 import api from '../../API/UserApi';
 
 const AddStudentDataPage = ({navigation}: any) => {
-  const [userData, setUserData] = useState<any>();
   const [classList, setClassList] = useState<any>([]);
   const [gender, setGender] = useState<string | null>(null);
   const [student_name, setStudent_name] = useState('');
@@ -26,7 +25,6 @@ const AddStudentDataPage = ({navigation}: any) => {
     const getData = async () => {
       const userData = await AsyncStorage.getItem('userData');
       const data = userData ? JSON.parse(userData) : ' ';
-      setUserData(data);
       console.log(data)
 
       await api
