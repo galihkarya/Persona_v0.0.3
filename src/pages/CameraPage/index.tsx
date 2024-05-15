@@ -19,10 +19,7 @@ import api from '../../API/UserApi';
 
 const CameraPage = ({navigation, route}: any) => {
   const {name, gender, student_name, group_id} = route.params;
-  // console.log(name, gender, student_name, group_id);
-  const heartLine = 'heartline';
-  const lifeLine = 'lifeLine';
-  const headLine = 'headLine';
+  console.log(name, gender, student_name, group_id);
 
   const flashOnIcon = require('../../../assets/icons/icon_flash_on.png');
   const flashOffIcon = require('../../../assets/icons/icon_flash_off.png');
@@ -39,7 +36,7 @@ const CameraPage = ({navigation, route}: any) => {
 
   const format = useCameraFormat(device, [
     {autoFocusSystem: 'contrast-detection', 
-      photoResolution: 'max'
+     photoResolution: 'max', 
     },
 
   ]);
@@ -97,43 +94,49 @@ const CameraPage = ({navigation, route}: any) => {
     // console.log(photo);
     // console.log(dataParams);
     // console.log(`/api/v1/result?${new URLSearchParams(dataParams).toString()}`);
+
     const path = `/api/v1/result/?${new URLSearchParams(
       dataParams,
     ).toString()}`;
-    console.log(path);
+    // console.log(path);
 
-    const testes = await api
+    if (student_name == undefined){
+      await api
+      .post('/api/v1/result/predict', photo, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(({data}) => {
+        console.log('ini data', data);
+        navigation.navigate('ResultGeneralPage', {
+          name,
+          gender,
+          heart_line: data.heart_line,
+          life_line: data.life_line,
+          head_line: data.head_line,
+        });
+      })
+      .catch((ex) => console.log('ini bawah', ex, name, gender))
+    }
+    else {
+      await api
       .post(path, photo, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
-
       .then(({data}) => {
-        console.log('iniiii', data);
+        navigation.navigate('ResultPage', {
+          student_name,
+          gender,
+          group_id,
+          heart_line: data.heart_line,
+          life_line: data.life_line,
+          head_line: data.head_line,
+        })
       })
-      .catch((ex) => { 
-        console.log(ex.request)
-      })
-
-    console.log('tesets', testes);
-    // if (student_name == null)
-    //   navigation.navigate('ResultGeneralPage', {
-    //     name,
-    //     gender,
-    //     heartLine,
-    //     lifeLine,
-    //     headLine,
-    //   });
-    // else
-    //   navigation.navigate('ResultPage', {
-    //     student_name,
-    //     gender,
-    //     group_id,
-    //     heartLine,
-    //     lifeLine,
-    //     headLine,
-    //   });
+    }
   };
 
   return (
