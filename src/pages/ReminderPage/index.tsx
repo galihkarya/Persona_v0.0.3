@@ -11,21 +11,10 @@ import {
 
 const ReminderPage = ({navigation, route}: any) => {
   const {name, gender, student_name, group_id} = route.params;
-  // console.log(name, gender, student_name, group_id);
-  const [userData, setUserData] = useState<any>(null);
-
-  useEffect(() => {
-    const getData = async () => {
-      const userData = await AsyncStorage.getItem('userData');
-      const data = userData ? JSON.parse(userData) : ' ';
-      setUserData(data);
-    };
-    getData();
-  }, []);
+  console.log(name, gender, student_name, group_id);
 
   const handleButton = () => {
-    if (userData == null) navigation.navigate('CameraPage', {name, gender});
-    else navigation.navigate('CameraPage', {student_name, gender, group_id});
+    navigation.navigate('CameraPage', {name, student_name, gender, group_id});
   };
 
   return (
