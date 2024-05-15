@@ -15,10 +15,11 @@ import {
   TakePhotoOptions,
 } from 'react-native-vision-camera';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import api from '../../API/UserApi';
 
 const CameraPage = ({navigation, route}: any) => {
-  const {name, sex, fullName, groupID} = route.params;
-
+  const {name, gender, student_name, group_id} = route.params;
+  // console.log(name, gender, student_name, group_id);
   const heartLine = 'heartline';
   const lifeLine = 'lifeLine';
   const headLine = 'headLine';
@@ -37,13 +38,18 @@ const CameraPage = ({navigation, route}: any) => {
   const device = useCameraDevice('back');
 
   const format = useCameraFormat(device, [
-    {autoFocusSystem: 'contrast-detection'},
+    {autoFocusSystem: 'contrast-detection', 
+      photoResolution: 'max'
+    },
+
   ]);
 
   const [flash, setFlash] = useState<TakePhotoOptions['flash']>('off');
 
   const [isTakingPhoto, setIsTakingPhoto] = useState(false);
   const [photoURI, setPhotoURI] = useState('');
+  const [photoFileName, setPhotoFileName] = useState<string | null>('');
+  const [photoType, setPhotoType] = useState('');
 
   const camera = useRef<Camera>(null);
 
@@ -54,16 +60,19 @@ const CameraPage = ({navigation, route}: any) => {
         qualityPrioritization: 'quality',
         flash,
         enableShutterSound: false,
+
       });
       console.log(photo);
 
-      const takenPhoto = await CameraRoll.saveAsset(`file://${photo.path}`, {
+      const takenPhoto = await CameraRoll.saveAsset(`file://${photo?.path}`, {
         type: 'photo',
       });
 
       console.log(takenPhoto);
 
       setPhotoURI(takenPhoto.node.image.uri);
+      setPhotoFileName(takenPhoto.node.image.filename);
+      setPhotoType(takenPhoto.node.type);
     } catch (error) {
       console.error('Error taking photo:', error);
     } finally {
@@ -71,9 +80,60 @@ const CameraPage = ({navigation, route}: any) => {
     }
   };
 
-  const buttonHandler = () => {
-    if (fullName == null) navigation.navigate('ResultGeneralPage', {name, sex, heartLine, lifeLine, headLine});
-    else navigation.navigate('ResultPage', {fullName, sex, groupID,  heartLine, lifeLine, headLine});
+  const buttonHandler = async () => {
+    const photo = new FormData();
+    photo.append('image', {
+      name: photoFileName,
+      type: photoType,
+      uri: photoURI,
+    });
+
+    const dataParams = {
+      student_name: student_name,
+      gender: gender,
+      group_id: group_id,
+    };
+
+    // console.log(photo);
+    // console.log(dataParams);
+    // console.log(`/api/v1/result?${new URLSearchParams(dataParams).toString()}`);
+    const path = `/api/v1/result/?${new URLSearchParams(
+      dataParams,
+    ).toString()}`;
+    console.log(path);
+
+    const testes = await api
+      .post(path, photo, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      .then(({data}) => {
+        console.log('iniiii', data);
+      })
+      .catch((ex) => { 
+        console.log(ex.request)
+      })
+
+    console.log('tesets', testes);
+    // if (student_name == null)
+    //   navigation.navigate('ResultGeneralPage', {
+    //     name,
+    //     gender,
+    //     heartLine,
+    //     lifeLine,
+    //     headLine,
+    //   });
+    // else
+    //   navigation.navigate('ResultPage', {
+    //     student_name,
+    //     gender,
+    //     group_id,
+    //     heartLine,
+    //     lifeLine,
+    //     headLine,
+    //   });
   };
 
   return (
@@ -99,7 +159,7 @@ const CameraPage = ({navigation, route}: any) => {
                   marginHorizontal: 20,
                   borderRadius: 15,
                 }}
-                onPress={buttonHandler}>
+                onPress={async () => buttonHandler()}>
                 <Text
                   style={{
                     textAlign: 'center',
