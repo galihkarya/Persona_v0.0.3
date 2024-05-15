@@ -1,4 +1,3 @@
-import {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,13 +8,14 @@ import {
   Platform,
   PermissionsAndroid,
   ToastAndroid,
+  StatusBar,
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import FileViewer from "react-native-file-viewer";
 
 const ResultGeneralPage = ({navigation, route}: any) => {
-  const {name, headLine, lifeLine, heartLine, sex} = route.params;
-  // console.log(studentName, groupID, headLine, lifeLine, heartLine, sex); 
+  const {name, head_line, life_line, heart_line, gender} = route.params;
+  // console.log(studentName, groupID, head_line, life_line, heart_line, gender); 
 
   let timestampClock: string;
   let timestampDate: string;
@@ -69,15 +69,15 @@ const ResultGeneralPage = ({navigation, route}: any) => {
       <div style="background-image: url('../../../assets/images/handpalm.png'); background-repeat: no-repeat; margin: 50">
           <h1>Hasil Pembacaan Garis Tangan</h1>
           <p>Nama siswa: ${name}</p>
-          <p>Jenis kelamin: ${sex ? 'laki-laki' : 'perempuan'}</p>
+          <p>Jenis kelamin: ${gender}</p>
           <p>Dicetak oleh: ${name}</p>
           <p>Waktu cetak: ${timestampDate} ${timestampClock}</p>
           <h2>Garis Kepala</h2>
-          <p>${headLine}</p>
+          <p>${head_line}</p>
           <h2>Garis Kehidupan</h2>
-          <p>${lifeLine}</p>
+          <p>${life_line}</p>
           <h2>Garis Hati</h2>
-          <p>${heartLine}</p>
+          <p>${heart_line}</p>
           <br/>
           <p>Persona 2024</p>
       </div>
@@ -106,6 +106,7 @@ const ResultGeneralPage = ({navigation, route}: any) => {
 
   return (
     <View>
+      <StatusBar barStyle={'dark-content'} backgroundColor={'#f2f2f2'}/>
       <View style={{borderBottomWidth: 0.5, borderColor: '#00000050'}}>
         <TouchableOpacity
           style={Styles.backButton}
@@ -139,7 +140,7 @@ const ResultGeneralPage = ({navigation, route}: any) => {
               />
               <Text style={Styles.lineTitle}>Garis Kepala</Text>
             </View>
-            <Text style={Styles.contentText}>{headLine}</Text>
+            <Text style={Styles.contentText}>{head_line}</Text>
           </View>
 
           <View style={Styles.card}>
@@ -150,7 +151,7 @@ const ResultGeneralPage = ({navigation, route}: any) => {
               />
               <Text style={Styles.lineTitle}>Garis Kehidupan</Text>
             </View>
-            <Text style={Styles.contentText}>{lifeLine}</Text>
+            <Text style={Styles.contentText}>{life_line}</Text>
           </View>
 
           <View style={Styles.card}>
@@ -161,7 +162,7 @@ const ResultGeneralPage = ({navigation, route}: any) => {
               />
               <Text style={Styles.lineTitle}>Garis Hati</Text>
             </View>
-            <Text style={Styles.contentText}>{heartLine}</Text>
+            <Text style={Styles.contentText}>{heart_line}</Text>
           </View>
         </View>
       </ScrollView>
