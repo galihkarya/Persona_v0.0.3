@@ -9,16 +9,26 @@ import {
   Platform,
   PermissionsAndroid,
   ToastAndroid,
+  StatusBar,
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import FileViewer from "react-native-file-viewer";
+import FileViewer from 'react-native-file-viewer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import Share from 'react-native-share';
+import api from '../../API/UserApi';
 
 const ResultPage = ({navigation, route}: any) => {
-  const {studentName, groupID, headLine, lifeLine, heartLine, sex} = route.params;
-  // console.log(studentName, groupID, headLine, lifeLine, heartLine, sex); 
-  const [userData, setUserData] = useState<any>(null);
+  const {
+    student_name,
+    group_name,
+    group_id,
+    head_line,
+    life_line,
+    heart_line,
+    gender,
+  } = route.params;
+  console.log(student_name, group_name, group_id, head_line, life_line, heart_line, gender);
+  const [userData, setUserData] = useState<any>();
+  const [groupNameById, setGroupNameById] = useState('');
 
   let timestampClock: string;
   let timestampDate: string;
@@ -29,8 +39,15 @@ const ResultPage = ({navigation, route}: any) => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = JSON.parse(await AsyncStorage.getItem('userData'));
+      const getUserData = await AsyncStorage.getItem('userData');
+      const data = getUserData ? JSON.parse(getUserData) : ' ';
+      console.log(data);
       setUserData(data);
+
+      await api.get(`/api/v1/group/${group_id}`).then(({data}) => {
+        console.log(data);
+        setGroupNameById(data.name);
+      });
     };
     getData();
   }, []);
@@ -79,24 +96,26 @@ const ResultPage = ({navigation, route}: any) => {
       const htmlContent = `
       <div style="background-image: url('../../../assets/images/handpalm.png'); background-repeat: no-repeat; margin: 50">
           <h1>Hasil Pembacaan Garis Tangan</h1>
-          <p>Nama siswa: ${studentName}</p>
-          <p>Jenis kelamin: ${sex ? 'laki-laki' : 'perempuan'}</p>
-          <p>Kelas: ${groupID}</p>
-          <p>Dicetak oleh: ${userData?.fullName}</p>
+          <p>Nama siswa: ${student_name}</p>
+          <p>Jenis kelamin: ${gender}</p>
+          <p>Kelas: ${group_name == undefined ? groupNameById : group_name}</p>
+          <p>Dicetak oleh: ${userData?.full_name}</p>
           <p>Waktu cetak: ${timestampDate} ${timestampClock}</p>
           <h2>Garis Kepala</h2>
-          <p>${headLine}</p>
+          <p>${head_line}</p>
           <h2>Garis Kehidupan</h2>
-          <p>${lifeLine}</p>
+          <p>${life_line}</p>
           <h2>Garis Hati</h2>
-          <p>${heartLine}</p>
+          <p>${heart_line}</p>
           <p>Persona 2024</p>
       </div>
         `;
 
       const options = {
         html: htmlContent,
-        fileName: `${studentName}${groupID}_${year}${month}${day}${timestampClock_str}`,
+        fileName: `${student_name}${
+          group_name == undefined ? groupNameById : group_name
+        }_${year}${month}${day}${timestampClock_str}`,
         directory: `Persona/Results`,
       };
 
@@ -106,10 +125,11 @@ const ResultPage = ({navigation, route}: any) => {
         `PDF berhasil di export di ${file.filePath}`,
         ToastAndroid.LONG,
       );
-      FileViewer.open(`file://${file.filePath}`).then(() => console.log('opened')).catch((error) => console.log(error));
+      FileViewer.open(`file://${file.filePath}`)
+        .then(() => console.log('opened'))
+        .catch(error => console.log(error));
       // await Linking.openURL(`file://${file.filePath}`);
       // Share.open({url: `file://${file.filePath}`});
-      
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
@@ -117,6 +137,7 @@ const ResultPage = ({navigation, route}: any) => {
 
   return (
     <View>
+      <StatusBar barStyle={'dark-content'} backgroundColor={'#f2f2f2'} />
       <View style={{borderBottomWidth: 0.5, borderColor: '#00000050'}}>
         <TouchableOpacity
           style={Styles.backButton}
@@ -133,8 +154,10 @@ const ResultPage = ({navigation, route}: any) => {
       </View>
 
       <ScrollView>
-        <Text style={Styles.studentNameText}>{studentName}</Text>
-        <Text style={Styles.classGroupText}>Kelas {groupID}</Text>
+        <Text style={Styles.student_nameText}>{student_name}</Text>
+        <Text style={Styles.classGroupText}>
+          Kelas {group_name == undefined ? groupNameById : group_name}
+        </Text>
 
         <View
           style={{
@@ -151,7 +174,7 @@ const ResultPage = ({navigation, route}: any) => {
               />
               <Text style={Styles.lineTitle}>Garis Kepala</Text>
             </View>
-            <Text style={Styles.contentText}>{headLine}</Text>
+            <Text style={Styles.contentText}>{head_line}</Text>
           </View>
 
           <View style={Styles.card}>
@@ -162,7 +185,7 @@ const ResultPage = ({navigation, route}: any) => {
               />
               <Text style={Styles.lineTitle}>Garis Kehidupan</Text>
             </View>
-            <Text style={Styles.contentText}>{lifeLine}</Text>
+            <Text style={Styles.contentText}>{life_line}</Text>
           </View>
 
           <View style={Styles.card}>
@@ -173,7 +196,7 @@ const ResultPage = ({navigation, route}: any) => {
               />
               <Text style={Styles.lineTitle}>Garis Hati</Text>
             </View>
-            <Text style={Styles.contentText}>{heartLine}</Text>
+            <Text style={Styles.contentText}>{heart_line}</Text>
           </View>
         </View>
       </ScrollView>
@@ -249,7 +272,7 @@ const Styles = StyleSheet.create({
     marginTop: 25,
     marginBottom: 15,
   },
-  studentNameText: {
+  student_nameText: {
     marginTop: 30,
     fontSize: 26,
     textAlign: 'center',
