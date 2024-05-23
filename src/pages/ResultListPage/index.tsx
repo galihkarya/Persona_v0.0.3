@@ -188,6 +188,7 @@ const ResultListPage = ({navigation}: any) => {
           <FlatList
             data={filteredData}
             contentContainerStyle={{paddingBottom: '110%'}}
+            showsVerticalScrollIndicator={false}
             renderItem={({item}) => (
               <FlatListResult
                 student_name={item.student_name}
@@ -261,6 +262,8 @@ const Styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 10,
     color: 'black',
+    fontWeight: '500',
+    paddingHorizontal: 5
   },
   listView: {
     flexDirection: 'row',
