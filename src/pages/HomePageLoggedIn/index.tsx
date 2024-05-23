@@ -28,7 +28,7 @@ const HomePageLogedIn = ({navigation}: any) => {
     };
     getData();
   }, []);
-    // console.log(userData);
+  // console.log(userData);
 
   const Card1 = () => {
     return (
@@ -61,10 +61,29 @@ const HomePageLogedIn = ({navigation}: any) => {
             />
           </TouchableOpacity>
           <Text style={Styles.modalTextTitle}>Macam-macam Garis Tangan</Text>
-          <Text style={Styles.modalTextContent}>
-            Menurut kamus besar bahasa Indonesia Palmistry merupakan kata benda
-            yang berarti kepandaian meramal berdasarkan rajah/garis tangan.
-          </Text>
+          <ScrollView style={{maxHeight: 300}}>
+            <Text style={Styles.modalTextContent}>
+              Garis Hati: terletak di atas garis kepala dan garis kehidupan.
+              Garis ini dimulai di Bawah jari telunjuk atau jari tengah, dan
+              berakhir di jari kelingking. Garis ini merepresentasikan kondisi
+              emosional seseorang serta hubungan emosional dan fisiknya dengan
+              orang lain.
+            </Text>
+            <Text style={Styles.modalTextContent}>
+              Garis Kepala: Garis ini dimulai tepat di atas the life line,
+              diantara ibu jari dan jari telunjuk, dan membentang melintasi
+              telapak tangan ke arah tepi telapak tangan lainnya secara
+              horizontal. Garis ini merepresentasikan garis kebijaksanaan dan
+              mengungkapkan kemampuan intelektual sekaligus kemampuan intuitif
+              seseorang.
+            </Text>
+            <Text style={Styles.modalTextContent}>
+              Garis Kehidupan: Garis ini dimulai di antara jari telunjuk dan ibu
+              jari, kemudian berlanjut ke bawah ke arah pangkal ibu jari dan
+              pergelangan tangan. Garis ini merepresentasikan hubungan dengan
+              orang lain dan kesejahteraan seseorang.
+            </Text>
+          </ScrollView>
         </View>
       </View>
     );
@@ -204,8 +223,8 @@ const Styles = StyleSheet.create({
   modalTextContent: {
     color: 'black',
     fontWeight: '400',
-    marginTop: 20,
-    marginBottom: 50,
+    marginTop: 10,
+    marginBottom: 20,
   },
   loginButton: {
     padding: 10,
