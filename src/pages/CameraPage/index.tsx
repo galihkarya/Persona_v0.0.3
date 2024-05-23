@@ -216,6 +216,8 @@ const CameraPage = ({navigation, route}: any) => {
             }}>
             <Text style={Styles.instruction}>Posisikan Tangan Kamu</Text>
           </View>
+          <View style={{justifyContent: 'center'}}>
+            <View style={Styles.guideline }/>
           <Camera
             ref={camera}
             style={Styles.viewFinder}
@@ -224,6 +226,7 @@ const CameraPage = ({navigation, route}: any) => {
             format={format}
             photo={true}
           />
+          </View>
           <TouchableOpacity
             style={Styles.shutterButton}
             onPress={onTakePicturePressed}
@@ -293,6 +296,7 @@ const Styles = StyleSheet.create({
     borderColor: '#cc3663',
     borderWidth: 5,
     opacity: 0.7,
+    position: 'absolute',
   },
   flashButton: {
     position: 'absolute',
