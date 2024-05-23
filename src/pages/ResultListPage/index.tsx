@@ -17,9 +17,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const ResultListPage = ({navigation}: any) => {
   const [userData, setUserData] = useState<any>();
   const [classList, setClassList] = useState<any>([]);
-  const [listData, setListData] = useState(null);
+  const [listData, setListData] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [filteredData, setFilteredData] = useState<any>();
 
   const dataFetcher = async () => {
     setIsLoading(true);
@@ -46,11 +47,13 @@ const ResultListPage = ({navigation}: any) => {
         .then(({data}) => {
           console.log('bk', data);
           setListData(data);
+          setFilteredData(data);
         });
     } else if (data.role == 'wk') {
       await api.get(`/api/v1/result/group/20`).then(({data}) => {
         console.log('wk', data);
         setListData(data);
+        setFilteredData(data);
       });
     }
     setIsLoading(false);
@@ -59,6 +62,17 @@ const ResultListPage = ({navigation}: any) => {
   useEffect(() => {
     dataFetcher();
   }, []);
+
+  useEffect(() => {
+    if (searchText === '') {
+      setFilteredData(listData);
+    } else {
+      const filtered = listData?.filter((item:any) =>
+        item.student_name.toLowerCase().includes(searchText.toLowerCase())
+      );
+      setFilteredData(filtered);
+    }
+  }, [searchText, listData]);
 
   const FlatListResult = ({
     student_name,
@@ -99,7 +113,7 @@ const ResultListPage = ({navigation}: any) => {
   const ref = useRef<IDropdownRef>(null);
 
   return (
-    <View style={{flex: 1, paddingBottom: '105%'}}>
+    <View style={{flex: 1}}>
       <Text style={Styles.headerText}>Daftar Hasil</Text>
       <View style={{margin: 20}}>
         <View
@@ -172,7 +186,8 @@ const ResultListPage = ({navigation}: any) => {
         </View>
         <View>
           <FlatList
-            data={listData}
+            data={filteredData}
+            contentContainerStyle={{paddingBottom: '110%'}}
             renderItem={({item}) => (
               <FlatListResult
                 student_name={item.student_name}
