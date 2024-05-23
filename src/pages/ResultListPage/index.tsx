@@ -6,8 +6,8 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  StatusBar,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import api from '../../API/UserApi';
 
@@ -18,38 +18,49 @@ const ResultListPage = ({navigation}: any) => {
   const [userData, setUserData] = useState<any>();
   const [classList, setClassList] = useState<any>([]);
   const [listData, setListData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchText, setSearchText] = useState('');
+
+  const dataFetcher = async () => {
+    setIsLoading(true);
+    const userData = await AsyncStorage.getItem('userData');
+    const data = userData ? JSON.parse(userData) : ' ';
+    console.log(data);
+    setUserData(data);
+
+    await api
+      .get(`/api/v1/institute/id/${data.institute_id}`)
+      .then(async ({data}) => {
+        console.log(data.groups)
+        const group = data.groups.map(({id: value, name: label}: any) => ({
+          value,
+          label,
+        }));
+        setClassList(group);
+        // console.log(classList);
+      });
+
+    if (data.role == 'bk') {
+      await api
+        .get(`/api/v1/result/institute/${data.institute_id}`)
+        .then(({data}) => {
+          console.log('bk', data);
+          setListData(data);
+        });
+    } else if (data.role == 'wk') {
+      await api.get(`/api/v1/result/group/20`).then(({data}) => {
+        console.log('wk', data);
+        setListData(data);
+      });
+    }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      const userData = await AsyncStorage.getItem('userData');
-      const data = userData ? JSON.parse(userData) : ' ';
-      setUserData(data);
-
-      await api
-        .get(`/api/v1/institute/id/${data.institute_id}`)
-        .then(async ({data}) => {
-          // console.log(data.groups)
-          const group = data.groups.map(({id: value, name: label}: any) => ({value, label}));
-          setClassList(group);
-          // console.log(classList);
-        });
-      
-      if (data.role == 'bk'){
-        await api
-        .get(`/api/v1/result/institute/${data.institute_id}`)
-        .then(({data}) => {console.log('bk', data); setListData(data)})
-      }
-      else if (data.role == 'wk'){
-        await api
-        .get(`/api/v1/result/group/20`)
-        .then(({data}) => {console.log('wk', data); setListData(data)})
-      }
-      
-    };
-    getData();
+    dataFetcher();
   }, []);
 
-  const PropList = ({
+  const FlatListResult = ({
     student_name,
     group_name,
     head_line,
@@ -88,24 +99,44 @@ const ResultListPage = ({navigation}: any) => {
   const ref = useRef<IDropdownRef>(null);
 
   return (
-    <View style={{flex: 1, maxHeight: '35%'}}>
-      <StatusBar backgroundColor="#f2f2f2" barStyle="dark-content" />
-
+    <View style={{flex: 1, paddingBottom: '105%'}}>
       <Text style={Styles.headerText}>Daftar Hasil</Text>
       <View style={{margin: 20}}>
-        <Text style={Styles.schoolName}>{userData?.institute_name}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Text style={Styles.schoolName}>{userData?.institute_name}</Text>
+          {isLoading ? (
+            <ActivityIndicator size={'large'} animating={true} color={'#cc3663'} />
+          ) : (
+            <TouchableOpacity onPress={dataFetcher}>
+              <Image
+                source={require('../../../assets/icons/icon_refreshButton.png')}
+                style={{width: 30, height: 30, opacity: 0.5}}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
         <Text style={Styles.schoolCode}>
-          Kode instansi: {userData?.institute_code}
+          Kode institusi: {userData?.institute_code}
         </Text>
         <View style={Styles.searchBox}>
           <Image
             source={require('../../../assets/icons/icon_search_black.png')}
             style={Styles.searchIcon}
           />
-          <TextInput placeholder="Cari" inputMode="search" />
+          <TextInput
+            style={{flex: 1}}
+            placeholder="Cari"
+            onChangeText={val => setSearchText(val)}
+            value={searchText}
+          />
         </View>
         <View style={{flexDirection: 'row', gap: 10, alignItems: 'center'}}>
-        <Dropdown
+          <Dropdown
             ref={ref}
             style={Styles.dropdown}
             placeholderStyle={Styles.placeholderStyle}
@@ -127,7 +158,11 @@ const ResultListPage = ({navigation}: any) => {
               borderRadius: 15,
             }}
             onPress={() => {
-              navigation.navigate('GroupListPage');
+              navigation.navigate('GroupListPage', {
+                institute_name: userData?.institute_name,
+                institute_code: userData?.institute_code,
+                institute_id: userData?.institute_id,
+              });
             }}>
             <Image
               source={require('../../../assets/icons/icon_edit.png')}
@@ -139,7 +174,7 @@ const ResultListPage = ({navigation}: any) => {
           <FlatList
             data={listData}
             renderItem={({item}) => (
-              <PropList
+              <FlatListResult
                 student_name={item.student_name}
                 group_name={item.group.name}
                 head_line={item.head_line}
@@ -215,7 +250,6 @@ const Styles = StyleSheet.create({
   listView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // flex: 1,
     alignItems: 'center',
     marginTop: 15,
     paddingBottom: 5,
