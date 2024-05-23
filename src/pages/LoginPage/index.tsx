@@ -31,7 +31,11 @@ const LoginPage = ({navigation}: any) => {
       .then(async ({data}) => {
         console.log(data);
         await AsyncStorage.setItem('userData', JSON.stringify(data));
-        navigation.replace('Tabs');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Tabs' }]
+        });
+        
       })
       .catch(({response}) => {
         console.log(response.data);
