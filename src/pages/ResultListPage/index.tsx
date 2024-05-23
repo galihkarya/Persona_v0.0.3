@@ -11,12 +11,10 @@ import {
 } from 'react-native';
 import api from '../../API/UserApi';
 
-import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ResultListPage = ({navigation}: any) => {
   const [userData, setUserData] = useState<any>();
-  const [classList, setClassList] = useState<any>([]);
   const [listData, setListData] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
@@ -28,18 +26,6 @@ const ResultListPage = ({navigation}: any) => {
     const data = userData ? JSON.parse(userData) : ' ';
     console.log(data);
     setUserData(data);
-
-    await api
-      .get(`/api/v1/institute/id/${data.institute_id}`)
-      .then(async ({data}) => {
-        console.log(data.groups)
-        const group = data.groups.map(({id: value, name: label}: any) => ({
-          value,
-          label,
-        }));
-        setClassList(group);
-        // console.log(classList);
-      });
 
     if (data.role == 'bk') {
       await api
@@ -67,10 +53,13 @@ const ResultListPage = ({navigation}: any) => {
     if (searchText === '') {
       setFilteredData(listData);
     } else {
-      const filtered = listData?.filter((item:any) =>
-        item.student_name.toLowerCase().includes(searchText.toLowerCase())
+      const filtered = listData?.filter(
+        (item: any) =>
+          item.student_name.toLowerCase().includes(searchText.toLowerCase()) ||
+          item.group.name.toLowerCase().includes(searchText.toLowerCase())
       );
       setFilteredData(filtered);
+      console.log(filtered);
     }
   }, [searchText, listData]);
 
@@ -109,9 +98,6 @@ const ResultListPage = ({navigation}: any) => {
     );
   };
 
-  const [classSelected, setClassSelected] = useState<any>();
-  const ref = useRef<IDropdownRef>(null);
-
   return (
     <View style={{flex: 1}}>
       <Text style={Styles.headerText}>Daftar Hasil</Text>
@@ -124,7 +110,11 @@ const ResultListPage = ({navigation}: any) => {
           }}>
           <Text style={Styles.schoolName}>{userData?.institute_name}</Text>
           {isLoading ? (
-            <ActivityIndicator size={'large'} animating={true} color={'#cc3663'} />
+            <ActivityIndicator
+              size={'large'}
+              animating={true}
+              color={'#cc3663'}
+            />
           ) : (
             <TouchableOpacity onPress={dataFetcher}>
               <Image
@@ -137,34 +127,27 @@ const ResultListPage = ({navigation}: any) => {
         <Text style={Styles.schoolCode}>
           Kode institusi: {userData?.institute_code}
         </Text>
-        <View style={Styles.searchBox}>
-          <Image
-            source={require('../../../assets/icons/icon_search_black.png')}
-            style={Styles.searchIcon}
-          />
-          <TextInput
-            style={{flex: 1}}
-            placeholder="Cari"
-            onChangeText={val => setSearchText(val)}
-            value={searchText}
-          />
-        </View>
-        <View style={{flexDirection: 'row', gap: 10, alignItems: 'center'}}>
-          <Dropdown
-            ref={ref}
-            style={Styles.dropdown}
-            placeholderStyle={Styles.placeholderStyle}
-            selectedTextStyle={Styles.selectedTextStyle}
-            data={classList}
-            maxHeight={200}
-            labelField="label"
-            valueField="value"
-            placeholder="Pilih grup kelas"
-            value={classSelected}
-            onChange={item => {
-              setClassSelected(item.value);
-            }}
-          />
+
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 10,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <View style={Styles.searchBox}>
+            <Image
+              source={require('../../../assets/icons/icon_search_black.png')}
+              style={Styles.searchIcon}
+            />
+            <TextInput
+              style={{flex: 0.78}}
+              placeholder="Cari"
+              onChangeText={val => setSearchText(val)}
+              value={searchText}
+            />
+          </View>
+
           <TouchableOpacity
             style={{
               backgroundColor: '#e9e9e9',
@@ -184,10 +167,11 @@ const ResultListPage = ({navigation}: any) => {
             />
           </TouchableOpacity>
         </View>
+
         <View>
           <FlatList
             data={filteredData}
-            contentContainerStyle={{paddingBottom: '110%'}}
+            contentContainerStyle={{paddingBottom: '90%'}}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => (
               <FlatListResult
@@ -200,7 +184,7 @@ const ResultListPage = ({navigation}: any) => {
               />
             )}
             keyExtractor={item => item.id}
-            style={{marginTop: 20}}
+            style={{marginTop: 5}}
           />
         </View>
       </View>
@@ -240,13 +224,6 @@ const Styles = StyleSheet.create({
     width: 20,
     opacity: 0.5,
   },
-  dropdown: {
-    height: 50,
-    backgroundColor: '#e9e9e9',
-    paddingHorizontal: 20,
-    borderRadius: 15,
-    flex: 1,
-  },
   placeholderStyle: {
     fontSize: 15,
   },
@@ -263,7 +240,7 @@ const Styles = StyleSheet.create({
     marginHorizontal: 10,
     color: 'black',
     fontWeight: '500',
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
   listView: {
     flexDirection: 'row',
