@@ -26,7 +26,15 @@ const ResultPage = ({navigation, route}: any) => {
     heart_line,
     gender,
   } = route.params;
-  console.log(student_name, group_name, group_id, head_line, life_line, heart_line, gender);
+  console.log(
+    student_name,
+    group_name,
+    group_id,
+    head_line,
+    life_line,
+    heart_line,
+    gender,
+  );
   const [userData, setUserData] = useState<any>();
   const [groupNameById, setGroupNameById] = useState('');
 
@@ -44,11 +52,12 @@ const ResultPage = ({navigation, route}: any) => {
       console.log(data);
       setUserData(data);
 
-      await api.get(`/api/v1/group/${group_id}`).then(({data}) => {
+      if (group_id != undefined)
+      {await api.get(`/api/v1/group/${group_id}`).then(({data}) => {
         console.log(data);
         setGroupNameById(data.name);
-      });
-    };
+      })
+    }}
     getData();
   }, []);
 
