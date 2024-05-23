@@ -11,7 +11,6 @@ import {
   Alert,
 } from 'react-native';
 import api from '../../API/UserApi';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegistAccount = ({navigation, route}: any) => {
   const {full_name, role, institute_name, institute_code, groupIdSelected, institute_id, group_name} = route.params;
@@ -19,7 +18,7 @@ const RegistAccount = ({navigation, route}: any) => {
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
 
-  // console.log(full_name, Number(role), institute, email, password);
+  console.log(full_name, role, institute_name, institute_code, groupIdSelected, institute_id, group_name);
 
   const [passwordVisible1, setPasswordVisible1] = useState(true);
   const [passwordVisible2, setPasswordVisible2] = useState(true);
@@ -29,8 +28,15 @@ const RegistAccount = ({navigation, route}: any) => {
   let visibleicon = require('../../../assets/icons/visibleicon.png');
   let invisibleicon = require('../../../assets/icons/invisibleicon.png');
 
+  const validateEmail = (email:string) => {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
+  };
+
   const handleRegistration = async () => {
-    if (password.length < 8)
+    if (!validateEmail(email))
+      ToastAndroid.show('Masukkan email yang valid', ToastAndroid.SHORT);
+    else if (password.length < 8)
       ToastAndroid.show('Password minimal 8 karakter', 2000);
     else if (password !== rePassword)
       ToastAndroid.show('Password belum sama', 2000);
@@ -41,7 +47,7 @@ const RegistAccount = ({navigation, route}: any) => {
         const registAPI = await api
         .post('/api/v1/user/bk', {full_name, email, password, institute_name})
         .then(async () => {
-          ToastAndroid.show('Registrasi berhasil, silahkan login', ToastAndroid.SHORT)
+          ToastAndroid.show('Registrasi berhasil, silahkan login', 3000)
           navigation.replace('LoginPage');
 
         })
@@ -60,7 +66,7 @@ const RegistAccount = ({navigation, route}: any) => {
         })
         .catch(response => {
           console.log(response);
-          Alert.alert('Error', response);
+          // Alert.alert('Error', response);
         });
       }
       setIsLoading(false);
