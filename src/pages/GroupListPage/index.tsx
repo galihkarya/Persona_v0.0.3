@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
-  ScrollView,
   Modal,
   ToastAndroid,
   FlatList,
@@ -17,7 +16,7 @@ import api from '../../API/UserApi';
 
 const GroupListPage = ({navigation, route}: any) => {
   const {institute_name, institute_code, institute_id} = route.params;
-  const [listGroup, setlistGroup] = useState(null);
+  const [listGroup, setlistGroup] = useState<any>(null);
   const [groupName, setGroupName] = useState('');
   const [editGroupName, setEditGroupName] = useState('');
   const [addGroup, setAddGroup] = useState('');
@@ -26,18 +25,33 @@ const GroupListPage = ({navigation, route}: any) => {
   const [isLoading, setisLoading] = useState(false);
   const [modal1Visible, setModal1Visible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [filteredData, setFilteredData] = useState<any>();
 
   const getListGroup = async () => {
     setisLoading(true);
     await api.get(`/api/v1/group/institute/${institute_id}`).then(({data}) => {
       console.log(data);
       setlistGroup(data);
+      setFilteredData(data)
     });
     setisLoading(false);
   };
+
   useEffect(() => {
     getListGroup();
   }, []);
+
+  useEffect(() => {
+    if (searchText === '') {
+      setFilteredData(listGroup);
+    } else {
+      const filtered = listGroup?.filter((item:any) =>
+        item.name.toLowerCase().includes(searchText.toLowerCase())
+      );
+      setFilteredData(filtered);
+    }
+  }, [searchText, listGroup]);
 
   const FlatListGroup = ({group_name, group_id}: any) => {
     return (
@@ -85,7 +99,7 @@ const GroupListPage = ({navigation, route}: any) => {
             source={require('../../../assets/icons/icon_search_black.png')}
             style={Styles.searchIcon}
           />
-          <TextInput placeholder="Cari" inputMode="search" />
+          <TextInput placeholder="Cari: '1a' atau '5b'" inputMode="search" onChangeText={val => setSearchText(val)} value={searchText}/>
         </View>
       </View>
 
@@ -93,8 +107,9 @@ const GroupListPage = ({navigation, route}: any) => {
         <ActivityIndicator size={'large'} />
       ) : (
         <FlatList
-          data={listGroup}
+          data={filteredData}
           contentContainerStyle={{paddingBottom: 75}}
+          showsVerticalScrollIndicator={false}
           renderItem={({item}) => (
             <FlatListGroup group_id={item.id} group_name={item.name} />
           )}
@@ -142,7 +157,8 @@ const GroupListPage = ({navigation, route}: any) => {
                       console.log(data);
                       getListGroup();
                       ToastAndroid.show(`Kelas berhasil diubah`, 3000);
-                    });
+                    })
+                    .finally(()=> setEditGroupName(''));
                   setModal1Visible(false);
                 }}
                 style={Styles.modalButtonP}>
@@ -325,6 +341,8 @@ const Styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 10,
     color: 'black',
+    fontWeight: '500',
+    paddingHorizontal: 7
   },
 });
 
