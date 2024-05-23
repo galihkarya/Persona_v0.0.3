@@ -6,7 +6,8 @@ function Splash({navigation}: any) {
   useEffect(() => {
     const checkToken = async () => {
       try {
-        const token = JSON.parse(await AsyncStorage.getItem('userData')).app_token;
+        const getToken = await AsyncStorage.getItem('userData');
+        const token = getToken ? JSON.parse(getToken).app_token : null;
         if (token == null) {
           navigation.replace('HomePage');
         } else {
@@ -17,7 +18,7 @@ function Splash({navigation}: any) {
         navigation.replace('HomePage');
       }
     };
-    setTimeout(checkToken, 1500);
+    setTimeout(checkToken, 1000);
   }, [navigation]);
 
   return (
