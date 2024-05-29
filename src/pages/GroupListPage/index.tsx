@@ -165,7 +165,11 @@ const GroupListPage = ({navigation, route}: any) => {
                 <Text style={Styles.modalTextButtonP}>Simpan</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => setModal1Visible(false)}
+                onPress={async () => {
+                  await api
+                  .delete(`/api/v1/group/`, {id: groupID})
+
+                  setModal1Visible(false)}}
                 style={Styles.modalButtonN}>
                 <Text style={Styles.modalTextButtonN}>Hapus</Text>
               </TouchableOpacity>
@@ -197,6 +201,7 @@ const GroupListPage = ({navigation, route}: any) => {
                     .then(({data}) => {
                       console.log(data);
                       setModal2Visible(false);
+                      getListGroup();
                       ToastAndroid.show(
                         `Kelas ${addGroup} telah berhasil dibuat`,
                         3000,
