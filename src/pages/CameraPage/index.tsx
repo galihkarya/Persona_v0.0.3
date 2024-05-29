@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import {useEffect, useState, useRef} from 'react';
 import {
@@ -23,6 +24,8 @@ const CameraPage = ({navigation, route}: any) => {
 
   const flashOnIcon = require('../../../assets/icons/icon_flash_on.png');
   const flashOffIcon = require('../../../assets/icons/icon_flash_off.png');
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const {hasPermission, requestPermission} = useCameraPermission();
 
@@ -78,6 +81,7 @@ const CameraPage = ({navigation, route}: any) => {
   };
 
   const buttonHandler = async () => {
+    setIsLoading(true);
     const photo = new FormData();
     photo.append('image', {
       name: photoFileName,
@@ -137,6 +141,7 @@ const CameraPage = ({navigation, route}: any) => {
         })
       })
     }
+    setIsLoading(false);
   };
 
   return (
@@ -161,9 +166,13 @@ const CameraPage = ({navigation, route}: any) => {
                   backgroundColor: '#CC3663',
                   marginHorizontal: 20,
                   borderRadius: 15,
+                  opacity: isLoading ? 0.3 : 1
                 }}
+                disabled = {isLoading}
                 onPress={async () => buttonHandler()}>
-                <Text
+                {isLoading ? (<ActivityIndicator color={'#FFFFFF'} size={'large'} style={{paddingVertical: 7}}/>) 
+                : 
+                (<Text
                   style={{
                     textAlign: 'center',
                     color: '#FFFFFF',
@@ -171,7 +180,7 @@ const CameraPage = ({navigation, route}: any) => {
                     fontSize: 14,
                   }}>
                   lanjut ...
-                </Text>
+                </Text>)}
               </TouchableOpacity>
               <TouchableOpacity
                 style={{
