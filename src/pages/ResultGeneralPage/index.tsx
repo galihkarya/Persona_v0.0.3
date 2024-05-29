@@ -9,13 +9,15 @@ import {
   PermissionsAndroid,
   ToastAndroid,
   StatusBar,
+  BackHandler,
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import FileViewer from "react-native-file-viewer";
+import FileViewer from 'react-native-file-viewer';
+import React, {useEffect} from 'react';
 
 const ResultGeneralPage = ({navigation, route}: any) => {
   const {name, head_line, life_line, heart_line, gender} = route.params;
-  // console.log(studentName, groupID, head_line, life_line, heart_line, gender); 
+  // console.log(studentName, groupID, head_line, life_line, heart_line, gender);
 
   let timestampClock: string;
   let timestampDate: string;
@@ -23,6 +25,23 @@ const ResultGeneralPage = ({navigation, route}: any) => {
   let month: string;
   let day: string;
   let timestampClock_str: string;
+
+  useEffect(() => {
+    const backAction = () => {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'HomePage'}],
+      });
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [navigation]);
 
   const exportToPDF = async () => {
     var moment = require('moment');
@@ -95,10 +114,11 @@ const ResultGeneralPage = ({navigation, route}: any) => {
         `PDF berhasil di export di ${file.filePath}`,
         ToastAndroid.LONG,
       );
-      FileViewer.open(`file://${file.filePath}`).then(() => console.log('opened')).catch((error) => console.log(error));
+      FileViewer.open(`file://${file.filePath}`)
+        .then(() => console.log('opened'))
+        .catch(error => console.log(error));
       // await Linking.openURL(`file://${file.filePath}`);
       // Share.open({url: `file://${file.filePath}`});
-      
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
@@ -106,19 +126,8 @@ const ResultGeneralPage = ({navigation, route}: any) => {
 
   return (
     <View>
-      <StatusBar barStyle={'dark-content'} backgroundColor={'#f2f2f2'}/>
+      <StatusBar barStyle={'dark-content'} backgroundColor={'#f2f2f2'} />
       <View style={{borderBottomWidth: 0.5, borderColor: '#00000050'}}>
-        <TouchableOpacity
-          style={Styles.backButton}
-          hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
-          onPress={() => {
-            navigation.goBack('AddStudentDataPage');
-          }}>
-          <Image
-            style={Styles.backIcon}
-            source={require('../../../assets/icons/icon_arrowLeft.png')}
-          />
-        </TouchableOpacity>
         <Text style={Styles.headerText}>Hasil</Text>
       </View>
 
@@ -244,7 +253,7 @@ const Styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '900',
     color: 'black',
-    marginBottom: 30
+    marginBottom: 30,
   },
   card: {
     backgroundColor: '#FFFFFF',

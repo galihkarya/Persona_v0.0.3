@@ -10,6 +10,7 @@ import {
   PermissionsAndroid,
   ToastAndroid,
   StatusBar,
+  BackHandler,
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import FileViewer from 'react-native-file-viewer';
@@ -59,7 +60,22 @@ const ResultPage = ({navigation, route}: any) => {
       })
     }}
     getData();
-  }, []);
+
+    const backAction = () => {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Tabs'}],
+      });  
+      return true; 
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [navigation]);
 
   const exportToPDF = async () => {
     var moment = require('moment');
@@ -148,17 +164,6 @@ const ResultPage = ({navigation, route}: any) => {
     <View>
       <StatusBar barStyle={'dark-content'} backgroundColor={'#f2f2f2'} />
       <View style={{borderBottomWidth: 0.5, borderColor: '#00000050'}}>
-        <TouchableOpacity
-          style={Styles.backButton}
-          hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
-          onPress={() => {
-            navigation.goBack('AddStudentDataPage');
-          }}>
-          <Image
-            style={Styles.backIcon}
-            source={require('../../../assets/icons/icon_arrowLeft.png')}
-          />
-        </TouchableOpacity>
         <Text style={Styles.headerText}>Hasil</Text>
       </View>
 
