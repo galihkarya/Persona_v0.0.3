@@ -63,7 +63,7 @@ const AddNamePage = ({navigation}:any) => {
           }}
           disabled={gender === null || name === ''}>
           
-          <Text style={Styles.textButton}>lanjut ...</Text>
+          <Text style={Styles.textButton}>lanjut</Text>
         </TouchableOpacity>
       </View>
     </View>

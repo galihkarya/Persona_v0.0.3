@@ -45,7 +45,7 @@ const RegistName = ({navigation}:any) => {
           onPress={onPressHandler}
           
           disabled={ full_name === '' }>
-          <Text style={Styles.textButton}>lanjut ...</Text>
+          <Text style={Styles.textButton}>lanjut</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

@@ -60,7 +60,7 @@ const ReminderPage = ({navigation, route}: any) => {
           </Text>
         </View>
         <TouchableOpacity style={Styles.button} onPress={handleButton}>
-          <Text style={Styles.textButton}>lanjut ...</Text>
+          <Text style={Styles.textButton}>lanjut</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>

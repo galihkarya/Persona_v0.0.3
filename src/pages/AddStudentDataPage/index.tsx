@@ -123,7 +123,7 @@ const AddStudentDataPage = ({navigation}: any) => {
             navigation.navigate('ReminderPage', {student_name, gender, group_id});
           }}
           disabled={gender === null || group_id === '' || student_name === ''}>
-          <Text style={Styles.textButton}>lanjut ...</Text>
+          <Text style={Styles.textButton}>lanjut</Text>
         </TouchableOpacity>
       </View>
     </View>

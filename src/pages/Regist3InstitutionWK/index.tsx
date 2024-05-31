@@ -134,7 +134,7 @@ const RegistInstitutionBK = ({navigation, route}: any) => {
           disabled={
             institute_code === '' || (isLoading && groupIdSelected == '')
           }>
-          <Text style={Styles.textButton}>lanjut ...</Text>
+          <Text style={Styles.textButton}>lanjut</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

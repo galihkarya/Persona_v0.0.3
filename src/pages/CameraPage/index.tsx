@@ -183,7 +183,7 @@ const CameraPage = ({navigation, route}: any) => {
                       paddingVertical: 15,
                       fontSize: 14,
                     }}>
-                    lanjut ...
+                    lanjut
                   </Text>
                 )}
               </TouchableOpacity>

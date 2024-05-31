@@ -44,7 +44,7 @@ const RegistInstitutionBK = ({navigation, route}:any) => {
           style={[Styles.button, {opacity: institute_name === '' ? 0.5 : 1}]}
           onPress={onPressHandler}
           disabled={ institute_name === '' }>
-          <Text style={Styles.textButton}>lanjut ...</Text>
+          <Text style={Styles.textButton}>lanjut</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

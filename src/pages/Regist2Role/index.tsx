@@ -5,7 +5,7 @@ import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 
 const RegistRole = ({navigation, route}:any) => {
   const {full_name} = route.params;
-  const [role, set_role] = useState<String>('');
+  const [role, set_role] = useState('');
   const ref = useRef<IDropdownRef>(null);
   const data = [
     {label: 'Guru BK', value: 'bk'},
@@ -63,7 +63,7 @@ const RegistRole = ({navigation, route}:any) => {
           onPress={onPressHandler}
           disabled={ role === '' }>
 
-          <Text style={Styles.textButton}>lanjut ...</Text>
+          <Text style={Styles.textButton}>lanjut</Text>
         </TouchableOpacity>
       </View>
     </View>
