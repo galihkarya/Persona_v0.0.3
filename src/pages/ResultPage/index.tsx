@@ -70,7 +70,7 @@ const ResultPage = ({navigation, route}: any) => {
     };
 
     const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
+      'hardwareBackPress', 
       backAction
     );
 
