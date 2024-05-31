@@ -16,6 +16,7 @@ const AddStudentDataPage = ({navigation}: any) => {
   const [gender, setGender] = useState<string | null>(null);
   const [student_name, setStudent_name] = useState('');
   const [group_id, setGroup_id] = useState<any>('');
+  const [role, setRole] = useState('');
 
   const handleRadiogender = (option: string) => {
     setGender(option === gender ? null : option);
@@ -25,7 +26,10 @@ const AddStudentDataPage = ({navigation}: any) => {
     const getData = async () => {
       const userData = await AsyncStorage.getItem('userData');
       const data = userData ? JSON.parse(userData) : ' ';
-      console.log(data)
+      console.log(data);
+      setRole(data.role);
+      if (data.role == 'wk') setGroup_id(data.group_id);
+      
 
       await api
         .get(`/api/v1/institute/id/${data.institute_id}`)
@@ -39,7 +43,6 @@ const AddStudentDataPage = ({navigation}: any) => {
     getData();
   }, []);
 
-  
   const ref = useRef<IDropdownRef>(null);
 
   return (
@@ -92,7 +95,7 @@ const AddStudentDataPage = ({navigation}: any) => {
           onChangeText={setStudent_name}
         />
 
-        <Dropdown
+        { role == 'bk' && (<Dropdown
           ref={ref}
           style={Styles.dropdown}
           placeholderStyle={Styles.placeholderStyle}
@@ -106,7 +109,8 @@ const AddStudentDataPage = ({navigation}: any) => {
           onChange={item => {
             setGroup_id(item.value);
           }}
-        />
+        />)}
+
         <TouchableOpacity
           style={[
             Styles.button,
