@@ -11,11 +11,12 @@ import {
   ToastAndroid,
   FlatList,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import api from '../../API/UserApi';
 
 const GroupListPage = ({navigation, route}: any) => {
-  const {institute_name, institute_code, institute_id} = route.params;
+  const {institute_name, institute_code, institute_id, role, group_id_user} = route.params;
   const [listGroup, setlistGroup] = useState<any>(null);
   const [groupName, setGroupName] = useState('');
   const [editGroupName, setEditGroupName] = useState('');
@@ -33,7 +34,8 @@ const GroupListPage = ({navigation, route}: any) => {
     await api.get(`/api/v1/group/institute/${institute_id}`).then(({data}) => {
       console.log(data);
       setlistGroup(data);
-      setFilteredData(data)
+      setFilteredData(data);
+
     });
     setisLoading(false);
   };
@@ -61,14 +63,15 @@ const GroupListPage = ({navigation, route}: any) => {
         </View>
         <View>
           <TouchableOpacity
-            style={Styles.editButton}
+            style={[Styles.editButton, {opacity: group_id_user == group_id ? 0.3 : 1}]}
+            disabled={group_id_user == group_id}
             onPress={() => {
               console.log('modal: edit class');
               setGroupID(group_id);
               setGroupName(group_name);
-              setModal1Visible(true);
+              if (role == 'bk') setModal1Visible(true);
             }}>
-            <Text style={Styles.editTextButton}>Edit</Text>
+            <Text style={Styles.editTextButton}>{role == 'bk' ? 'Edit' : group_id_user == group_id ? 'Tergabung' : 'Gabung'}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -104,12 +107,13 @@ const GroupListPage = ({navigation, route}: any) => {
       </View>
 
       {isLoading ? (
-        <ActivityIndicator size={'large'} />
+        <ActivityIndicator size={'large'} color={'#cc3663'} />
       ) : (
         <FlatList
           data={filteredData}
           contentContainerStyle={{paddingBottom: 75}}
           showsVerticalScrollIndicator={false}
+          refreshControl={<RefreshControl refreshing={isLoading} onRefresh={getListGroup} colors={['#cc3663', '#ffffff']}/>}
           renderItem={({item}) => (
             <FlatListGroup group_id={item.id} group_name={item.name} />
           )}
@@ -117,7 +121,7 @@ const GroupListPage = ({navigation, route}: any) => {
         />
       )}
 
-      <TouchableOpacity
+      { role == 'bk' && (<TouchableOpacity
         style={{right: 10, bottom: 10, position: 'absolute'}}
         onPress={() => {
           setModal2Visible(true);
@@ -127,7 +131,7 @@ const GroupListPage = ({navigation, route}: any) => {
           source={require('../../../assets/icons/icon_addGroup.png')}
           style={Styles.addIcon}
         />
-      </TouchableOpacity>
+      </TouchableOpacity>)}
 
       <Modal
         visible={modal1Visible}

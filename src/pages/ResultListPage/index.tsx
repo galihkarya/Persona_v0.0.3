@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import api from '../../API/UserApi';
 
@@ -36,7 +37,7 @@ const ResultListPage = ({navigation}: any) => {
           setFilteredData(data);
         });
     } else if (data.role == 'wk') {
-      await api.get(`/api/v1/result/group/20`).then(({data}) => {
+      await api.get(`/api/v1/result/group/${data.group_id}`).then(({data}) => {
         console.log('wk', data);
         setListData(data);
         setFilteredData(data);
@@ -56,7 +57,7 @@ const ResultListPage = ({navigation}: any) => {
       const filtered = listData?.filter(
         (item: any) =>
           item.student_name.toLowerCase().includes(searchText.toLowerCase()) ||
-          item.group.name.toLowerCase().includes(searchText.toLowerCase())
+          item.group.name.toLowerCase().includes(searchText.toLowerCase()),
       );
       setFilteredData(filtered);
       console.log(filtered);
@@ -102,28 +103,7 @@ const ResultListPage = ({navigation}: any) => {
     <View style={{flex: 1}}>
       <Text style={Styles.headerText}>Daftar Hasil</Text>
       <View style={{margin: 20}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <Text style={Styles.schoolName}>{userData?.institute_name}</Text>
-          {isLoading ? (
-            <ActivityIndicator
-              size={'large'}
-              animating={true}
-              color={'#cc3663'}
-            />
-          ) : (
-            <TouchableOpacity onPress={dataFetcher}>
-              <Image
-                source={require('../../../assets/icons/icon_refreshButton.png')}
-                style={{width: 30, height: 30, opacity: 0.5}}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
+        <Text style={Styles.schoolName}>{userData?.institute_name}</Text>
         <Text style={Styles.schoolCode}>
           Kode institusi: {userData?.institute_code}
         </Text>
@@ -156,9 +136,11 @@ const ResultListPage = ({navigation}: any) => {
             }}
             onPress={() => {
               navigation.navigate('GroupListPage', {
-                institute_name: userData?.institute_name,
-                institute_code: userData?.institute_code,
-                institute_id: userData?.institute_id,
+                institute_name: userData.institute_name,
+                institute_code: userData.institute_code,
+                institute_id: userData.institute_id,
+                role: userData.role,
+                group_id_user: userData.group_id,
               });
             }}>
             <Image
@@ -169,23 +151,34 @@ const ResultListPage = ({navigation}: any) => {
         </View>
 
         <View>
-          <FlatList
-            data={filteredData}
-            contentContainerStyle={{paddingBottom: '90%'}}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item}) => (
-              <FlatListResult
-                student_name={item.student_name}
-                group_name={item.group.name}
-                head_line={item.head_line}
-                life_line={item.life_line}
-                heart_line={item.heart_line}
-                gender={item.gender}
-              />
-            )}
-            keyExtractor={item => item.id}
-            style={{marginTop: 5}}
-          />
+          {isLoading ? (
+            <ActivityIndicator size={'large'} color={'#cc3663'} />
+          ) : (
+            <FlatList
+              data={filteredData}
+              contentContainerStyle={{paddingBottom: '90%'}}
+              showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isLoading}
+                  onRefresh={dataFetcher}
+                  colors={['#cc3663', '#ffffff']}
+                />
+              }
+              renderItem={({item}) => (
+                <FlatListResult
+                  student_name={item.student_name}
+                  group_name={item.group.name}
+                  head_line={item.head_line}
+                  life_line={item.life_line}
+                  heart_line={item.heart_line}
+                  gender={item.gender}
+                />
+              )}
+              keyExtractor={item => item.id}
+              style={{marginTop: 5}}
+            />
+          )}
         </View>
       </View>
     </View>
