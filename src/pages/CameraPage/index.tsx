@@ -38,10 +38,11 @@ const CameraPage = ({navigation, route}: any) => {
   const device = useCameraDevice('back');
 
   const format = useCameraFormat(device, [
-    {autoFocusSystem: 'contrast-detection', 
-     photoResolution: 'max', 
+    {
+      autoFocusSystem: 'contrast-detection',
+      photoResolution: {width: 480, height: 640},
+      photoAspectRatio: 4 / 3,
     },
-
   ]);
 
   const [flash, setFlash] = useState<TakePhotoOptions['flash']>('off');
@@ -60,7 +61,6 @@ const CameraPage = ({navigation, route}: any) => {
         qualityPrioritization: 'quality',
         flash,
         enableShutterSound: false,
-
       });
       console.log(photo);
 
@@ -104,42 +104,41 @@ const CameraPage = ({navigation, route}: any) => {
     ).toString()}`;
     // console.log(path);
 
-    if (student_name == undefined){
+    if (student_name == undefined) {
       await api
-      .post('/api/v1/result/predict', photo, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(({data}) => {
-        console.log('ini data', data);
-        navigation.navigate('ResultGeneralPage', {
-          name,
-          gender,
-          heart_line: data.heart_line,
-          life_line: data.life_line,
-          head_line: data.head_line,
-        });
-      })
-      .catch((ex) => console.log('ini bawah', ex, name, gender))
-    }
-    else {
-      await api
-      .post(path, photo, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(({data}) => {
-        navigation.navigate('ResultPage', {
-          student_name,
-          gender,
-          group_id,
-          heart_line: data.heart_line,
-          life_line: data.life_line,
-          head_line: data.head_line,
+        .post('/api/v1/result/predict', photo, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         })
-      })
+        .then(({data}) => {
+          console.log('ini data', data);
+          navigation.navigate('ResultGeneralPage', {
+            name,
+            gender,
+            heart_line: data.heart_line,
+            life_line: data.life_line,
+            head_line: data.head_line,
+          });
+        })
+        .catch(ex => console.log('ini bawah', ex, name, gender));
+    } else {
+      await api
+        .post(path, photo, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then(({data}) => {
+          navigation.navigate('ResultPage', {
+            student_name,
+            gender,
+            group_id,
+            heart_line: data.heart_line,
+            life_line: data.life_line,
+            head_line: data.head_line,
+          });
+        });
     }
     setIsLoading(false);
   };
@@ -166,21 +165,27 @@ const CameraPage = ({navigation, route}: any) => {
                   backgroundColor: '#CC3663',
                   marginHorizontal: 20,
                   borderRadius: 15,
-                  opacity: isLoading ? 0.3 : 1
+                  opacity: isLoading ? 0.3 : 1,
                 }}
-                disabled = {isLoading}
+                disabled={isLoading}
                 onPress={async () => buttonHandler()}>
-                {isLoading ? (<ActivityIndicator color={'#FFFFFF'} size={'large'} style={{paddingVertical: 7}}/>) 
-                : 
-                (<Text
-                  style={{
-                    textAlign: 'center',
-                    color: '#FFFFFF',
-                    paddingVertical: 15,
-                    fontSize: 14,
-                  }}>
-                  lanjut ...
-                </Text>)}
+                {isLoading ? (
+                  <ActivityIndicator
+                    color={'#FFFFFF'}
+                    size={'large'}
+                    style={{paddingVertical: 7}}
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      color: '#FFFFFF',
+                      paddingVertical: 15,
+                      fontSize: 14,
+                    }}>
+                    lanjut ...
+                  </Text>
+                )}
               </TouchableOpacity>
               <TouchableOpacity
                 style={{
@@ -226,15 +231,17 @@ const CameraPage = ({navigation, route}: any) => {
             <Text style={Styles.instruction}>Posisikan Tangan Kamu</Text>
           </View>
           <View style={{justifyContent: 'center'}}>
-            <View style={Styles.guideline }/>
-          <Camera
-            ref={camera}
-            style={Styles.viewFinder}
-            device={device}
-            isActive={true}
-            format={format}
-            photo={true}
-          />
+            <View style={Styles.guideline} />
+            {device && (
+              <Camera
+                ref={camera}
+                style={Styles.viewFinder}
+                device={device}
+                isActive={true}
+                format={format}
+                photo={true}
+              />
+            )}
           </View>
           <TouchableOpacity
             style={Styles.shutterButton}
