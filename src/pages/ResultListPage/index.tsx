@@ -191,7 +191,7 @@ const ResultListPage = ({navigation}: any) => {
               style={Styles.searchIcon}
             />
             <TextInput
-              style={{flex: 0.78}}
+              style={[{flex: 0.78}, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
               placeholder="Cari"
               onChangeText={val => setSearchText(val)}
               value={searchText}

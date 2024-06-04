@@ -67,7 +67,7 @@ const AddNamePage = ({navigation}:any) => {
       </View>
       <View style={{margin: 20, rowGap: 20}}>
 
-        <TextInput style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]} placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}50` : `${Styles.textDarkTheme.color}50`} placeholder="Nama Lengkap" value={name} onChangeText={setName} />
+        <TextInput style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]} placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}50` : `${Styles.textDarkTheme.color}50`} placeholder="Nama Lengkap" value={name} onChangeText={setName} />
 
         <TouchableOpacity
           style={[Styles.button, {opacity: gender === null || name === '' ? 0.3 : 1}]}
@@ -112,7 +112,6 @@ const Styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   instructionText: {
-    color: 'black',
     textAlign: 'center',
     fontWeight: '300',
     marginTop: '15%',
@@ -148,7 +147,6 @@ const Styles = StyleSheet.create({
     height: 50,
     elevation: 8,
     shadowColor: '#00000050',
-    backgroundColor: '#fefefe',
     paddingHorizontal: 20,
     borderRadius: 10,
   },

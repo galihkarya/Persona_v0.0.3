@@ -309,7 +309,6 @@ const Styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: '700',
-    color: 'black',
     textAlign: 'center',
     marginTop: 25,
     marginBottom: 15,
@@ -319,17 +318,14 @@ const Styles = StyleSheet.create({
     fontSize: 26,
     textAlign: 'center',
     fontWeight: '900',
-    color: 'black',
   },
   classGroupText: {
     marginBottom: 30,
     fontSize: 14,
     textAlign: 'center',
     fontWeight: '300',
-    color: 'black',
   },
   card: {
-    backgroundColor: '#FFFFFF',
     padding: 25,
     borderRadius: 16,
     width: '100%',
@@ -342,13 +338,11 @@ const Styles = StyleSheet.create({
   },
   lineTitle: {
     fontSize: 18,
-    color: 'black',
     fontWeight: '400',
     justifyContent: 'center',
   },
   contentText: {
     fontSize: 16,
-    color: 'black',
     fontWeight: '300',
     lineHeight: 21,
     letterSpacing: 0.8,

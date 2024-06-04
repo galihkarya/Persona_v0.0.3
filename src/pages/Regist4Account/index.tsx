@@ -117,13 +117,13 @@ const RegistAccount = ({navigation, route}: any) => {
       <View style={{margin: 20}}>
         <View style={[Styles.input, theme == 'light'
               ? Styles.containerLightTheme2
-              : Styles.containerDarkTheme2]}>
+              : Styles.containerDarkTheme2, ]}>
           <TextInput
             placeholder="email"
             value={email}
             onChangeText={setemail}
             autoCapitalize='none'
-            style={{flex:1}}
+            style={[{flex:1}, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
           />
         </View>
 
@@ -133,7 +133,7 @@ const RegistAccount = ({navigation, route}: any) => {
           <TextInput
             secureTextEntry={passwordVisible1}
             placeholder="password"
-            style={{flex: 1}}
+            style={[{flex: 1}, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
             value={password}
             onChangeText={setPassword}
             autoCapitalize='none'
@@ -153,7 +153,7 @@ const RegistAccount = ({navigation, route}: any) => {
           <TextInput
             secureTextEntry={passwordVisible2}
             placeholder="ketik ulang password"
-            style={{flex: 1}}
+            style={[{flex: 1}, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
             value={rePassword}
             onChangeText={setRePassword}
             autoCapitalize='none'
@@ -230,7 +230,6 @@ const Styles = StyleSheet.create({
   head1: {
     fontWeight: '700',
     fontSize: 40,
-    color: 'black',
     marginVertical: 20,
   },
   head2: {
@@ -239,7 +238,6 @@ const Styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    backgroundColor: '#fefefe',
     borderRadius: 10,
     elevation: 8,
     shadowColor: '#00000050',

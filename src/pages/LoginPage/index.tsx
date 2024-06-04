@@ -78,7 +78,7 @@ const LoginPage = ({navigation}: any) => {
           </View>
 
           <TextInput
-            style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+            style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,]}
             placeholder="email"
             value={email}
             onChangeText={setEmail}
@@ -90,7 +90,7 @@ const LoginPage = ({navigation}: any) => {
             <TextInput
               secureTextEntry={passwordVisible}
               placeholder="password"
-              style={{flex: 1}}
+              style={[{flex: 1}, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
               value={password}
               onChangeText={setPassword}
               autoCapitalize='none'
@@ -158,7 +158,6 @@ const Styles = StyleSheet.create({
   input: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fefefe',
     borderRadius: 10,
     elevation: 8,
     shadowColor: '#00000050',

@@ -12,7 +12,7 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
-  Appearance, 
+  Appearance,
 } from 'react-native';
 import api from '../../API/UserApi';
 
@@ -21,13 +21,14 @@ const GroupListPage = ({navigation, route}: any) => {
   const [theme, setTheme] = useState(colorScheme);
 
   useEffect(() => {
-    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+    const subscription = Appearance.addChangeListener(({colorScheme}) => {
       setTheme(colorScheme);
     });
     return () => subscription.remove();
   }, []);
 
-  const {institute_name, institute_code, institute_id, role, group_id_user} = route.params;
+  const {institute_name, institute_code, institute_id, role, group_id_user} =
+    route.params;
   const [listGroup, setlistGroup] = useState<any>(null);
   const [groupName, setGroupName] = useState('');
   const [editGroupName, setEditGroupName] = useState('');
@@ -46,7 +47,6 @@ const GroupListPage = ({navigation, route}: any) => {
       console.log(data);
       setlistGroup(data);
       setFilteredData(data);
-
     });
     setisLoading(false);
   };
@@ -59,8 +59,8 @@ const GroupListPage = ({navigation, route}: any) => {
     if (searchText === '') {
       setFilteredData(listGroup);
     } else {
-      const filtered = listGroup?.filter((item:any) =>
-        item.name.toLowerCase().includes(searchText.toLowerCase())
+      const filtered = listGroup?.filter((item: any) =>
+        item.name.toLowerCase().includes(searchText.toLowerCase()),
       );
       setFilteredData(filtered);
     }
@@ -70,11 +70,23 @@ const GroupListPage = ({navigation, route}: any) => {
     return (
       <View style={Styles.listView}>
         <View>
-          <Text style={[Styles.classGroup, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Kelas {group_name}</Text>
+          <Text
+            style={[
+              Styles.classGroup,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
+            Kelas {group_name}
+          </Text>
         </View>
         <View>
           <TouchableOpacity
-            style={[Styles.editButton, {opacity: group_id_user == group_id ? 0.3 : 1}, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+            style={[
+              Styles.editButton,
+              {opacity: group_id_user == group_id ? 0.3 : 1},
+              theme == 'light'
+                ? Styles.containerLightTheme2
+                : Styles.containerDarkTheme2,
+            ]}
             disabled={group_id_user == group_id}
             onPress={() => {
               console.log('modal: edit class');
@@ -82,7 +94,17 @@ const GroupListPage = ({navigation, route}: any) => {
               setGroupName(group_name);
               if (role == 'bk') setModal1Visible(true);
             }}>
-            <Text style={[Styles.editTextButton, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{role == 'bk' ? 'Edit' : group_id_user == group_id ? 'Tergabung' : 'Gabung'}</Text>
+            <Text
+              style={[
+                Styles.editTextButton,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              {role == 'bk'
+                ? 'Edit'
+                : group_id_user == group_id
+                ? 'Tergabung'
+                : 'Gabung'}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -90,7 +112,13 @@ const GroupListPage = ({navigation, route}: any) => {
   };
 
   return (
-    <View style={[{flex: 1, padding: 20}, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
+    <View
+      style={[
+        {flex: 1, padding: 20},
+        theme == 'light'
+          ? Styles.containerLightTheme1
+          : Styles.containerDarkTheme1,
+      ]}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <TouchableOpacity
           hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
@@ -99,21 +127,64 @@ const GroupListPage = ({navigation, route}: any) => {
           }}>
           <Image
             style={Styles.backIcon}
-            source={theme == 'light' ? require('../../../assets/icons/back_black.png') : require('../../../assets/icons/back_white.png')}
+            source={
+              theme == 'light'
+                ? require('../../../assets/icons/back_black.png')
+                : require('../../../assets/icons/back_white.png')
+            }
           />
         </TouchableOpacity>
-        <Text style={[Styles.headerText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Daftar Grup</Text>
+        <Text
+          style={[
+            Styles.headerText,
+            theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+          ]}>
+          Daftar Grup
+        </Text>
       </View>
 
       <View style={{marginTop: 20, marginBottom: 10}}>
-        <Text style={[Styles.schoolName, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{institute_name}</Text>
-        <Text style={[Styles.schoolCode, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Kode institusi: {institute_code}</Text>
-        <View style={[Styles.searchBox, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}>
+        <Text
+          style={[
+            Styles.schoolName,
+            theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+          ]}>
+          {institute_name}
+        </Text>
+        <Text
+          style={[
+            Styles.schoolCode,
+            theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+          ]}>
+          Kode institusi: {institute_code}
+        </Text>
+        <View
+          style={[
+            Styles.searchBox,
+            theme == 'light'
+              ? Styles.containerLightTheme2
+              : Styles.containerDarkTheme2,
+          ]}>
           <Image
-            source={theme == 'light' ? require('../../../assets/icons/search_black.png') : require('../../../assets/icons/search_white.png')}
+            source={
+              theme == 'light'
+                ? require('../../../assets/icons/search_black.png')
+                : require('../../../assets/icons/search_white.png')
+            }
             style={Styles.searchIcon}
           />
-          <TextInput placeholder="Cari: '1a' atau '5b'" placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}90` : `${Styles.textDarkTheme.color}90`} inputMode="search" onChangeText={val => setSearchText(val)} value={searchText}/>
+          <TextInput
+          style={theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme}
+            placeholder="Cari: '1a' atau '5b'"
+            placeholderTextColor={
+              theme == 'light'
+                ? `${Styles.textLightTheme.color}90`
+                : `${Styles.textDarkTheme.color}90`
+            }
+            inputMode="search"
+            onChangeText={val => setSearchText(val)}
+            value={searchText}
+          />
         </View>
       </View>
 
@@ -124,7 +195,13 @@ const GroupListPage = ({navigation, route}: any) => {
           data={filteredData}
           contentContainerStyle={{paddingBottom: 75}}
           showsVerticalScrollIndicator={false}
-          refreshControl={<RefreshControl refreshing={isLoading} onRefresh={getListGroup} colors={['#cc3663', '#ffffff']}/>}
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={getListGroup}
+              colors={['#cc3663', '#ffffff']}
+            />
+          }
           renderItem={({item}) => (
             <FlatListGroup group_id={item.id} group_name={item.name} />
           )}
@@ -132,17 +209,19 @@ const GroupListPage = ({navigation, route}: any) => {
         />
       )}
 
-      { role == 'bk' && (<TouchableOpacity
-        style={{right: 30, bottom: 30, position: 'absolute'}}
-        onPress={() => {
-          setModal2Visible(true);
-          console.log('modal: add class');
-        }}>
-        <Image
-          source={require('../../../assets/icons/icon_addGroup.png')}
-          style={Styles.addIcon}
-        />
-      </TouchableOpacity>)}
+      {role == 'bk' && (
+        <TouchableOpacity
+          style={{right: 30, bottom: 30, position: 'absolute'}}
+          onPress={() => {
+            setModal2Visible(true);
+            console.log('modal: add class');
+          }}>
+          <Image
+            source={require('../../../assets/icons/icon_addGroup.png')}
+            style={Styles.addIcon}
+          />
+        </TouchableOpacity>
+      )}
 
       <Modal
         visible={modal1Visible}
@@ -151,14 +230,34 @@ const GroupListPage = ({navigation, route}: any) => {
         statusBarTranslucent
         animationType="fade">
         <View style={Styles.centeredView}>
-          <View style={[Styles.modalView, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
-            <Text style={[Styles.modalTitle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Edit Kelas</Text>
+          <View
+            style={[
+              Styles.modalView,
+              theme == 'light'
+                ? Styles.containerLightTheme1
+                : Styles.containerDarkTheme1,
+            ]}>
+            <Text
+              style={[
+                Styles.modalTitle,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              Edit Kelas
+            </Text>
             <TextInput
-              style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
+              style={[
+                Styles.input,
+                theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}
               onChangeText={setEditGroupName}
               value={editGroupName}
               placeholder={groupName}
-              placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}50` : `${Styles.textDarkTheme.color}50`}
+              placeholderTextColor={
+                theme == 'light'
+                  ? `${Styles.textLightTheme.color}50`
+                  : `${Styles.textDarkTheme.color}50`
+              }
             />
             <View style={{flexDirection: 'row', gap: 10}}>
               <TouchableOpacity
@@ -174,7 +273,7 @@ const GroupListPage = ({navigation, route}: any) => {
                       getListGroup();
                       ToastAndroid.show(`Kelas berhasil diubah`, 3000);
                     })
-                    .finally(()=> setEditGroupName(''));
+                    .finally(() => setEditGroupName(''));
                   setModal1Visible(false);
                 }}
                 style={Styles.modalButtonP}>
@@ -182,10 +281,10 @@ const GroupListPage = ({navigation, route}: any) => {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={async () => {
-                  await api
-                  .delete(`/api/v1/group/`, {id: groupID})
+                  await api.delete(`/api/v1/group/`, {id: groupID});
 
-                  setModal1Visible(false)}}
+                  setModal1Visible(false);
+                }}
                 style={Styles.modalButtonN}>
                 <Text style={Styles.modalTextButtonN}>Hapus</Text>
               </TouchableOpacity>
@@ -201,10 +300,28 @@ const GroupListPage = ({navigation, route}: any) => {
         statusBarTranslucent
         animationType="fade">
         <View style={Styles.centeredView}>
-          <View style={[Styles.modalView, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
-            <Text style={[Styles.modalTitle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Tambahkan Kelas</Text>
+          <View
+            style={[
+              Styles.modalView,
+              theme == 'light'
+                ? Styles.containerLightTheme1
+                : Styles.containerDarkTheme1,
+            ]}>
+            <Text
+              style={[
+                Styles.modalTitle,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              Tambahkan Kelas
+            </Text>
             <TextInput
-              style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
+              style={[
+                Styles.input,
+                theme == 'light'
+                  ? Styles.containerLightTheme2
+                  : Styles.containerDarkTheme2,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}
               onChangeText={setAddGroup}
               value={addGroup}
               placeholder="1A"
@@ -242,27 +359,26 @@ const GroupListPage = ({navigation, route}: any) => {
 
 const Styles = StyleSheet.create({
   containerLightTheme1: {
-    backgroundColor: '#f0f0f0'
-  }, 
+    backgroundColor: '#f0f0f0',
+  },
   containerDarkTheme1: {
-    backgroundColor: '#2d2d2d'
-  }, 
+    backgroundColor: '#2d2d2d',
+  },
   containerLightTheme2: {
-    backgroundColor: '#fefefe'
-  }, 
+    backgroundColor: '#fefefe',
+  },
   containerDarkTheme2: {
-    backgroundColor: '#3d3d3d'
-  }, 
+    backgroundColor: '#3d3d3d',
+  },
   textLightTheme: {
-    color: '#2d2d2d'
-  }, 
+    color: '#2d2d2d',
+  },
   textDarkTheme: {
-    color: '#f0f0f0'
+    color: '#f0f0f0',
   },
   headerText: {
     fontSize: 20,
     fontWeight: '700',
-    color: 'black',
     justifyContent: 'center',
     flex: 1,
     textAlign: 'center',
@@ -307,7 +423,6 @@ const Styles = StyleSheet.create({
   },
   modalView: {
     // margin: 10,
-    backgroundColor: '#f2f2f2',
     borderRadius: 12,
     padding: 25,
     elevation: 5,
@@ -315,7 +430,6 @@ const Styles = StyleSheet.create({
   },
   modalTitle: {
     textAlign: 'center',
-    color: 'black',
     fontSize: 18,
     fontWeight: '500',
   },
@@ -341,14 +455,12 @@ const Styles = StyleSheet.create({
     color: '#cc3663',
   },
   titleModal: {
-    color: 'black',
     textAlign: 'center',
     fontSize: 18,
     fontWeight: '500',
     marginBottom: 20,
   },
   input: {
-    backgroundColor: '#fefefe',
     borderRadius: 10,
     elevation: 8,
     shadowColor: '#00000050',
@@ -366,7 +478,6 @@ const Styles = StyleSheet.create({
     borderColor: '#00000070',
   },
   classGroup: {
-    color: 'black',
     fontWeight: '600',
     fontSize: 16,
   },
@@ -378,9 +489,8 @@ const Styles = StyleSheet.create({
   editTextButton: {
     marginVertical: 5,
     marginHorizontal: 10,
-    color: 'black',
     fontWeight: '500',
-    paddingHorizontal: 7
+    paddingHorizontal: 7,
   },
 });
 

@@ -114,7 +114,6 @@ const Styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '900',
     textAlign: 'center',
-    color: 'black',
   },
   images: {
     width: 120,
@@ -123,7 +122,6 @@ const Styles = StyleSheet.create({
   description: {
     fontSize: 16,
     fontWeight: '300',
-    color: 'black',
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -131,7 +129,6 @@ const Styles = StyleSheet.create({
     backgroundColor: '#CC3663',
     marginHorizontal: 20,
     borderRadius: 15,
-    // flex: 1,
   },
   textButton: {
     textAlign: 'center',

@@ -246,12 +246,10 @@ const Styles = StyleSheet.create({
   modalTextTitle: {
     marginVertical: 15,
     textAlign: 'left',
-    color: 'black',
     fontWeight: '900',
     fontSize: 34,
   },
   modalTextContent: {
-    color: 'black',
     fontWeight: '400',
     marginTop: 10,
     marginBottom: 20,
@@ -262,7 +260,6 @@ const Styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10, 
     alignSelf: 'flex-end',
-    backgroundColor: '#fefefe',
     flexDirection: 'row',
   },
   loginText: {
@@ -291,7 +288,6 @@ const Styles = StyleSheet.create({
   textCard: {
     fontSize: 18,
     fontWeight: '900',
-    color: '#000000',
     alignSelf: 'center',
     maxWidth: 175,
   },

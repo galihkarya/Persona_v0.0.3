@@ -175,7 +175,6 @@ const Styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   instructionText: {
-    color: 'black',
     textAlign: 'center',
     fontWeight: '300',
     marginTop: '15%',
@@ -188,7 +187,6 @@ const Styles = StyleSheet.create({
   },
   radioButtons: {
     alignItems: 'center',
-    backgroundColor: '#fafafa',
     padding: 10,
     borderRadius: 15,
   },
@@ -200,10 +198,8 @@ const Styles = StyleSheet.create({
   genderText: {
     fontSize: 16,
     fontWeight: '800',
-    color: 'black',
   },
   input: {
-    backgroundColor: '#fefefe',
     borderRadius: 10,
     elevation: 8,
     shadowColor: '#00000050',
@@ -213,7 +209,6 @@ const Styles = StyleSheet.create({
     height: 50,
     elevation: 8,
     shadowColor: '#00000050',
-    backgroundColor: '#fefefe',
     paddingHorizontal: 20,
     borderRadius: 10,
   },

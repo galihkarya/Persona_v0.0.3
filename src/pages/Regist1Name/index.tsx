@@ -75,7 +75,7 @@ const RegistName = ({navigation}: any) => {
             Styles.input,
             theme == 'light'
               ? Styles.containerLightTheme2
-              : Styles.containerDarkTheme2,
+              : Styles.containerDarkTheme2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme
           ]}
           placeholderTextColor={
             theme == 'light'
@@ -132,14 +132,12 @@ const Styles = StyleSheet.create({
   head1: {
     fontWeight: '700',
     fontSize: 40,
-    color: 'black',
     marginVertical: 20,
   },
   head2: {
     fontSize: 16,
   },
   input: {
-    backgroundColor: '#fefefe',
     borderRadius: 10,
     elevation: 8,
     shadowColor: '#00000050',

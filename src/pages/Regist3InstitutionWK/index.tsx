@@ -103,7 +103,7 @@ const RegistInstitutionBK = ({navigation, route}: any) => {
       </View>
       <View style={{margin: 20}}>
         <TextInput
-          style={[{marginVertical: schoolIsTrue ? 0 : 8}, Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+          style={[{marginVertical: schoolIsTrue ? 0 : 8}, Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
           placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}50` : `${Styles.textDarkTheme.color}50`}
           placeholder="Kode sekolah"
           value={institute_code}
@@ -189,14 +189,12 @@ const Styles = StyleSheet.create({
   head1: {
     fontWeight: '700',
     fontSize: 40,
-    color: 'black',
     marginVertical: 20,
   },
   head2: {
     fontSize: 16,
   },
   input: {
-    backgroundColor: '#fefefe',
     borderRadius: 10,
     elevation: 8,
     shadowColor: '#00000050',
@@ -210,13 +208,11 @@ const Styles = StyleSheet.create({
   },
   textButton: {
     textAlign: 'center',
-    color: '#FFFFFF',
     paddingVertical: 15,
     fontSize: 16,
   },
   dropdown: {
     height: 50,
-    backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     borderRadius: 13,
     flex: 1,
@@ -226,11 +222,9 @@ const Styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 14,
-    color: 'black',
   },
   selectedTextStyle: {
     fontSize: 14,
-    color: 'black',
   },
 });
 
