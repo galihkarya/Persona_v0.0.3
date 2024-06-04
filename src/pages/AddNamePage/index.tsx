@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -6,18 +6,29 @@ import {
   Image,
   StyleSheet,
   TextInput,
+  Appearance, 
 } from 'react-native';
 
 const AddNamePage = ({navigation}:any) => {
   const [gender, setgender] = useState<string | null>(null);
   const [name, setName] = useState('');
 
-  const handleRadiogender = (option: string) => {
+  const colorScheme = Appearance.getColorScheme();
+  const [theme, setTheme] = useState(colorScheme);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setTheme(colorScheme);
+    });
+    return () => subscription.remove();
+  }, []);
+
+  const handleRadioGender = (option: string) => {
     setgender(option === gender ? null : option);
   };
 
   return (
-    <View>
+    <View style={[theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1, {flex: 1}]}>
       <TouchableOpacity
         style={Styles.backButton}
         hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
@@ -26,35 +37,37 @@ const AddNamePage = ({navigation}:any) => {
         }}>
         <Image
           style={Styles.backIcon}
-          source={require('../../../assets/icons/icon_arrowLeft.png')}
+          source={ theme == 'light' ? require('../../../assets/icons/back_black.png') : require('../../../assets/icons/back_white.png')}
         />
       </TouchableOpacity>
-      <Text style={Styles.instructionText}>Masukkan data diri</Text>
-      <View style={Styles.radioImage}>
+      <Text style={[Styles.instructionText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Masukkan data diri</Text>
+      <View style={[Styles.radioImage]}>
         <TouchableOpacity
           style={[
             Styles.radioButtons,
             {opacity: gender === 'Laki-laki' ? 1 : 0.3},
+            theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2
           ]}
-          onPress={() => handleRadiogender('Laki-laki')}
+          onPress={() => handleRadioGender('Laki-laki')}
           activeOpacity={1}>
-          <Text style={Styles.genderText}>Laki-laki</Text>
+          <Text style={[Styles.genderText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Laki-laki</Text>
           <Image style={Styles.genderImage} source={require('../../../assets/images/boy.png')} />
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             Styles.radioButtons,
             {opacity: gender === 'Perempuan' ? 1 : 0.3},
+            theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2
           ]}
-          onPress={() => handleRadiogender('Perempuan')}
+          onPress={() => handleRadioGender('Perempuan')}
           activeOpacity={1}>
-          <Text style={Styles.genderText}>Perempuan</Text>
+          <Text style={[Styles.genderText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Perempuan</Text>
           <Image style={Styles.genderImage} source={require('../../../assets/images/girl.png')} />
         </TouchableOpacity>
       </View>
       <View style={{margin: 20, rowGap: 20}}>
 
-        <TextInput style={Styles.input} placeholder="Nama Lengkap" value={name} onChangeText={setName} />
+        <TextInput style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]} placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}50` : `${Styles.textDarkTheme.color}50`} placeholder="Nama Lengkap" value={name} onChangeText={setName} />
 
         <TouchableOpacity
           style={[Styles.button, {opacity: gender === null || name === '' ? 0.3 : 1}]}
@@ -71,6 +84,24 @@ const AddNamePage = ({navigation}:any) => {
 };
 
 const Styles = StyleSheet.create({
+  containerLightTheme1: {
+    backgroundColor: '#f0f0f0'
+  }, 
+  containerDarkTheme1: {
+    backgroundColor: '#2d2d2d'
+  }, 
+  containerLightTheme2: {
+    backgroundColor: '#fefefe'
+  }, 
+  containerDarkTheme2: {
+    backgroundColor: '#3d3d3d'
+  }, 
+  textLightTheme: {
+    color: '#2d2d2d'
+  }, 
+  textDarkTheme: {
+    color: '#f0f0f0'
+  },
   backIcon: {
     width: 20,
     height: 20,
@@ -94,7 +125,7 @@ const Styles = StyleSheet.create({
   },
   radioButtons: {
     alignItems: 'center',
-    backgroundColor: '#fafafa',
+    // backgroundColor: '#fafafa',
     padding: 10,
     borderRadius: 15,
   },
@@ -106,10 +137,8 @@ const Styles = StyleSheet.create({
   genderText: {
     fontSize: 16,
     fontWeight: '800',
-    color: 'black',
   },
   input: {
-    backgroundColor: '#fefefe',
     borderRadius: 10,
     elevation: 8,
     shadowColor: '#00000050',

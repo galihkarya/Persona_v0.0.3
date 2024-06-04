@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,19 +9,26 @@ import {
   TextInput,
   ScrollView,
   ToastAndroid,
-  SafeAreaView,
+  Appearance, 
 } from 'react-native';
 import api from '../../API/UserApi';
 
 const LoginPage = ({navigation}: any) => {
+  const colorScheme = Appearance.getColorScheme();
+  const [theme, setTheme] = useState(colorScheme);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setTheme(colorScheme);
+    });
+    return () => subscription.remove();
+  }, []);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const [passwordVisible, setPasswordVisible] = useState(true);
-
-  let visibleicon = require('../../../assets/icons/visibleicon.png');
-  let invisibleicon = require('../../../assets/icons/invisibleicon.png');
 
   const handleLogin = async () => {
     setIsLoading(true);
@@ -46,8 +53,7 @@ const LoginPage = ({navigation}: any) => {
   };
 
   return (
-    <SafeAreaView>
-      <ScrollView>
+      <ScrollView style={[theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1, {flex: 1}]}>
         <View>
           <TouchableOpacity
             style={Styles.backButton}
@@ -57,7 +63,7 @@ const LoginPage = ({navigation}: any) => {
             }}>
             <Image
               style={Styles.backIcon}
-              source={require('../../../assets/icons/icon_arrowLeft.png')}
+              source={ theme == 'light' ? require('../../../assets/icons/back_black.png') : require('../../../assets/icons/back_white.png')}
             />
           </TouchableOpacity>
         </View>
@@ -66,30 +72,35 @@ const LoginPage = ({navigation}: any) => {
             <Text style={{fontWeight: '900', fontSize: 42, color: '#cc3663'}}>
               Selamat datang kembali,
             </Text>
-            <Text style={{marginVertical: 30}}>
+            <Text style={[{marginVertical: 30}, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>
               Masukkan email dan password
             </Text>
           </View>
 
           <TextInput
-            style={Styles.input}
+            style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
             placeholder="email"
             value={email}
             onChangeText={setEmail}
+            autoCapitalize='none'
+            keyboardType='email-address'
+            placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}50` : `${Styles.textDarkTheme.color}50`}
           />
-          <View style={Styles.input}>
+          <View style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}>
             <TextInput
               secureTextEntry={passwordVisible}
               placeholder="password"
               style={{flex: 1}}
               value={password}
               onChangeText={setPassword}
+              autoCapitalize='none'
+              placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}50` : `${Styles.textDarkTheme.color}50`}
             />
             <TouchableOpacity
               onPress={() => setPasswordVisible(!passwordVisible)}>
               <Image
                 style={Styles.visibleIcon}
-                source={passwordVisible ? invisibleicon : visibleicon}
+                source={passwordVisible ? (theme == 'light' ? require('../../../assets/icons/invisible_black.png') : require('../../../assets/icons/invisible_white.png')) : (theme == 'light' ? require('../../../assets/icons/visible_black.png') : require('../../../assets/icons/visible_white.png'))}
               />
             </TouchableOpacity>
           </View>
@@ -97,10 +108,7 @@ const LoginPage = ({navigation}: any) => {
             style={[
               Styles.button,
               {
-                opacity:
-                  email === '' || password === '' || isLoading == true
-                    ? 0.5
-                    : 1,
+                opacity: email === '' || password === '' || isLoading == true ? 0.5 : 1,
               },
             ]}
             disabled={email === '' || password === '' || isLoading == true}
@@ -110,9 +118,9 @@ const LoginPage = ({navigation}: any) => {
             <Text style={Styles.textButton}>Masuk</Text>
           </TouchableOpacity>
           <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-            <Text>Belum punya akun? </Text>
+            <Text style={theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme}>Belum punya akun? </Text>
             <TouchableOpacity
-              hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
+              hitSlop={5}
               onPress={() => {
                 navigation.navigate('RegistName');
               }}>
@@ -121,11 +129,28 @@ const LoginPage = ({navigation}: any) => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
   );
 };
 
 const Styles = StyleSheet.create({
+  containerLightTheme1: {
+    backgroundColor: '#f0f0f0'
+  }, 
+  containerDarkTheme1: {
+    backgroundColor: '#2d2d2d'
+  }, 
+  containerLightTheme2: {
+    backgroundColor: '#fefefe'
+  }, 
+  containerDarkTheme2: {
+    backgroundColor: '#3d3d3d'
+  }, 
+  textLightTheme: {
+    color: '#2d2d2d'
+  }, 
+  textDarkTheme: {
+    color: '#f0f0f0'
+  },
   backIcon: {
     width: 20,
     height: 20,

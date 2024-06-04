@@ -7,11 +7,22 @@ import {
   Image,
   StyleSheet,
   TextInput,
+  Appearance, 
 } from 'react-native';
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 import api from '../../API/UserApi';
 
 const AddStudentDataPage = ({navigation}: any) => {
+  const colorScheme = Appearance.getColorScheme();
+  const [theme, setTheme] = useState(colorScheme);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setTheme(colorScheme);
+    });
+    return () => subscription.remove();
+  }, []);
+
   const [classList, setClassList] = useState<any>([]);
   const [gender, setGender] = useState<string | null>(null);
   const [student_name, setStudent_name] = useState('');
@@ -46,7 +57,7 @@ const AddStudentDataPage = ({navigation}: any) => {
   const ref = useRef<IDropdownRef>(null);
 
   return (
-    <View>
+    <View style={[theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1, {flex: 1}]}>
       <TouchableOpacity
         style={Styles.backButton}
         hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
@@ -55,19 +66,20 @@ const AddStudentDataPage = ({navigation}: any) => {
         }}>
         <Image
           style={Styles.backIcon}
-          source={require('../../../assets/icons/icon_arrowLeft.png')}
+          source={ theme == 'light' ? require('../../../assets/icons/back_black.png') : require('../../../assets/icons/back_white.png')}
         />
       </TouchableOpacity>
-      <Text style={Styles.instructionText}>Masukkan data diri</Text>
+      <Text style={[Styles.instructionText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Masukkan data diri</Text>
       <View style={Styles.radioImage}>
         <TouchableOpacity
           style={[
             Styles.radioButtons,
             {opacity: gender === 'Laki-laki' ? 1 : 0.3},
+            theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2
           ]}
           onPress={() => handleRadiogender('Laki-laki')}
           activeOpacity={1}>
-          <Text style={Styles.genderText}>Laki-laki</Text>
+          <Text style={[Styles.genderText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Laki-laki</Text>
           <Image
             style={Styles.genderImage}
             source={require('../../../assets/images/boy.png')}
@@ -77,10 +89,11 @@ const AddStudentDataPage = ({navigation}: any) => {
           style={[
             Styles.radioButtons,
             {opacity: gender === 'Perempuan' ? 1 : 0.3},
+            theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2
           ]}
           onPress={() => handleRadiogender('Perempuan')}
           activeOpacity={1}>
-          <Text style={Styles.genderText}>Perempuan</Text>
+          <Text style={[Styles.genderText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Perempuan</Text>
           <Image
             style={Styles.genderImage}
             source={require('../../../assets/images/girl.png')}
@@ -89,23 +102,26 @@ const AddStudentDataPage = ({navigation}: any) => {
       </View>
       <View style={{margin: 20, rowGap: 20}}>
         <TextInput
-          style={Styles.input}
+          style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
           placeholder="Nama Lengkap"
           value={student_name}
           onChangeText={setStudent_name}
+          autoCapitalize='words'
+          placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}50` : `${Styles.textDarkTheme.color}50`}
         />
 
         { role == 'bk' && (<Dropdown
           ref={ref}
-          style={Styles.dropdown}
-          placeholderStyle={Styles.placeholderStyle}
-          selectedTextStyle={Styles.selectedTextStyle}
+          style={[Styles.dropdown, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+          placeholderStyle={[Styles.placeholderStyle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
+          selectedTextStyle={[Styles.selectedTextStyle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
           data={classList}
           maxHeight={200}
           labelField="label"
           valueField="value"
           placeholder="Pilih grup kelas"
           value={group_id}
+          containerStyle={theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2}
           onChange={item => {
             setGroup_id(item.value);
           }}
@@ -131,6 +147,24 @@ const AddStudentDataPage = ({navigation}: any) => {
 };
 
 const Styles = StyleSheet.create({
+  containerLightTheme1: {
+    backgroundColor: '#f0f0f0'
+  }, 
+  containerDarkTheme1: {
+    backgroundColor: '#2d2d2d'
+  }, 
+  containerLightTheme2: {
+    backgroundColor: '#fefefe'
+  }, 
+  containerDarkTheme2: {
+    backgroundColor: '#3d3d3d'
+  }, 
+  textLightTheme: {
+    color: '#2d2d2d'
+  }, 
+  textDarkTheme: {
+    color: '#f0f0f0'
+  },
   backIcon: {
     width: 20,
     height: 20,

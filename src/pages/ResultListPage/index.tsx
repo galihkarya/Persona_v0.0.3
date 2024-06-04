@@ -9,12 +9,23 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
+  Appearance, 
 } from 'react-native';
 import api from '../../API/UserApi';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ResultListPage = ({navigation}: any) => {
+  const colorScheme = Appearance.getColorScheme();
+  const [theme, setTheme] = useState(colorScheme);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setTheme(colorScheme);
+    });
+    return () => subscription.remove();
+  }, []);
+
   const [userData, setUserData] = useState<any>();
   const [listData, setListData] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
@@ -74,14 +85,14 @@ const ResultListPage = ({navigation}: any) => {
   }: any) => {
     // console.log(student_name, group_name, head_line, life_line, heart_line, gender);
     return (
-      <View style={Styles.listView}>
+      <View style={[Styles.listView, {borderColor: theme == 'light' ? '#3d3d3d50' : '#fefefe50' }]}>
         <View>
-          <Text style={Styles.resultName}>{student_name}</Text>
-          <Text style={Styles.classGroup}>Kelas {group_name}</Text>
+          <Text style={[Styles.resultName, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{student_name}</Text>
+          <Text style={[Styles.classGroup, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Kelas {group_name}</Text>
         </View>
         <View>
           <TouchableOpacity
-            style={Styles.lihatButton}
+            style={[Styles.lihatButton, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
             onPress={() =>
               navigation.navigate('ResultPage', {
                 student_name,
@@ -92,7 +103,7 @@ const ResultListPage = ({navigation}: any) => {
                 gender,
               })
             }>
-            <Text style={Styles.lihatTextButton}>Lihat</Text>
+            <Text style={[Styles.lihatTextButton, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Lihat</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -100,11 +111,11 @@ const ResultListPage = ({navigation}: any) => {
   };
 
   return (
-    <View style={{flex: 1}}>
-      <Text style={Styles.headerText}>Daftar Hasil</Text>
+    <View style={[{flex: 1}, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
+      <Text style={[Styles.headerText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Daftar Hasil</Text>
       <View style={{margin: 20}}>
-        <Text style={Styles.schoolName}>{userData?.institute_name}</Text>
-        <Text style={Styles.schoolCode}>
+        <Text style={[Styles.schoolName, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{userData?.institute_name}</Text>
+        <Text style={[Styles.schoolCode, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>
           Kode institusi: {userData?.institute_code}
         </Text>
 
@@ -115,9 +126,9 @@ const ResultListPage = ({navigation}: any) => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <View style={Styles.searchBox}>
+          <View style={[Styles.searchBox, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}>
             <Image
-              source={require('../../../assets/icons/icon_search_black.png')}
+              source={theme == 'light' ? require('../../../assets/icons/search_black.png') : require('../../../assets/icons/search_white.png')}
               style={Styles.searchIcon}
             />
             <TextInput
@@ -125,15 +136,15 @@ const ResultListPage = ({navigation}: any) => {
               placeholder="Cari"
               onChangeText={val => setSearchText(val)}
               value={searchText}
+              placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}90` : `${Styles.textDarkTheme.color}90`}
             />
           </View>
 
           <TouchableOpacity
-            style={{
-              backgroundColor: '#e9e9e9',
+            style={[{
               padding: 12.5,
               borderRadius: 15,
-            }}
+            }, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
             onPress={() => {
               navigation.navigate('GroupListPage', {
                 institute_name: userData.institute_name,
@@ -186,26 +197,40 @@ const ResultListPage = ({navigation}: any) => {
 };
 
 const Styles = StyleSheet.create({
+  containerLightTheme1: {
+    backgroundColor: '#f0f0f0'
+  }, 
+  containerDarkTheme1: {
+    backgroundColor: '#2d2d2d'
+  }, 
+  containerLightTheme2: {
+    backgroundColor: '#fefefe'
+  }, 
+  containerDarkTheme2: {
+    backgroundColor: '#3d3d3d'
+  }, 
+  textLightTheme: {
+    color: '#2d2d2d'
+  }, 
+  textDarkTheme: {
+    color: '#f0f0f0'
+  },
   headerText: {
     fontSize: 20,
     fontWeight: '700',
-    color: 'black',
     textAlign: 'center',
     marginTop: 20,
   },
   schoolName: {
     fontSize: 24,
     fontWeight: '700',
-    color: 'black',
   },
   schoolCode: {
     fontSize: 14,
     fontWeight: '500',
-    color: 'black',
   },
   searchBox: {
     flexDirection: 'row',
-    backgroundColor: '#e9e9e9',
     borderRadius: 15,
     marginVertical: 15,
     paddingHorizontal: 20,
@@ -225,13 +250,11 @@ const Styles = StyleSheet.create({
   },
   lihatButton: {
     alignContent: 'center',
-    backgroundColor: '#e0e0e0',
     borderRadius: 10,
   },
   lihatTextButton: {
     marginVertical: 5,
     marginHorizontal: 10,
-    color: 'black',
     fontWeight: '500',
     paddingHorizontal: 5,
   },
@@ -242,17 +265,15 @@ const Styles = StyleSheet.create({
     marginTop: 15,
     paddingBottom: 5,
     borderBottomWidth: 0.5,
-    borderColor: '#00000070',
   },
   resultName: {
-    color: 'black',
     fontWeight: '600',
     fontSize: 16,
   },
   classGroup: {
-    color: '#00000088',
     fontWeight: '400',
     fontSize: 14,
+    opacity: 0.5
   },
 });
 

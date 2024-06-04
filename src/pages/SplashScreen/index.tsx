@@ -1,8 +1,11 @@
-import React, {useEffect} from 'react';
-import {StyleSheet, Image, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Image, View, Appearance} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Splash({navigation}: any) {
+  const colorScheme = Appearance.getColorScheme();
+  const [theme, setTheme] = useState(colorScheme);
+
   useEffect(() => {
     const checkToken = async () => {
       try {
@@ -21,10 +24,17 @@ function Splash({navigation}: any) {
     setTimeout(checkToken, 1000);
   }, [navigation]);
 
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setTheme(colorScheme);
+    });
+    return () => subscription.remove();
+  }, []);
+
   return (
-    <View style={styles.container}>
+    <View style={[Styles.container, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
       <Image
-        style={styles.tinyLogo}
+        style={Styles.tinyLogo}
         source={require('../../../assets/images/logo.png')}
       />
     </View>
@@ -33,7 +43,13 @@ function Splash({navigation}: any) {
 
 export default Splash;
 
-const styles = StyleSheet.create({
+const Styles = StyleSheet.create({
+  containerLightTheme1: {
+    backgroundColor: '#f0f0f0'
+  }, 
+  containerDarkTheme1: {
+    backgroundColor: '#2d2d2d'
+  }, 
   container: {
     flex: 1,
     alignItems: 'center',

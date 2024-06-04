@@ -1,9 +1,18 @@
-
-import React, {useRef, useState} from 'react';
-import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import React, {useRef, useState, useEffect} from 'react';
+import {View, Text, TouchableOpacity, Image, StyleSheet, Appearance} from 'react-native';
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 
 const RegistRole = ({navigation, route}:any) => {
+  const colorScheme = Appearance.getColorScheme();
+  const [theme, setTheme] = useState(colorScheme);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setTheme(colorScheme);
+    });
+    return () => subscription.remove();
+  }, []);
+
   const {full_name} = route.params;
   const [role, set_role] = useState('');
   const ref = useRef<IDropdownRef>(null);
@@ -22,7 +31,7 @@ const RegistRole = ({navigation, route}:any) => {
   }
 
   return (
-    <View>
+    <View style={[theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1, {flex: 1}]}>
       <TouchableOpacity
         style={Styles.backButton}
         hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
@@ -31,7 +40,7 @@ const RegistRole = ({navigation, route}:any) => {
         }}>
         <Image
           style={Styles.backIcon}
-          source={require('../../../assets/icons/icon_arrowLeft.png')}
+          source={ theme == 'light' ? require('../../../assets/icons/back_black.png') : require('../../../assets/icons/back_white.png')}
         />
       </TouchableOpacity>
       <View style={{marginTop: 50, marginBottom: 30, alignItems: 'center'}}>
@@ -39,21 +48,22 @@ const RegistRole = ({navigation, route}:any) => {
           style={Styles.imageCenter}
           source={require('../../../assets/images/thinking_face.png')}
         />
-        <Text style={Styles.head1}>Role</Text>
-        <Text style={Styles.head2}>Tentukan role anda di bawah ini</Text>
+        <Text style={[Styles.head1, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Role</Text>
+        <Text style={[Styles.head2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Tentukan role anda di bawah ini</Text>
       </View>
       <View style={{margin: 20}}>
         <Dropdown
           ref={ref}
-          style={Styles.dropdown}
-          placeholderStyle={Styles.placeholderStyle}
-          selectedTextStyle={Styles.selectedTextStyle}
+          style={[Styles.dropdown, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+          placeholderStyle={[Styles.placeholderStyle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
+          selectedTextStyle={[Styles.selectedTextStyle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
           data={data}
           maxHeight={300}
           labelField="label"
           valueField="value"
           placeholder="Pilih role"
           value={role}
+          containerStyle={[theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
           onChange={item => {
             set_role(item.value);
           }}
@@ -71,6 +81,24 @@ const RegistRole = ({navigation, route}:any) => {
 };
 
 const Styles = StyleSheet.create({
+  containerLightTheme1: {
+    backgroundColor: '#f0f0f0'
+  }, 
+  containerDarkTheme1: {
+    backgroundColor: '#2d2d2d'
+  }, 
+  containerLightTheme2: {
+    backgroundColor: '#fefefe'
+  }, 
+  containerDarkTheme2: {
+    backgroundColor: '#3d3d3d'
+  }, 
+  textLightTheme: {
+    color: '#2d2d2d'
+  }, 
+  textDarkTheme: {
+    color: '#f0f0f0'
+  },
   backIcon: {
     width: 20,
     height: 20,
@@ -87,19 +115,10 @@ const Styles = StyleSheet.create({
   head1: {
     fontWeight: '700',
     fontSize: 40,
-    color: 'black',
     marginVertical: 20,
   },
   head2: {
     fontSize: 16,
-  },
-  input: {
-    backgroundColor: '#fefefe',
-    borderRadius: 10,
-    elevation: 8,
-    shadowColor: '#00000050',
-    paddingHorizontal: 20,
-    marginVertical: 8,
   },
   button: {
     backgroundColor: '#CC3663',
@@ -118,12 +137,12 @@ const Styles = StyleSheet.create({
     height: 50,
     elevation: 8,
     shadowColor: '#00000050',
-    backgroundColor: '#fefefe',
     paddingHorizontal: 20,
     borderRadius: 10,
   },
   placeholderStyle: {
     fontSize: 16,
+    opacity: 0.5
   },
   selectedTextStyle: {
     fontSize: 16,

@@ -11,6 +11,7 @@ import {
   ToastAndroid,
   StatusBar,
   BackHandler,
+  Appearance, 
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import FileViewer from 'react-native-file-viewer';
@@ -18,6 +19,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../../API/UserApi';
 
 const ResultPage = ({navigation, route}: any) => {
+  const colorScheme = Appearance.getColorScheme();
+  const [theme, setTheme] = useState(colorScheme);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setTheme(colorScheme);
+    });
+    return () => subscription.remove();
+  }, []);
+
   const {
     student_name,
     group_name,
@@ -161,15 +172,15 @@ const ResultPage = ({navigation, route}: any) => {
   };
 
   return (
-    <View>
+    <View style={theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'#f2f2f2'} />
       <View style={{borderBottomWidth: 0.5, borderColor: '#00000050'}}>
-        <Text style={Styles.headerText}>Hasil</Text>
+        <Text style={[Styles.headerText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Hasil</Text>
       </View>
 
       <ScrollView>
-        <Text style={Styles.student_nameText}>{student_name}</Text>
-        <Text style={Styles.classGroupText}>
+        <Text style={[Styles.student_nameText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{student_name}</Text>
+        <Text style={[Styles.classGroupText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>
           Kelas {group_name == undefined ? groupNameById : group_name}
         </Text>
 
@@ -180,37 +191,37 @@ const ResultPage = ({navigation, route}: any) => {
             marginBottom: 250,
             marginHorizontal: 30,
           }}>
-          <View style={Styles.card}>
+          <View style={[Styles.card, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
                 source={require('../../../assets/images/headline.png')}
                 style={Styles.images}
               />
-              <Text style={Styles.lineTitle}>Garis Kepala</Text>
+              <Text style={[Styles.lineTitle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Garis Kepala</Text>
             </View>
-            <Text style={Styles.contentText}>{head_line}</Text>
+            <Text style={[Styles.contentText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{head_line}</Text>
           </View>
 
-          <View style={Styles.card}>
+          <View style={[Styles.card, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
                 source={require('../../../assets/images/lifeline.png')}
                 style={Styles.images}
               />
-              <Text style={Styles.lineTitle}>Garis Kehidupan</Text>
+              <Text style={[Styles.lineTitle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Garis Kehidupan</Text>
             </View>
-            <Text style={Styles.contentText}>{life_line}</Text>
+            <Text style={[Styles.contentText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{life_line}</Text>
           </View>
 
-          <View style={Styles.card}>
+          <View style={[Styles.card, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
                 source={require('../../../assets/images/heartline.png')}
                 style={Styles.images}
               />
-              <Text style={Styles.lineTitle}>Garis Hati</Text>
+              <Text style={[Styles.lineTitle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Garis Hati</Text>
             </View>
-            <Text style={Styles.contentText}>{heart_line}</Text>
+            <Text style={[Styles.contentText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{heart_line}</Text>
           </View>
         </View>
       </ScrollView>
@@ -240,13 +251,12 @@ const ResultPage = ({navigation, route}: any) => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{
-            backgroundColor: '#FFFFFF',
+          style={[{
             marginHorizontal: 20,
             borderRadius: 15,
             borderColor: '#CC3663',
             borderWidth: 3,
-          }}
+          }, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}
           onPress={() => {
             navigation.reset({
               index: 0,
@@ -268,6 +278,24 @@ const ResultPage = ({navigation, route}: any) => {
   );
 };
 const Styles = StyleSheet.create({
+  containerLightTheme1: {
+    backgroundColor: '#f0f0f0'
+  }, 
+  containerDarkTheme1: {
+    backgroundColor: '#2d2d2d'
+  }, 
+  containerLightTheme2: {
+    backgroundColor: '#fefefe'
+  }, 
+  containerDarkTheme2: {
+    backgroundColor: '#3d3d3d'
+  }, 
+  textLightTheme: {
+    color: '#2d2d2d'
+  }, 
+  textDarkTheme: {
+    color: '#f0f0f0'
+  },
   backIcon: {
     width: 20,
     height: 20,

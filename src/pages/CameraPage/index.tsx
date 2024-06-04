@@ -26,14 +26,22 @@ const CameraPage = ({navigation, route}: any) => {
   const flashOffIcon = require('../../../assets/icons/icon_flash_off.png');
 
   const [isLoading, setIsLoading] = useState(false);
-
   const {hasPermission, requestPermission} = useCameraPermission();
+  const [widthViewFinder, setWidthViewFinder] = useState(99);
 
   useEffect(() => {
     if (!hasPermission) {
       requestPermission();
     }
   }, [hasPermission]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setWidthViewFinder(100); 
+    }, 500);
+
+    return () => clearTimeout(timer); 
+  }, []);
 
   const device = useCameraDevice('back');
 
@@ -61,6 +69,7 @@ const CameraPage = ({navigation, route}: any) => {
         qualityPrioritization: 'quality',
         flash,
         enableShutterSound: false,
+
       });
       console.log(photo);
 
@@ -235,11 +244,12 @@ const CameraPage = ({navigation, route}: any) => {
             {device && (
               <Camera
                 ref={camera}
-                style={Styles.viewFinder}
+                style={[Styles.viewFinder, {width: `${widthViewFinder}%`}]}
                 device={device}
                 isActive={true}
                 format={format}
                 photo={true}
+                orientation='portrait'
               />
             )}
           </View>
@@ -300,7 +310,6 @@ const Styles = StyleSheet.create({
     zIndex: 4,
   },
   viewFinder: {
-    width: '100%',
     aspectRatio: 3 / 4,
     justifyContent: 'center',
   },

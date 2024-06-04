@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,21 @@ import {
   ScrollView,
   ToastAndroid,
   Alert,
+  Appearance, 
 } from 'react-native';
 import api from '../../API/UserApi';
 
 const RegistAccount = ({navigation, route}: any) => {
+  const colorScheme = Appearance.getColorScheme();
+  const [theme, setTheme] = useState(colorScheme);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({colorScheme}) => {
+      setTheme(colorScheme);
+    });
+    return () => subscription.remove();
+  }, []);
+
   const {full_name, role, institute_name, institute_code, groupIdSelected, institute_id, group_name} = route.params;
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
@@ -74,7 +85,11 @@ const RegistAccount = ({navigation, route}: any) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={
+      theme == 'light'
+        ? Styles.containerLightTheme1
+        : Styles.containerDarkTheme1
+    }>
       <TouchableOpacity
         style={Styles.backButton}
         hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
@@ -83,7 +98,11 @@ const RegistAccount = ({navigation, route}: any) => {
         }}>
         <Image
           style={Styles.backIcon}
-          source={require('../../../assets/icons/icon_arrowLeft.png')}
+          source={
+            theme == 'light'
+              ? require('../../../assets/icons/back_black.png')
+              : require('../../../assets/icons/back_white.png')
+          }
         />
       </TouchableOpacity>
       <View style={{marginTop: 0, marginBottom: 30, alignItems: 'center'}}>
@@ -91,50 +110,59 @@ const RegistAccount = ({navigation, route}: any) => {
           style={Styles.imageCenter}
           source={require('../../../assets/images/account.png')}
         />
-        <Text style={Styles.head1}>Akun</Text>
-        <Text style={Styles.head2}>Masukkan email dan password yang bagus</Text>
+        <Text style={[Styles.head1, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Akun</Text>
+        <Text style={[Styles.head2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Masukkan email dan password yang bagus</Text>
       </View>
 
       <View style={{margin: 20}}>
-        <View style={Styles.input}>
+        <View style={[Styles.input, theme == 'light'
+              ? Styles.containerLightTheme2
+              : Styles.containerDarkTheme2]}>
           <TextInput
             placeholder="email"
             value={email}
             onChangeText={setemail}
+            autoCapitalize='none'
             style={{flex:1}}
           />
         </View>
 
-        <View style={Styles.input}>
+        <View style={[Styles.input, theme == 'light'
+              ? Styles.containerLightTheme2
+              : Styles.containerDarkTheme2]}>
           <TextInput
             secureTextEntry={passwordVisible1}
             placeholder="password"
             style={{flex: 1}}
             value={password}
             onChangeText={setPassword}
+            autoCapitalize='none'
           />
           <TouchableOpacity
             onPress={() => setPasswordVisible1(!passwordVisible1)}>
             <Image
               style={Styles.visibleIcon}
-              source={passwordVisible1 ? invisibleicon : visibleicon}
+              source={passwordVisible1 ? (theme == 'light' ? require('../../../assets/icons/invisible_black.png') : require('../../../assets/icons/invisible_white.png')) : (theme == 'light' ? require('../../../assets/icons/visible_black.png') : require('../../../assets/icons/visible_white.png'))}
             />
           </TouchableOpacity>
         </View>
 
-        <View style={Styles.input}>
+        <View style={[Styles.input, theme == 'light'
+              ? Styles.containerLightTheme2
+              : Styles.containerDarkTheme2]}>
           <TextInput
             secureTextEntry={passwordVisible2}
             placeholder="ketik ulang password"
             style={{flex: 1}}
             value={rePassword}
             onChangeText={setRePassword}
+            autoCapitalize='none'
           />
           <TouchableOpacity
             onPress={() => setPasswordVisible2(!passwordVisible2)}>
             <Image
               style={Styles.visibleIcon}
-              source={passwordVisible2 ? invisibleicon : visibleicon}
+              source={passwordVisible2 ? (theme == 'light' ? require('../../../assets/icons/invisible_black.png') : require('../../../assets/icons/invisible_white.png')) : (theme == 'light' ? require('../../../assets/icons/visible_black.png') : require('../../../assets/icons/visible_white.png'))}
             />
           </TouchableOpacity>
         </View>
@@ -167,6 +195,24 @@ const RegistAccount = ({navigation, route}: any) => {
 };
 
 const Styles = StyleSheet.create({
+  containerLightTheme1: {
+    backgroundColor: '#f0f0f0',
+  },
+  containerDarkTheme1: {
+    backgroundColor: '#2d2d2d',
+  },
+  containerLightTheme2: {
+    backgroundColor: '#fefefe',
+  },
+  containerDarkTheme2: {
+    backgroundColor: '#3d3d3d',
+  },
+  textLightTheme: {
+    color: '#2d2d2d',
+  },
+  textDarkTheme: {
+    color: '#f0f0f0',
+  },
   backIcon: {
     width: 20,
     height: 20,

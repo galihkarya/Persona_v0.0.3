@@ -12,10 +12,21 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
+  Appearance, 
 } from 'react-native';
 import api from '../../API/UserApi';
 
 const GroupListPage = ({navigation, route}: any) => {
+  const colorScheme = Appearance.getColorScheme();
+  const [theme, setTheme] = useState(colorScheme);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setTheme(colorScheme);
+    });
+    return () => subscription.remove();
+  }, []);
+
   const {institute_name, institute_code, institute_id, role, group_id_user} = route.params;
   const [listGroup, setlistGroup] = useState<any>(null);
   const [groupName, setGroupName] = useState('');
@@ -59,11 +70,11 @@ const GroupListPage = ({navigation, route}: any) => {
     return (
       <View style={Styles.listView}>
         <View>
-          <Text style={Styles.classGroup}>Kelas {group_name}</Text>
+          <Text style={[Styles.classGroup, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Kelas {group_name}</Text>
         </View>
         <View>
           <TouchableOpacity
-            style={[Styles.editButton, {opacity: group_id_user == group_id ? 0.3 : 1}]}
+            style={[Styles.editButton, {opacity: group_id_user == group_id ? 0.3 : 1}, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
             disabled={group_id_user == group_id}
             onPress={() => {
               console.log('modal: edit class');
@@ -71,7 +82,7 @@ const GroupListPage = ({navigation, route}: any) => {
               setGroupName(group_name);
               if (role == 'bk') setModal1Visible(true);
             }}>
-            <Text style={Styles.editTextButton}>{role == 'bk' ? 'Edit' : group_id_user == group_id ? 'Tergabung' : 'Gabung'}</Text>
+            <Text style={[Styles.editTextButton, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{role == 'bk' ? 'Edit' : group_id_user == group_id ? 'Tergabung' : 'Gabung'}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -79,7 +90,7 @@ const GroupListPage = ({navigation, route}: any) => {
   };
 
   return (
-    <View style={{margin: 20, flex: 1}}>
+    <View style={[{flex: 1, padding: 20}, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <TouchableOpacity
           hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
@@ -88,21 +99,21 @@ const GroupListPage = ({navigation, route}: any) => {
           }}>
           <Image
             style={Styles.backIcon}
-            source={require('../../../assets/icons/icon_arrowLeft.png')}
+            source={theme == 'light' ? require('../../../assets/icons/back_black.png') : require('../../../assets/icons/back_white.png')}
           />
         </TouchableOpacity>
-        <Text style={Styles.headerText}>Daftar Grup</Text>
+        <Text style={[Styles.headerText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Daftar Grup</Text>
       </View>
 
       <View style={{marginTop: 20, marginBottom: 10}}>
-        <Text style={Styles.schoolName}>{institute_name}</Text>
-        <Text style={Styles.schoolCode}>Kode institusi: {institute_code}</Text>
-        <View style={Styles.searchBox}>
+        <Text style={[Styles.schoolName, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{institute_name}</Text>
+        <Text style={[Styles.schoolCode, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Kode institusi: {institute_code}</Text>
+        <View style={[Styles.searchBox, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}>
           <Image
-            source={require('../../../assets/icons/icon_search_black.png')}
+            source={theme == 'light' ? require('../../../assets/icons/search_black.png') : require('../../../assets/icons/search_white.png')}
             style={Styles.searchIcon}
           />
-          <TextInput placeholder="Cari: '1a' atau '5b'" inputMode="search" onChangeText={val => setSearchText(val)} value={searchText}/>
+          <TextInput placeholder="Cari: '1a' atau '5b'" placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}90` : `${Styles.textDarkTheme.color}90`} inputMode="search" onChangeText={val => setSearchText(val)} value={searchText}/>
         </View>
       </View>
 
@@ -122,7 +133,7 @@ const GroupListPage = ({navigation, route}: any) => {
       )}
 
       { role == 'bk' && (<TouchableOpacity
-        style={{right: 10, bottom: 10, position: 'absolute'}}
+        style={{right: 30, bottom: 30, position: 'absolute'}}
         onPress={() => {
           setModal2Visible(true);
           console.log('modal: add class');
@@ -229,6 +240,24 @@ const GroupListPage = ({navigation, route}: any) => {
 };
 
 const Styles = StyleSheet.create({
+  containerLightTheme1: {
+    backgroundColor: '#f0f0f0'
+  }, 
+  containerDarkTheme1: {
+    backgroundColor: '#2d2d2d'
+  }, 
+  containerLightTheme2: {
+    backgroundColor: '#fefefe'
+  }, 
+  containerDarkTheme2: {
+    backgroundColor: '#3d3d3d'
+  }, 
+  textLightTheme: {
+    color: '#2d2d2d'
+  }, 
+  textDarkTheme: {
+    color: '#f0f0f0'
+  },
   headerText: {
     fontSize: 20,
     fontWeight: '700',

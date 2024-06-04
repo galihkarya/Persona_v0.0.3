@@ -8,11 +8,22 @@ import {
   TextInput,
   ScrollView,
   ToastAndroid,
+  Appearance
 } from 'react-native';
 import api from '../../API/UserApi';
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 
 const RegistInstitutionBK = ({navigation, route}: any) => {
+  const colorScheme = Appearance.getColorScheme();
+  const [theme, setTheme] = useState(colorScheme);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setTheme(colorScheme);
+    });
+    return () => subscription.remove();
+  }, []);
+
   const {full_name, role} = route.params;
   const [institute_code, setInstitute_code] = useState('');
   const [institute_name, setInstitute_name] = useState();
@@ -65,7 +76,7 @@ const RegistInstitutionBK = ({navigation, route}: any) => {
   const ref = useRef<IDropdownRef>(null);
 
   return (
-    <ScrollView>
+    <ScrollView style={[theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1, {flex: 1}]}>
       <TouchableOpacity
         style={Styles.backButton}
         hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
@@ -74,7 +85,7 @@ const RegistInstitutionBK = ({navigation, route}: any) => {
         }}>
         <Image
           style={Styles.backIcon}
-          source={require('../../../assets/icons/icon_arrowLeft.png')}
+          source={ theme == 'light' ? require('../../../assets/icons/back_black.png') : require('../../../assets/icons/back_white.png')}
         />
       </TouchableOpacity>
       <View
@@ -87,12 +98,13 @@ const RegistInstitutionBK = ({navigation, route}: any) => {
           style={Styles.imageCenter}
           source={require('../../../assets/images/school.png')}
         />
-        <Text style={Styles.head1}>Institusi</Text>
-        <Text style={Styles.head2}>Masukkan kode sekolah</Text>
+        <Text style={[Styles.head1, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Institusi</Text>
+        <Text style={[Styles.head2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Masukkan kode sekolah</Text>
       </View>
       <View style={{margin: 20}}>
         <TextInput
-          style={[{marginVertical: schoolIsTrue ? 0 : 8}, Styles.input]}
+          style={[{marginVertical: schoolIsTrue ? 0 : 8}, Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+          placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}50` : `${Styles.textDarkTheme.color}50`}
           placeholder="Kode sekolah"
           value={institute_code}
           autoCapitalize="characters"
@@ -104,15 +116,16 @@ const RegistInstitutionBK = ({navigation, route}: any) => {
         {schoolIsTrue && (
           <Dropdown
             ref={ref}
-            style={Styles.dropdown}
-            placeholderStyle={Styles.placeholderStyle}
-            selectedTextStyle={Styles.selectedTextStyle}
+            style={[Styles.dropdown, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+            placeholderStyle={[Styles.placeholderStyle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
+            selectedTextStyle={[Styles.selectedTextStyle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
             data={classList}
             maxHeight={150}
             labelField="label"
             valueField="value"
             placeholder="Pilih grup kelas"
             value={groupIdSelected}
+            containerStyle={[theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
             onChange={item => {
               setGroupIdSelected(item.value);
             }}
@@ -142,6 +155,24 @@ const RegistInstitutionBK = ({navigation, route}: any) => {
 };
 
 const Styles = StyleSheet.create({
+  containerLightTheme1: {
+    backgroundColor: '#f0f0f0'
+  }, 
+  containerDarkTheme1: {
+    backgroundColor: '#2d2d2d'
+  }, 
+  containerLightTheme2: {
+    backgroundColor: '#fefefe'
+  }, 
+  containerDarkTheme2: {
+    backgroundColor: '#3d3d3d'
+  }, 
+  textLightTheme: {
+    color: '#2d2d2d'
+  }, 
+  textDarkTheme: {
+    color: '#f0f0f0'
+  },
   backIcon: {
     width: 20,
     height: 20,

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,18 +7,35 @@ import {
   StyleSheet,
   TextInput,
   ScrollView,
+  Appearance,
 } from 'react-native';
 
-const RegistInstitutionBK = ({navigation, route}:any) => {
+const RegistInstitutionBK = ({navigation, route}: any) => {
+  const colorScheme = Appearance.getColorScheme();
+  const [theme, setTheme] = useState(colorScheme);
+
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({colorScheme}) => {
+      setTheme(colorScheme);
+    });
+    return () => subscription.remove();
+  }, []);
+
   const {full_name, role} = route.params;
   const [institute_name, setInstitute_name] = useState('');
 
   const onPressHandler = () => {
     navigation.navigate('RegistAccount', {full_name, role, institute_name});
-  }
+  };
 
   return (
-    <ScrollView>
+    <ScrollView
+      style={[
+        theme == 'light'
+          ? Styles.containerLightTheme1
+          : Styles.containerDarkTheme1,
+        {flex: 1},
+      ]}>
       <TouchableOpacity
         style={Styles.backButton}
         hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
@@ -27,7 +44,11 @@ const RegistInstitutionBK = ({navigation, route}:any) => {
         }}>
         <Image
           style={Styles.backIcon}
-          source={require('../../../assets/icons/icon_arrowLeft.png')}
+          source={
+            theme == 'light'
+              ? require('../../../assets/icons/back_black.png')
+              : require('../../../assets/icons/back_white.png')
+          }
         />
       </TouchableOpacity>
       <View style={{marginTop: 50, marginBottom: 30, alignItems: 'center'}}>
@@ -35,15 +56,45 @@ const RegistInstitutionBK = ({navigation, route}:any) => {
           style={Styles.imageCenter}
           source={require('../../../assets/images/school.png')}
         />
-        <Text style={Styles.head1}>Institusi</Text>
-        <Text style={Styles.head2}>Masukkan nama sekolah</Text>
+        <Text
+          style={[
+            Styles.head1,
+            theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+          ]}>
+          Institusi
+        </Text>
+        <Text
+          style={[
+            Styles.head2,
+            theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+          ]}>
+          Masukkan nama sekolah
+        </Text>
       </View>
       <View style={{margin: 20}}>
-        <TextInput style={Styles.input} placeholder="Nama sekolah" value={institute_name} onChangeText={(val_institute_name) => setInstitute_name(val_institute_name)}/>
+        <TextInput
+          style={[
+            Styles.input,
+            theme == 'light'
+              ? Styles.containerLightTheme2
+              : Styles.containerDarkTheme2,
+          ]}
+          placeholderTextColor={
+            theme == 'light'
+              ? `${Styles.textLightTheme.color}50`
+              : `${Styles.textDarkTheme.color}50`
+          }
+          placeholder="Nama sekolah"
+          value={institute_name}
+          autoCapitalize='words'
+          onChangeText={val_institute_name =>
+            setInstitute_name(val_institute_name)
+          }
+        />
         <TouchableOpacity
           style={[Styles.button, {opacity: institute_name === '' ? 0.5 : 1}]}
           onPress={onPressHandler}
-          disabled={ institute_name === '' }>
+          disabled={institute_name === ''}>
           <Text style={Styles.textButton}>lanjut</Text>
         </TouchableOpacity>
       </View>
@@ -52,6 +103,24 @@ const RegistInstitutionBK = ({navigation, route}:any) => {
 };
 
 const Styles = StyleSheet.create({
+  containerLightTheme1: {
+    backgroundColor: '#f0f0f0',
+  },
+  containerDarkTheme1: {
+    backgroundColor: '#2d2d2d',
+  },
+  containerLightTheme2: {
+    backgroundColor: '#fefefe',
+  },
+  containerDarkTheme2: {
+    backgroundColor: '#3d3d3d',
+  },
+  textLightTheme: {
+    color: '#2d2d2d',
+  },
+  textDarkTheme: {
+    color: '#f0f0f0',
+  },
   backIcon: {
     width: 20,
     height: 20,
