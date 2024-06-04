@@ -9,7 +9,7 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
-  Appearance, 
+  Appearance,
 } from 'react-native';
 import api from '../../API/UserApi';
 
@@ -20,7 +20,7 @@ const ResultListPage = ({navigation}: any) => {
   const [theme, setTheme] = useState(colorScheme);
 
   useEffect(() => {
-    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+    const subscription = Appearance.addChangeListener(({colorScheme}) => {
       setTheme(colorScheme);
     });
     return () => subscription.remove();
@@ -85,14 +85,35 @@ const ResultListPage = ({navigation}: any) => {
   }: any) => {
     // console.log(student_name, group_name, head_line, life_line, heart_line, gender);
     return (
-      <View style={[Styles.listView, {borderColor: theme == 'light' ? '#3d3d3d50' : '#fefefe50' }]}>
+      <View
+        style={[
+          Styles.listView,
+          {borderColor: theme == 'light' ? '#3d3d3d50' : '#fefefe50'},
+        ]}>
         <View>
-          <Text style={[Styles.resultName, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{student_name}</Text>
-          <Text style={[Styles.classGroup, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Kelas {group_name}</Text>
+          <Text
+            style={[
+              Styles.resultName,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
+            {student_name}
+          </Text>
+          <Text
+            style={[
+              Styles.classGroup,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
+            Kelas {group_name}
+          </Text>
         </View>
         <View>
           <TouchableOpacity
-            style={[Styles.lihatButton, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+            style={[
+              Styles.lihatButton,
+              theme == 'light'
+                ? Styles.containerLightTheme2
+                : Styles.containerDarkTheme2,
+            ]}
             onPress={() =>
               navigation.navigate('ResultPage', {
                 student_name,
@@ -103,7 +124,13 @@ const ResultListPage = ({navigation}: any) => {
                 gender,
               })
             }>
-            <Text style={[Styles.lihatTextButton, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Lihat</Text>
+            <Text
+              style={[
+                Styles.lihatTextButton,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              Lihat
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -111,11 +138,33 @@ const ResultListPage = ({navigation}: any) => {
   };
 
   return (
-    <View style={[{flex: 1}, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
-      <Text style={[Styles.headerText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Daftar Hasil</Text>
+    <View
+      style={[
+        {flex: 1},
+        theme == 'light'
+          ? Styles.containerLightTheme1
+          : Styles.containerDarkTheme1,
+      ]}>
+      <Text
+        style={[
+          Styles.headerText,
+          theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+        ]}>
+        Daftar Hasil
+      </Text>
       <View style={{margin: 20}}>
-        <Text style={[Styles.schoolName, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>{userData?.institute_name}</Text>
-        <Text style={[Styles.schoolCode, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>
+        <Text
+          style={[
+            Styles.schoolName,
+            theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+          ]}>
+          {userData?.institute_name}
+        </Text>
+        <Text
+          style={[
+            Styles.schoolCode,
+            theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+          ]}>
           Kode institusi: {userData?.institute_code}
         </Text>
 
@@ -126,9 +175,19 @@ const ResultListPage = ({navigation}: any) => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <View style={[Styles.searchBox, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}>
+          <View
+            style={[
+              Styles.searchBox,
+              theme == 'light'
+                ? Styles.containerLightTheme2
+                : Styles.containerDarkTheme2,
+            ]}>
             <Image
-              source={theme == 'light' ? require('../../../assets/icons/search_black.png') : require('../../../assets/icons/search_white.png')}
+              source={
+                theme == 'light'
+                  ? require('../../../assets/icons/search_black.png')
+                  : require('../../../assets/icons/search_white.png')
+              }
               style={Styles.searchIcon}
             />
             <TextInput
@@ -136,15 +195,26 @@ const ResultListPage = ({navigation}: any) => {
               placeholder="Cari"
               onChangeText={val => setSearchText(val)}
               value={searchText}
-              placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}90` : `${Styles.textDarkTheme.color}90`}
+              placeholderTextColor={
+                theme == 'light'
+                  ? `${Styles.textLightTheme.color}90`
+                  : `${Styles.textDarkTheme.color}90`
+              }
             />
           </View>
 
           <TouchableOpacity
-            style={[{
-              padding: 12.5,
-              borderRadius: 15,
-            }, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+            style={[
+              {
+                padding: 12.5,
+                borderRadius: 15,
+                elevation: 4,
+                shadowColor: '#00000050',
+              },
+              theme == 'light'
+                ? Styles.containerLightTheme2
+                : Styles.containerDarkTheme2,
+            ]}
             onPress={() => {
               navigation.navigate('GroupListPage', {
                 institute_name: userData.institute_name,
@@ -198,22 +268,22 @@ const ResultListPage = ({navigation}: any) => {
 
 const Styles = StyleSheet.create({
   containerLightTheme1: {
-    backgroundColor: '#f0f0f0'
-  }, 
+    backgroundColor: '#f0f0f0',
+  },
   containerDarkTheme1: {
-    backgroundColor: '#2d2d2d'
-  }, 
+    backgroundColor: '#2d2d2d',
+  },
   containerLightTheme2: {
-    backgroundColor: '#fefefe'
-  }, 
+    backgroundColor: '#fefefe',
+  },
   containerDarkTheme2: {
-    backgroundColor: '#3d3d3d'
-  }, 
+    backgroundColor: '#3d3d3d',
+  },
   textLightTheme: {
-    color: '#2d2d2d'
-  }, 
+    color: '#2d2d2d',
+  },
   textDarkTheme: {
-    color: '#f0f0f0'
+    color: '#f0f0f0',
   },
   headerText: {
     fontSize: 20,
@@ -236,6 +306,8 @@ const Styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignItems: 'center',
     columnGap: 10,
+    elevation: 4,
+    shadowColor: '#00000050',
   },
   searchIcon: {
     height: 20,
@@ -251,6 +323,8 @@ const Styles = StyleSheet.create({
   lihatButton: {
     alignContent: 'center',
     borderRadius: 10,
+    elevation: 4,
+    shadowColor: '#00000050',
   },
   lihatTextButton: {
     marginVertical: 5,
@@ -273,7 +347,7 @@ const Styles = StyleSheet.create({
   classGroup: {
     fontWeight: '400',
     fontSize: 14,
-    opacity: 0.5
+    opacity: 0.5,
   },
 });
 

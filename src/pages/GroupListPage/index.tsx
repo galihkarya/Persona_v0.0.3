@@ -151,13 +151,14 @@ const GroupListPage = ({navigation, route}: any) => {
         statusBarTranslucent
         animationType="fade">
         <View style={Styles.centeredView}>
-          <View style={Styles.modalView}>
-            <Text style={Styles.modalTitle}>Edit Kelas</Text>
+          <View style={[Styles.modalView, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
+            <Text style={[Styles.modalTitle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Edit Kelas</Text>
             <TextInput
-              style={Styles.input}
+              style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
               onChangeText={setEditGroupName}
               value={editGroupName}
               placeholder={groupName}
+              placeholderTextColor={theme == 'light' ? `${Styles.textLightTheme.color}50` : `${Styles.textDarkTheme.color}50`}
             />
             <View style={{flexDirection: 'row', gap: 10}}>
               <TouchableOpacity
@@ -200,10 +201,10 @@ const GroupListPage = ({navigation, route}: any) => {
         statusBarTranslucent
         animationType="fade">
         <View style={Styles.centeredView}>
-          <View style={Styles.modalView}>
-            <Text style={Styles.modalTitle}>Tambahkan Kelas</Text>
+          <View style={[Styles.modalView, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
+            <Text style={[Styles.modalTitle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Tambahkan Kelas</Text>
             <TextInput
-              style={Styles.input}
+              style={[Styles.input, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}
               onChangeText={setAddGroup}
               value={addGroup}
               placeholder="1A"
@@ -274,21 +275,20 @@ const Styles = StyleSheet.create({
   schoolName: {
     fontSize: 24,
     fontWeight: '700',
-    color: 'black',
   },
   schoolCode: {
     fontSize: 14,
     fontWeight: '500',
-    color: 'black',
   },
   searchBox: {
     flexDirection: 'row',
-    backgroundColor: '#e9e9e9',
     borderRadius: 15,
     marginVertical: 15,
     paddingHorizontal: 20,
     alignItems: 'center',
     columnGap: 10,
+    elevation: 4,
+    shadowColor: '#00000050',
   },
   searchIcon: {
     height: 20,
