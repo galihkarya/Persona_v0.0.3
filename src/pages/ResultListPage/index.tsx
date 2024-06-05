@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Appearance,
+  StatusBar,
 } from 'react-native';
 import api from '../../API/UserApi';
 
@@ -145,6 +146,7 @@ const ResultListPage = ({navigation}: any) => {
           ? Styles.containerLightTheme1
           : Styles.containerDarkTheme1,
       ]}>
+        <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
       <Text
         style={[
           Styles.headerText,

@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Appearance,
+  StatusBar,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -50,6 +51,7 @@ const ProfilePage = ({navigation}: any) => {
           ? Styles.containerLightTheme1
           : Styles.containerDarkTheme1,
       ]}>
+        <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
       {/* <Image
         source={require('../../../assets/images/pp.png')}
         style={Styles.profilePicture}

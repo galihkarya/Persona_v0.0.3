@@ -137,7 +137,7 @@ const ResultGeneralPage = ({navigation, route}: any) => {
 
   return (
     <View style={theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={'#f2f2f2'} />
+      <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
       <View style={{borderBottomWidth: 0.5, borderColor: '#00000050'}}>
         <Text style={[Styles.headerText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Hasil</Text>
       </View>

@@ -8,7 +8,8 @@ import {
   Image,
   Modal,
   ScrollView,
-  Appearance, 
+  Appearance,
+  StatusBar, 
 } from 'react-native';
 
 const HomePageLogedIn = ({navigation}: any) => {
@@ -124,6 +125,7 @@ const HomePageLogedIn = ({navigation}: any) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={[theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1, {flex: 1}]}>
+      <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
       <View
         style={{
           marginRight: 20,

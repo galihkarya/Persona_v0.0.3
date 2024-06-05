@@ -8,6 +8,7 @@ import {
   TextInput,
   ScrollView,
   Appearance,
+  StatusBar,
 } from 'react-native';
 
 const RegistInstitutionBK = ({navigation, route}: any) => {
@@ -36,6 +37,7 @@ const RegistInstitutionBK = ({navigation, route}: any) => {
           : Styles.containerDarkTheme1,
         {flex: 1},
       ]}>
+        <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
       <TouchableOpacity
         style={Styles.backButton}
         hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}

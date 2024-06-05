@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Image, View, Appearance} from 'react-native';
+import {StyleSheet, Image, View, Appearance, StatusBar} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Splash({navigation}: any) {
@@ -32,7 +32,9 @@ function Splash({navigation}: any) {
   }, []);
 
   return (
+    
     <View style={[Styles.container, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
+      <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
       <Image
         style={Styles.tinyLogo}
         source={require('../../../assets/images/logo.png')}

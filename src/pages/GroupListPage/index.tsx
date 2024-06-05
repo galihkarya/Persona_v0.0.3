@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Appearance,
+  StatusBar,
 } from 'react-native';
 import api from '../../API/UserApi';
 
@@ -119,6 +120,7 @@ const GroupListPage = ({navigation, route}: any) => {
           ? Styles.containerLightTheme1
           : Styles.containerDarkTheme1,
       ]}>
+        <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <TouchableOpacity
           hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
@@ -252,6 +254,7 @@ const GroupListPage = ({navigation, route}: any) => {
               ]}
               onChangeText={setEditGroupName}
               value={editGroupName}
+              autoCapitalize='characters'
               placeholder={groupName}
               placeholderTextColor={
                 theme == 'light'
@@ -271,7 +274,7 @@ const GroupListPage = ({navigation, route}: any) => {
                     .then(({data}) => {
                       console.log(data);
                       getListGroup();
-                      ToastAndroid.show(`Kelas berhasil diubah`, 3000);
+                      ToastAndroid.show(`Kelas berhasil diubah dari ${groupName} menjadi ${editGroupName}`, 3000);
                     })
                     .finally(() => setEditGroupName(''));
                   setModal1Visible(false);
@@ -281,7 +284,10 @@ const GroupListPage = ({navigation, route}: any) => {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={async () => {
-                  await api.delete(`/api/v1/group/`, {id: groupID});
+                  await api.delete(`/api/v1/group/`, {params: {id: groupID}})
+                  .then(() => {getListGroup(); ToastAndroid.show(`Kelas berhasil ${groupName} dihapus`, 3000);})
+                  .catch(ex => (console.log(ex)))
+                  
 
                   setModal1Visible(false);
                 }}
@@ -325,6 +331,7 @@ const GroupListPage = ({navigation, route}: any) => {
               onChangeText={setAddGroup}
               value={addGroup}
               placeholder="1A"
+              autoCapitalize='characters'
             />
             <View style={{flexDirection: 'row', gap: 10}}>
               <TouchableOpacity

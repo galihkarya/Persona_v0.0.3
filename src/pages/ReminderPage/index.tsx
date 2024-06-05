@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Appearance, 
+  Appearance,
+  StatusBar, 
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 
@@ -29,6 +30,7 @@ const ReminderPage = ({navigation, route}: any) => {
 
   return (
     <View style={[theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1, {flex: 1}]}>
+      <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
       <View style={{paddingVertical: 20}}>
         <TouchableOpacity
           style={Styles.backButton}

@@ -9,7 +9,8 @@ import {
   ScrollView,
   ToastAndroid,
   Alert,
-  Appearance, 
+  Appearance,
+  StatusBar, 
 } from 'react-native';
 import api from '../../API/UserApi';
 
@@ -90,6 +91,7 @@ const RegistAccount = ({navigation, route}: any) => {
         ? Styles.containerLightTheme1
         : Styles.containerDarkTheme1
     }>
+      <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
       <TouchableOpacity
         style={Styles.backButton}
         hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}

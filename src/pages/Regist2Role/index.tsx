@@ -1,5 +1,5 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, Image, StyleSheet, Appearance} from 'react-native';
+import {View, Text, TouchableOpacity, Image, StyleSheet, Appearance, StatusBar} from 'react-native';
 import {Dropdown, IDropdownRef} from 'react-native-element-dropdown';
 
 const RegistRole = ({navigation, route}:any) => {
@@ -32,6 +32,7 @@ const RegistRole = ({navigation, route}:any) => {
 
   return (
     <View style={[theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1, {flex: 1}]}>
+      <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
       <TouchableOpacity
         style={Styles.backButton}
         hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}

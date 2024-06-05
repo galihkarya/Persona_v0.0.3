@@ -9,7 +9,8 @@ import {
   TextInput,
   ScrollView,
   ToastAndroid,
-  Appearance, 
+  Appearance,
+  StatusBar, 
 } from 'react-native';
 import api from '../../API/UserApi';
 
@@ -54,6 +55,7 @@ const LoginPage = ({navigation}: any) => {
 
   return (
       <ScrollView style={[theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1, {flex: 1}]}>
+        <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
         <View>
           <TouchableOpacity
             style={Styles.backButton}

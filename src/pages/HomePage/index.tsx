@@ -7,7 +7,8 @@ import {
   Image,
   Modal,
   ScrollView,
-  Appearance, 
+  Appearance,
+  StatusBar, 
 } from 'react-native';
 
 const HomePage = ({navigation}: any) => {
@@ -112,6 +113,7 @@ const HomePage = ({navigation}: any) => {
 
   return (
     <View style={[theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1, {flex: 1}]}>
+      <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
       <View style={{marginRight: 10, marginTop: 20}}>
         <TouchableOpacity
           style={[Styles.loginButton, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
