@@ -48,8 +48,8 @@ const CameraPage = ({navigation, route}: any) => {
   const format = useCameraFormat(device, [
     {
       autoFocusSystem: 'contrast-detection',
-      photoResolution: {width: 480, height: 640},
-      photoAspectRatio: 4 / 3,
+      photoResolution: {width: 640, height: 640},
+      photoAspectRatio: 1 / 1,
     },
   ]);
 
@@ -240,7 +240,8 @@ const CameraPage = ({navigation, route}: any) => {
             <Text style={Styles.instruction}>Posisikan Tangan Kamu</Text>
           </View>
           <View style={{justifyContent: 'center'}}>
-            <View style={Styles.guideline} />
+            <View style={Styles.guideline}/>
+            <Image style={Styles.palmGuidelines} source={require('../../../assets/images/palm_guidelines.png')} />
             {device && (
               <Camera
                 ref={camera}
@@ -310,18 +311,25 @@ const Styles = StyleSheet.create({
     zIndex: 4,
   },
   viewFinder: {
-    aspectRatio: 3 / 4,
+    aspectRatio: 1,
     justifyContent: 'center',
   },
   guideline: {
     zIndex: 3,
-    width: 250,
-    height: 250,
+    width: '55%',
+    height: '55%',
     alignSelf: 'center',
     borderColor: '#cc3663',
     borderWidth: 5,
     opacity: 0.7,
     position: 'absolute',
+  },
+  palmGuidelines: {
+    position: 'absolute', 
+    zIndex: 2, 
+    width: '115%',
+    height: '115%', 
+    alignSelf: 'center'
   },
   flashButton: {
     position: 'absolute',
