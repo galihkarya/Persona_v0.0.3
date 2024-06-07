@@ -37,10 +37,10 @@ const CameraPage = ({navigation, route}: any) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setWidthViewFinder(100); 
+      setWidthViewFinder(100);
     }, 500);
 
-    return () => clearTimeout(timer); 
+    return () => clearTimeout(timer);
   }, []);
 
   const device = useCameraDevice('back');
@@ -69,7 +69,6 @@ const CameraPage = ({navigation, route}: any) => {
         qualityPrioritization: 'quality',
         flash,
         enableShutterSound: false,
-
       });
       console.log(photo);
 
@@ -239,9 +238,12 @@ const CameraPage = ({navigation, route}: any) => {
             }}>
             <Text style={Styles.instruction}>Posisikan Tangan Kamu</Text>
           </View>
-          <View style={{justifyContent: 'center'}}>
-            <View style={Styles.guideline}/>
-            <Image style={Styles.palmGuidelines} source={require('../../../assets/images/palm_guidelines.png')} />
+          <View style={{justifyContent: 'center', marginTop: 50}}>
+            <View style={Styles.guideline} />
+            <Image
+              style={Styles.palmGuidelines}
+              source={require('../../../assets/images/palm_guidelines.png')}
+            />
             {device && (
               <Camera
                 ref={camera}
@@ -250,7 +252,7 @@ const CameraPage = ({navigation, route}: any) => {
                 isActive={true}
                 format={format}
                 photo={true}
-                orientation='portrait'
+                orientation="portrait"
               />
             )}
           </View>
@@ -325,11 +327,11 @@ const Styles = StyleSheet.create({
     position: 'absolute',
   },
   palmGuidelines: {
-    position: 'absolute', 
-    zIndex: 2, 
+    position: 'absolute',
+    zIndex: 2,
     width: '115%',
-    height: '115%', 
-    alignSelf: 'center'
+    height: '115%',
+    alignSelf: 'center',
   },
   flashButton: {
     position: 'absolute',
