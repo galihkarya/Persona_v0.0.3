@@ -47,7 +47,7 @@ const AddStudentDataPage = ({navigation}: any) => {
         .get(`/api/v1/institute/id/${data.institute_id}`)
         .then(async ({data}) => {
           // console.log(data.groups)
-          const group = data.groups.map(({id: value, name: label}: any) => ({value,label}));
+          const group = data.institute.groups.map(({id: value, name: label}: any) => ({value,label}));
           setClassList(group);
           // console.log(classList);
         });
