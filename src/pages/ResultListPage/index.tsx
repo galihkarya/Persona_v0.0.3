@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import {
 import api from '../../API/UserApi';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ResultListPage = ({navigation}: any) => {
   const colorScheme = Appearance.getColorScheme();
@@ -58,9 +59,13 @@ const ResultListPage = ({navigation}: any) => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    dataFetcher();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      dataFetcher();
+      return () => {};
+    }, [])
+  );
+
 
   useEffect(() => {
     if (searchText === '') {
@@ -224,6 +229,7 @@ const ResultListPage = ({navigation}: any) => {
                 institute_id: userData.institute_id,
                 role: userData.role,
                 group_id_user: userData.group_id,
+                user_id: userData.id, 
               });
             }}>
             <Image
