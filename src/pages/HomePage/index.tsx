@@ -8,24 +8,24 @@ import {
   Modal,
   ScrollView,
   Appearance,
-  StatusBar, 
+  StatusBar,
 } from 'react-native';
 
-const HomePage = ({navigation}: any) => {
+const HomePage = ({navigation, theme: propTheme}: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [currentModal, setCurrentModal] = useState(2);
 
   const colorScheme = Appearance.getColorScheme();
-  const [theme, setTheme] = useState(colorScheme);
+  const [theme, setTheme] = useState(colorScheme || propTheme);
   const closeWhite = require('../../../assets/icons/close_White.png');
   const closeBlack = require('../../../assets/icons/close_Black.png');
 
   useEffect(() => {
-    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
-      setTheme(colorScheme);
+    const subscription = Appearance.addChangeListener(({colorScheme}) => {
+      setTheme(colorScheme || propTheme);
     });
     return () => subscription.remove();
-  }, []);
+  }, [propTheme]);
 
   const setModalContent = (modalHome: number) => {
     setModalVisible(true);
@@ -35,15 +35,34 @@ const HomePage = ({navigation}: any) => {
   const Card1 = () => {
     return (
       <View style={Styles.centeredView}>
-        <View style={[Styles.modalView, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
-          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} hitSlop={10}>
+        <View
+          style={[
+            Styles.modalView,
+            theme == 'light'
+              ? Styles.containerLightTheme1
+              : Styles.containerDarkTheme1,
+          ]}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(!modalVisible)}
+            hitSlop={10}
+            testID="closeButton">
             <Image
               style={Styles.buttonClose}
               source={theme == 'light' ? closeBlack : closeWhite}
             />
           </TouchableOpacity>
-          <Text style={[Styles.modalTextTitle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Apa itu Palmistry?</Text>
-          <Text style={[Styles.modalTextContent, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>
+          <Text
+            style={[
+              Styles.modalTextTitle,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
+            Apa itu Palmistry?
+          </Text>
+          <Text
+            style={[
+              Styles.modalTextContent,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
             Menurut kamus besar bahasa Indonesia Palmistry merupakan kata benda
             yang berarti kepandaian meramal berdasarkan rajah/garis tangan.
           </Text>
@@ -55,23 +74,45 @@ const HomePage = ({navigation}: any) => {
   const Card2 = () => {
     return (
       <View style={Styles.centeredView}>
-        <View style={[Styles.modalView, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
-          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} hitSlop={10}>
+        <View
+          style={[
+            Styles.modalView,
+            theme == 'light'
+              ? Styles.containerLightTheme1
+              : Styles.containerDarkTheme1,
+          ]}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(!modalVisible)}
+            hitSlop={10}>
             <Image
               style={Styles.buttonClose}
               source={theme == 'light' ? closeBlack : closeWhite}
             />
           </TouchableOpacity>
-          <Text style={[Styles.modalTextTitle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Macam-macam Garis Tangan</Text>
+          <Text
+            style={[
+              Styles.modalTextTitle,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
+            Macam-macam Garis Tangan
+          </Text>
           <ScrollView style={{maxHeight: 300}}>
-            <Text style={[Styles.modalTextContent, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>
+            <Text
+              style={[
+                Styles.modalTextContent,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
               Garis Hati: terletak di atas garis kepala dan garis kehidupan.
               Garis ini dimulai di Bawah jari telunjuk atau jari tengah, dan
               berakhir di jari kelingking. Garis ini merepresentasikan kondisi
               emosional seseorang serta hubungan emosional dan fisiknya dengan
               orang lain.
             </Text>
-            <Text style={[Styles.modalTextContent, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>
+            <Text
+              style={[
+                Styles.modalTextContent,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
               Garis Kepala: Garis ini dimulai tepat di atas the life line,
               diantara ibu jari dan jari telunjuk, dan membentang melintasi
               telapak tangan ke arah tepi telapak tangan lainnya secara
@@ -79,7 +120,11 @@ const HomePage = ({navigation}: any) => {
               mengungkapkan kemampuan intelektual sekaligus kemampuan intuitif
               seseorang.
             </Text>
-            <Text style={[Styles.modalTextContent, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>
+            <Text
+              style={[
+                Styles.modalTextContent,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
               Garis Kehidupan: Garis ini dimulai di antara jari telunjuk dan ibu
               jari, kemudian berlanjut ke bawah ke arah pangkal ibu jari dan
               pergelangan tangan. Garis ini merepresentasikan hubungan dengan
@@ -94,33 +139,103 @@ const HomePage = ({navigation}: any) => {
   const Card3 = () => {
     return (
       <View style={Styles.centeredView}>
-        <View style={[Styles.modalView, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
-          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} hitSlop={10}>
+        <View
+          style={[
+            Styles.modalView,
+            theme == 'light'
+              ? Styles.containerLightTheme1
+              : Styles.containerDarkTheme1,
+          ]}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(!modalVisible)}
+            hitSlop={10}>
             <Image
               style={Styles.buttonClose}
               source={theme == 'light' ? closeBlack : closeWhite}
             />
           </TouchableOpacity>
-          <Text style={[Styles.modalTextTitle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Gaya belajar</Text>
-          <Text style={[Styles.modalTextContent, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>
-            Menurut kamus besar bahasa Indonesia Palmistry merupakan kata benda
-            yang berarti kepandaian meramal berdasarkan rajah/garis tangan.
+          <Text
+            style={[
+              Styles.modalTextTitle,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
+            Gaya belajar
           </Text>
+          <ScrollView style={{maxHeight: 300}}>
+            <Text
+              style={[
+                Styles.modalTextContent,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              1. Belajar Somatis: Belajar dengan menggunakan indra peraba,
+              kinestetik, dan praktik yang melibatkan aktivitas fisik seperti
+              menggerakkan tubuh.
+            </Text>
+            <Text
+              style={[
+                Styles.modalTextContent,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              2. Belajar Auditori: Belajar dengan menggunakan pendengaran.
+            </Text>
+            <Text
+              style={[
+                Styles.modalTextContent,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              3. Belajar Visual: Belajar dengan melihat apa yang sedang
+              dipelajari secara langsung atau melihat contoh dari dunia nyata.
+            </Text>
+            <Text
+              style={[
+                Styles.modalTextContent,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              4. Belajar Intelektual: Belajar dengan merenung, mencipta, dan
+              menggabungkan pengalaman mental, fisik, emosional, serta intuitif.
+            </Text>
+            <Text style={[Styles.modalTextFooter, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Meier, Dave - The Accelerated Learning</Text>
+          </ScrollView>
         </View>
       </View>
     );
   };
 
   return (
-    <View style={[theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1, {flex: 1}]}>
-      <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
+    <View
+      style={[
+        theme == 'light'
+          ? Styles.containerLightTheme1
+          : Styles.containerDarkTheme1,
+        {flex: 1},
+      ]}
+      testID="theme-container">
+      <StatusBar
+        barStyle={theme == 'light' ? 'dark-content' : 'light-content'}
+        backgroundColor={
+          theme == 'light'
+            ? Styles.containerLightTheme1.backgroundColor
+            : Styles.containerDarkTheme1.backgroundColor
+        }
+      />
       <View style={{marginRight: 10, marginTop: 20}}>
         <TouchableOpacity
-          style={[Styles.loginButton, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+          style={[
+            Styles.loginButton,
+            theme == 'light'
+              ? Styles.containerLightTheme2
+              : Styles.containerDarkTheme2,
+          ]}
           onPress={() => {
             navigation.navigate('LoginPage');
           }}>
-          <Text style={[Styles.loginText, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Log in</Text>
+          <Text
+            style={[
+              Styles.loginText,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
+            Log in
+          </Text>
           {/* <Image
             style={Styles.avatar}
             source={require('../../../assets/icons/Avatar.png')}
@@ -146,31 +261,62 @@ const HomePage = ({navigation}: any) => {
 
       <View style={{marginTop: 20}}>
         <TouchableOpacity
-          style={[Styles.card, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+          style={[
+            Styles.card,
+            theme == 'light'
+              ? Styles.containerLightTheme2
+              : Styles.containerDarkTheme2,
+          ]}
           onPress={() => setModalContent(1)}>
           <Image
             style={Styles.imageObjects}
             source={require('../../../assets/images/palm_fluent.png')}
           />
-          <Text style={[Styles.textCard, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Apa itu Palmistry?</Text>
+          <Text
+            style={[
+              Styles.textCard,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
+            Apa itu Palmistry?
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[Styles.card, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+          style={[
+            Styles.card,
+            theme == 'light'
+              ? Styles.containerLightTheme2
+              : Styles.containerDarkTheme2,
+          ]}
           onPress={() => setModalContent(2)}>
           <Image
             style={Styles.imageObjects}
             source={require('../../../assets/images/palmline.png')}
           />
-          <Text style={[Styles.textCard, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Macam-macam Garis Tangan</Text>
+          <Text
+            style={[
+              Styles.textCard,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
+            Macam-macam Garis Tangan
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[Styles.card, theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2]}
+          style={[
+            Styles.card,
+            theme == 'light'
+              ? Styles.containerLightTheme2
+              : Styles.containerDarkTheme2,
+          ]}
           onPress={() => setModalContent(3)}>
           <Image
             style={Styles.imageObjects}
             source={require('../../../assets/images/indexfinger_fluent.png')}
           />
-          <Text style={[Styles.textCard, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>
+          <Text
+            style={[
+              Styles.textCard,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
             Gaya belajar yang cocok sesuai kepribadian anak!
           </Text>
         </TouchableOpacity>
@@ -184,28 +330,26 @@ const HomePage = ({navigation}: any) => {
       </TouchableOpacity>
     </View>
   );
-
-  
 };
 
 const Styles = StyleSheet.create({
   containerLightTheme1: {
-    backgroundColor: '#f0f0f0'
-  }, 
+    backgroundColor: '#f0f0f0',
+  },
   containerDarkTheme1: {
-    backgroundColor: '#2d2d2d'
-  }, 
+    backgroundColor: '#2d2d2d',
+  },
   containerLightTheme2: {
-    backgroundColor: '#fefefe'
-  }, 
+    backgroundColor: '#fefefe',
+  },
   containerDarkTheme2: {
-    backgroundColor: '#3d3d3d'
-  }, 
+    backgroundColor: '#3d3d3d',
+  },
   textLightTheme: {
-    color: '#2d2d2d'
-  }, 
+    color: '#2d2d2d',
+  },
   textDarkTheme: {
-    color: '#f0f0f0'
+    color: '#f0f0f0',
   },
   centeredView: {
     flex: 1,
@@ -235,12 +379,17 @@ const Styles = StyleSheet.create({
     fontWeight: '400',
     marginTop: 10,
     marginBottom: 20,
+    fontSize: 16,
   },
+  modalTextFooter: {
+    fontSize: 14, 
+    fontWeight: '400', 
+  }, 
   loginButton: {
     marginRight: 15,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 10, 
+    borderRadius: 10,
     alignSelf: 'flex-end',
     flexDirection: 'row',
   },
@@ -285,7 +434,7 @@ const Styles = StyleSheet.create({
     color: '#fefefe',
     paddingVertical: 15,
     fontSize: 16,
-    fontWeight: '600'
+    fontWeight: '600',
   },
 });
 
