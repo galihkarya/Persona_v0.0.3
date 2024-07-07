@@ -6,6 +6,7 @@ import {
   StyleSheet,
   StatusBar,
   ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import {useEffect, useState, useRef} from 'react';
 import {
@@ -20,7 +21,6 @@ import api from '../../API/UserApi';
 
 const CameraPage = ({navigation, route}: any) => {
   const {name, gender, student_name, group_id} = route.params;
-  console.log(name, gender, student_name, group_id);
 
   const flashOnIcon = require('../../../assets/icons/icon_flash_on.png');
   const flashOffIcon = require('../../../assets/icons/icon_flash_off.png');
@@ -90,65 +90,55 @@ const CameraPage = ({navigation, route}: any) => {
 
   const buttonHandler = async () => {
     setIsLoading(true);
-    const photo = new FormData();
-    photo.append('image', {
-      name: photoFileName,
-      type: photoType,
-      uri: photoURI,
-    });
+    try {
+      const photo = new FormData();
+      photo.append('image', {
+        name: photoFileName,
+        type: photoType,
+        uri: photoURI,
+      });
 
-    const dataParams = {
-      student_name: student_name,
-      gender: gender,
-      group_id: group_id,
-    };
+      const dataParams = {
+        student_name: student_name,
+        gender: gender,
+        group_id: group_id,
+      };
 
-    // console.log(photo);
-    // console.log(dataParams);
-    // console.log(`/api/v1/result?${new URLSearchParams(dataParams).toString()}`);
+      const path = `/api/v1/result/?${new URLSearchParams(dataParams).toString()}`;
 
-    const path = `/api/v1/result/?${new URLSearchParams(
-      dataParams,
-    ).toString()}`;
-    // console.log(path);
-
-    if (student_name == undefined) {
-      await api
-        .post('/api/v1/result/predict', photo, {
+      if (student_name == undefined) {
+        const { data } = await api.post('/api/v1/result/predict', photo, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-        })
-        .then(({data}) => {
-          console.log('ini data', data);
-          navigation.navigate('ResultGeneralPage', {
-            name,
-            gender,
-            heart_line: data.heart_line,
-            life_line: data.life_line,
-            head_line: data.head_line,
-          });
-        })
-        .catch(ex => console.log('ini bawah', ex, name, gender));
-    } else {
-      await api
-        .post(path, photo, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then(({data}) => {
-          navigation.navigate('ResultPage', {
-            student_name,
-            gender,
-            group_id,
-            heart_line: data.heart_line,
-            life_line: data.life_line,
-            head_line: data.head_line,
-          });
         });
+        navigation.navigate('ResultGeneralPage', {
+          name,
+          gender,
+          heart_line: data.heart_line,
+          life_line: data.life_line,
+          head_line: data.head_line,
+        });
+      } else {
+        const { data } = await api.post(path, photo, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        navigation.navigate('ResultPage', {
+          student_name,
+          gender,
+          group_id,
+          heart_line: data.heart_line,
+          life_line: data.life_line,
+          head_line: data.head_line,
+        });
+      }
+    } catch (error:any) {
+      ToastAndroid.show(error.response?.data?.detail || 'Error occurred', 5000);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
@@ -260,15 +250,19 @@ const CameraPage = ({navigation, route}: any) => {
             style={Styles.shutterButton}
             onPress={onTakePicturePressed}
             disabled={isTakingPhoto}
+            testID= 'shutter-button'
           />
           <TouchableOpacity
             onPress={() =>
               setFlash(curValue => (curValue === 'off' ? 'on' : 'off'))
             }
-            style={Styles.flashButton}>
+            style={Styles.flashButton}
+            testID='flash-button'>
+              
             <Image
               source={flash === 'on' ? flashOnIcon : flashOffIcon}
               style={{width: 30, height: 30}}
+              testID='flash-icon'
             />
           </TouchableOpacity>
         </>
