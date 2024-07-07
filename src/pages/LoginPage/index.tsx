@@ -39,9 +39,7 @@ const LoginPage = ({navigation}: any) => {
       .then(async ({data}) => {
         console.log(data);
         await AsyncStorage.setItem('userData', JSON.stringify(data));
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Tabs' }]
+        navigation.reset({index: 0, routes: [{ name: 'Tabs' }]
         });
         
       })
