@@ -210,6 +210,7 @@ const Styles = StyleSheet.create({
   },
   textButton: {
     textAlign: 'center',
+    color: '#f0f0f0',
     paddingVertical: 15,
     fontSize: 16,
   },
