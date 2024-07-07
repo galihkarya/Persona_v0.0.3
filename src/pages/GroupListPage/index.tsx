@@ -28,26 +28,37 @@ const GroupListPage = ({navigation, route}: any) => {
     return () => subscription.remove();
   }, []);
 
-  const {institute_name, institute_code, institute_id, role, group_id_user} =
-    route.params;
+  const {
+    user_id,
+    institute_name,
+    institute_code,
+    institute_id,
+    role,
+    group_id_user
+  } = route.params;
+
   const [listGroup, setlistGroup] = useState<any>(null);
   const [groupName, setGroupName] = useState('');
   const [editGroupName, setEditGroupName] = useState('');
   const [addGroup, setAddGroup] = useState('');
   const [groupID, setGroupID] = useState<number>();
+  const [groupIdUser, setGroupIdUser] = useState(group_id_user);
 
   const [isLoading, setisLoading] = useState(false);
   const [modal1Visible, setModal1Visible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
+  const [modal3Visible, setModal3Visible] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [filteredData, setFilteredData] = useState<any>();
 
   const getListGroup = async () => {
     setisLoading(true);
-    await api.get(`/api/v1/group/institute/${institute_id}`).then(({data}) => {
+    await api
+    .get(`/api/v1/group/institute/${institute_id}`)
+    .then(({data}) => {
       console.log(data);
-      setlistGroup(data);
-      setFilteredData(data);
+      setlistGroup(data.group);
+      setFilteredData(data.group);
     });
     setisLoading(false);
   };
@@ -83,17 +94,21 @@ const GroupListPage = ({navigation, route}: any) => {
           <TouchableOpacity
             style={[
               Styles.editButton,
-              {opacity: group_id_user == group_id ? 0.3 : 1},
+              {
+                opacity:
+                groupIdUser == group_id || group_name == 'BK' ? 0.3 : 1,
+              },
               theme == 'light'
                 ? Styles.containerLightTheme2
                 : Styles.containerDarkTheme2,
             ]}
-            disabled={group_id_user == group_id}
+            disabled={groupIdUser == group_id || group_name == 'BK'}
             onPress={() => {
-              console.log('modal: edit class');
+              console.log('modal: edit class', group_name);
               setGroupID(group_id);
               setGroupName(group_name);
               if (role == 'bk') setModal1Visible(true);
+              else if (role == 'wk') setModal3Visible(true);
             }}>
             <Text
               style={[
@@ -102,7 +117,7 @@ const GroupListPage = ({navigation, route}: any) => {
               ]}>
               {role == 'bk'
                 ? 'Edit'
-                : group_id_user == group_id
+                : groupIdUser == group_id
                 ? 'Tergabung'
                 : 'Gabung'}
             </Text>
@@ -120,7 +135,14 @@ const GroupListPage = ({navigation, route}: any) => {
           ? Styles.containerLightTheme1
           : Styles.containerDarkTheme1,
       ]}>
-        <StatusBar barStyle={theme == 'light' ? 'dark-content' : 'light-content'} backgroundColor={theme == 'light' ? Styles.containerLightTheme1.backgroundColor : Styles.containerDarkTheme1.backgroundColor}/>
+      <StatusBar
+        barStyle={theme == 'light' ? 'dark-content' : 'light-content'}
+        backgroundColor={
+          theme == 'light'
+            ? Styles.containerLightTheme1.backgroundColor
+            : Styles.containerDarkTheme1.backgroundColor
+        }
+      />
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <TouchableOpacity
           hitSlop={{top: 5, bottom: 5, right: 5, left: 5}}
@@ -176,7 +198,9 @@ const GroupListPage = ({navigation, route}: any) => {
             style={Styles.searchIcon}
           />
           <TextInput
-          style={theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme}
+            style={
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme
+            }
             placeholder="Cari: '1a' atau '5b'"
             placeholderTextColor={
               theme == 'light'
@@ -249,12 +273,14 @@ const GroupListPage = ({navigation, route}: any) => {
             <TextInput
               style={[
                 Styles.input,
-                theme == 'light' ? Styles.containerLightTheme2 : Styles.containerDarkTheme2,
+                theme == 'light'
+                  ? Styles.containerLightTheme2
+                  : Styles.containerDarkTheme2,
                 theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
               ]}
               onChangeText={setEditGroupName}
               value={editGroupName}
-              autoCapitalize='characters'
+              autoCapitalize="characters"
               placeholder={groupName}
               placeholderTextColor={
                 theme == 'light'
@@ -274,7 +300,10 @@ const GroupListPage = ({navigation, route}: any) => {
                     .then(({data}) => {
                       console.log(data);
                       getListGroup();
-                      ToastAndroid.show(`Kelas berhasil diubah dari ${groupName} menjadi ${editGroupName}`, 3000);
+                      ToastAndroid.show(
+                        `Kelas berhasil diubah dari ${groupName} menjadi ${editGroupName}`,
+                        3000,
+                      );
                     })
                     .finally(() => setEditGroupName(''));
                   setModal1Visible(false);
@@ -284,10 +313,16 @@ const GroupListPage = ({navigation, route}: any) => {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={async () => {
-                  await api.delete(`/api/v1/group/`, {params: {id: groupID}})
-                  .then(() => {getListGroup(); ToastAndroid.show(`Kelas berhasil ${groupName} dihapus`, 3000);})
-                  .catch(ex => (console.log(ex)))
-                  
+                  await api
+                    .delete(`/api/v1/group/`, {params: {id: groupID}})
+                    .then(() => {
+                      getListGroup();
+                      ToastAndroid.show(
+                        `Kelas berhasil ${groupName} dihapus`,
+                        3000,
+                      );
+                    })
+                    .catch(ex => console.log(ex));
 
                   setModal1Visible(false);
                 }}
@@ -331,7 +366,7 @@ const GroupListPage = ({navigation, route}: any) => {
               onChangeText={setAddGroup}
               value={addGroup}
               placeholder="1A"
-              autoCapitalize='characters'
+              autoCapitalize="characters"
             />
             <View style={{flexDirection: 'row', gap: 10}}>
               <TouchableOpacity
@@ -349,10 +384,79 @@ const GroupListPage = ({navigation, route}: any) => {
                     });
                 }}
                 style={Styles.modalButtonP}>
-                <Text style={Styles.modalTextButtonP}>Simpan</Text>
+                <Text style={Styles.modalTextButtonP}>Tambah</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setModal2Visible(false)}
+                style={Styles.modalButtonN}>
+                <Text style={Styles.modalTextButtonN}>Batal</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={modal3Visible}
+        transparent
+        onRequestClose={() => setModal3Visible(false)}
+        statusBarTranslucent
+        animationType="fade">
+        <View style={Styles.centeredView}>
+          <View
+            style={[
+              Styles.modalView,
+              theme == 'light'
+                ? Styles.containerLightTheme1
+                : Styles.containerDarkTheme1,
+            ]}>
+            <Text
+              style={[
+                Styles.modalTitle,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              Peringatan
+            </Text>
+            <Text
+              style={[
+                Styles.contentModal,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              Apakah anda yakin ingin pindah kelas ke {groupName}
+            </Text>
+
+            <View style={{flexDirection: 'row', gap: 10, alignSelf: 'center'}}>
+              <TouchableOpacity
+                onPress={async () => {
+                  console.log(user_id, groupID)
+                  await api
+                    .put(`/api/v1/user/group`, {
+                      id: user_id,
+                      group_id: groupID,
+                    })
+                    .then(({data}) => {
+                      console.log(data);
+                      setGroupIdUser(groupID);
+                      getListGroup();
+                      setModal3Visible(false);
+                      ToastAndroid.show(
+                        `Anda berhasil pindah ke kelas ${groupName}`,
+                        3000,
+                      );
+                    })
+                    .finally(async () => {
+                      const getUserData = await AsyncStorage.getItem('userData');
+                      const userDataTemp = getUserData ? JSON.parse(getUserData) : ' ';
+                      userDataTemp.group_id = groupID
+                      await AsyncStorage.setItem('userData', JSON.stringify(userDataTemp));
+                    })
+                    .catch(ex => console.log(ex));
+                }}
+                style={Styles.modalButtonP}>
+                <Text style={Styles.modalTextButtonP}>Pindah</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setModal3Visible(false)}
                 style={Styles.modalButtonN}>
                 <Text style={Styles.modalTextButtonN}>Batal</Text>
               </TouchableOpacity>
@@ -466,6 +570,13 @@ const Styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     marginBottom: 20,
+  },
+  contentModal: {
+    fontSize: 16,
+    marginVertical: 25,
+    textAlign: 'center',
+    maxWidth: '70%', 
+    alignSelf: 'center',
   },
   input: {
     borderRadius: 10,
