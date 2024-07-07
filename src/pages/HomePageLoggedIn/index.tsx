@@ -106,18 +106,63 @@ const HomePageLogedIn = ({navigation}: any) => {
   const Card3 = () => {
     return (
       <View style={Styles.centeredView}>
-        <View style={[Styles.modalView, theme == 'light' ? Styles.containerLightTheme1 : Styles.containerDarkTheme1]}>
-          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} hitSlop={10}>
+        <View
+          style={[
+            Styles.modalView,
+            theme == 'light'
+              ? Styles.containerLightTheme1
+              : Styles.containerDarkTheme1,
+          ]}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(!modalVisible)}
+            hitSlop={10}>
             <Image
               style={Styles.buttonClose}
               source={theme == 'light' ? closeBlack : closeWhite}
             />
           </TouchableOpacity>
-          <Text style={[Styles.modalTextTitle, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Gaya belajar</Text>
-          <Text style={[Styles.modalTextContent, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>
-            Menurut kamus besar bahasa Indonesia Palmistry merupakan kata benda
-            yang berarti kepandaian meramal berdasarkan rajah/garis tangan.
+          <Text
+            style={[
+              Styles.modalTextTitle,
+              theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+            ]}>
+            Gaya belajar
           </Text>
+          <ScrollView style={{maxHeight: 300}}>
+            <Text
+              style={[
+                Styles.modalTextContent,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              1. Belajar Somatis: Belajar dengan menggunakan indra peraba,
+              kinestetik, dan praktik yang melibatkan aktivitas fisik seperti
+              menggerakkan tubuh.
+            </Text>
+            <Text
+              style={[
+                Styles.modalTextContent,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              2. Belajar Auditori: Belajar dengan menggunakan pendengaran.
+            </Text>
+            <Text
+              style={[
+                Styles.modalTextContent,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              3. Belajar Visual: Belajar dengan melihat apa yang sedang
+              dipelajari secara langsung atau melihat contoh dari dunia nyata.
+            </Text>
+            <Text
+              style={[
+                Styles.modalTextContent,
+                theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme,
+              ]}>
+              4. Belajar Intelektual: Belajar dengan merenung, mencipta, dan
+              menggabungkan pengalaman mental, fisik, emosional, serta intuitif.
+            </Text>
+            <Text style={[Styles.modalTextFooter, theme == 'light' ? Styles.textLightTheme : Styles.textDarkTheme]}>Meier, Dave - The Accelerated Learning</Text>
+          </ScrollView>
         </View>
       </View>
     );
@@ -255,7 +300,12 @@ const Styles = StyleSheet.create({
     fontWeight: '400',
     marginTop: 10,
     marginBottom: 20,
+    fontSize: 16
   },
+  modalTextFooter: {
+    fontSize: 14, 
+    fontWeight: '400', 
+  }, 
   loginButton: {
     marginRight: 15,
     paddingHorizontal: 20,
