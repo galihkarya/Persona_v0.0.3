@@ -101,26 +101,36 @@ const ResultPage = ({navigation, route}: any) => {
 
     try {
       if (Platform.OS === 'android') {
-        const granted = await PermissionsAndroid.request(
+        const writePermission = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           {
             title: 'Izin Menulis ke Penyimpanan',
-            message:
-              'Aplikasi ini membutuhkan izin untuk menulis ke penyimpanan.',
+            message: 'Aplikasi ini membutuhkan izin untuk menulis ke penyimpanan.',
             buttonPositive: 'Oke',
             buttonNegative: 'Batal',
           },
         );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          generatePDF();
+  
+        const readPermission = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          {
+            title: 'Izin Membaca Penyimpanan',
+            message: 'Aplikasi ini membutuhkan izin untuk membaca penyimpanan.',
+            buttonPositive: 'Oke',
+            buttonNegative: 'Batal',
+          },
+        );
+  
+        if (
+          writePermission === PermissionsAndroid.RESULTS.GRANTED &&
+          readPermission === PermissionsAndroid.RESULTS.GRANTED
+        ) {
+          await generatePDF();
         } else {
-          ToastAndroid.show(
-            'Izin ditolak, tidak dapat menyimpan PDF.',
-            ToastAndroid.SHORT,
-          );
+          ToastAndroid.show('Izin ditolak, tidak dapat menyimpan PDF.', ToastAndroid.SHORT);
         }
       } else {
-        generatePDF();
+        await generatePDF();
       }
     } catch (error) {
       console.error('Error exporting to PDF:', error);
